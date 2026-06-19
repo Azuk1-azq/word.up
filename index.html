@@ -3,1349 +3,971 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>WordUp! 英語学習</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<title>azqEN</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800;900&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#F7F6F3;--card:#fff;--card2:#F0EEE9;--bdr:#E2DDD6;
-  --txt:#1A1814;--dim:#8A8478;
-  --grn:#58CC02;--grnbg:#D7F0B8;--grnd:#46a800;
-  --red:#FF4B4B;--redbg:#FFE0E0;--redd:#c40000;
-  --blu:#1CB0F6;--blubg:#D7F1FD;--blud:#0a8bc4;
-  --gld:#FF9600;--gldd:#cc7800;
-  --pur:#CE82FF;--purd:#a853e0;
-  --R:14px;
+  --bg:#F2F0EB;--card:#fff;--card2:#EDEAE3;--bdr:#D5D0C5;
+  --txt:#1A1710;--dim:#857F72;
+  --grn:#58CC02;--grnbg:#DFF5B0;--grnd:#3D8F01;
+  --red:#FF4B4B;--redbg:#FFE0E0;--redd:#B80000;
+  --blu:#1CB0F6;--blubg:#D3EFFE;--blud:#0A8BC4;
+  --gld:#FF9600;--gldbg:#FFF0CC;--gldd:#B86D00;
+  --pur:#9B59B6;--purbg:#F0E6FF;--purd:#6C3483;
+  --R:14px;--Rlg:20px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);overflow-x:hidden;min-height:100vh}
-
-/* ── TOP BAR ── */
-#topbar{position:sticky;top:0;z-index:200;background:var(--card);border-bottom:2px solid var(--bdr);height:54px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.logo{font-family:'DM Serif Display';font-size:1.25rem;letter-spacing:-.4px}.logo b{color:var(--grn)}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);min-height:100%;overflow-x:hidden}
+#topbar{position:fixed;top:0;left:0;right:0;z-index:300;background:var(--card);border-bottom:2.5px solid var(--bdr);height:56px;padding:0 16px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'DM Serif Display';font-size:1.4rem}.logo b{color:var(--grn)}
 .tstats{display:flex;gap:7px}
-.tstat{display:flex;align-items:center;gap:4px;background:var(--card2);border:1.5px solid var(--bdr);border-radius:50px;padding:4px 11px;font-size:.82rem;font-weight:700}
-#t-hearts{color:var(--red)}#t-streak{color:var(--gld)}#t-gems{color:var(--blu)}
+.tstat{display:flex;align-items:center;gap:4px;padding:5px 11px;background:var(--card2);border:2px solid var(--bdr);border-radius:50px;font-size:.82rem;font-weight:800}
+#ts-hearts{color:var(--red)}#ts-streak{color:var(--gld)}#ts-gems{color:var(--blu)}
+.htimer{font-size:.63rem;color:var(--dim);font-weight:700;margin-left:2px}
+#xprow{position:fixed;top:56px;left:0;right:0;z-index:299;background:var(--card);border-bottom:2px solid var(--bdr);padding:6px 16px;display:flex;align-items:center;gap:10px}
+#xp-lv{font-size:.68rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
+#xp-bg{flex:1;height:12px;background:var(--card2);border-radius:50px;overflow:hidden;border:2px solid var(--bdr)}
+#xp-fill{height:100%;background:linear-gradient(90deg,var(--grn),#89E219);border-radius:50px;transition:width .6s cubic-bezier(.34,1.56,.64,1);position:relative}
+#xp-fill::after{content:'';position:absolute;top:3px;left:6px;right:6px;height:4px;background:rgba(255,255,255,.45);border-radius:50px}
+#xp-frac{font-size:.72rem;font-weight:700;color:var(--dim);white-space:nowrap}
+#navbar{position:fixed;bottom:0;left:0;right:0;z-index:300;background:var(--card);border-top:2.5px solid var(--bdr);display:flex;padding-bottom:env(safe-area-inset-bottom)}
+.nb{flex:1;padding:10px 4px 8px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'DM Sans';font-size:.67rem;font-weight:700;color:var(--dim);transition:color .15s}
+.nb .ni{font-size:1.4rem;transition:transform .15s}.nb.on{color:var(--grn)}.nb.on .ni{transform:scale(1.1)}
+#wrap{max-width:640px;margin:0 auto;padding:120px 14px 90px}
+.page{display:none}.page.show{display:block;animation:fu .2s ease}
+@keyframes fu{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── XP ── */
-#xprow{background:var(--card);border-bottom:2px solid var(--bdr);padding:7px 14px;display:flex;align-items:center;gap:10px}
-#xp-lv{font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
-#xp-bg{flex:1;height:10px;background:var(--card2);border-radius:50px;overflow:hidden;border:1.5px solid var(--bdr)}
-#xp-fill{height:100%;background:linear-gradient(90deg,var(--grn),#89E219);border-radius:50px;width:0%;transition:width .5s cubic-bezier(.34,1.56,.64,1)}
-#xp-num{font-size:.72rem;font-weight:700;color:var(--dim);white-space:nowrap}
+/* COURSE MAP */
+.course-hdr{background:linear-gradient(135deg,#1A1710,#3D3528);border-radius:var(--Rlg);padding:20px;margin-bottom:16px;color:#fff;position:relative;overflow:hidden}
+.course-hdr::after{content:'🗺️';position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:3rem;opacity:.18}
+.course-hdr h2{font-family:'DM Serif Display';font-size:1.3rem;margin-bottom:4px}
+.course-hdr p{font-size:.8rem;opacity:.72}
+.ch-stats{display:flex;gap:20px;margin-top:12px}
+.ch-sv{font-family:'DM Serif Display';font-size:1.4rem;color:var(--gld)}
+.ch-sl{font-size:.62rem;opacity:.68;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.streak-ban{display:flex;align-items:center;gap:11px;background:linear-gradient(90deg,#FF9600,#FFB800);border-radius:var(--R);padding:13px 15px;margin-bottom:16px;box-shadow:0 4px 0 var(--gldd)}
+.sb-fire{font-size:1.9rem}.sb-body{flex:1}
+.sb-t{font-weight:900;font-size:.9rem;color:#fff}.sb-s{font-size:.74rem;color:rgba(255,255,255,.85);margin-top:2px}
+.sb-lv{background:rgba(0,0,0,.18);border-radius:50px;padding:4px 12px;font-size:.74rem;font-weight:800;color:#fff}
 
-/* ── NAV ── */
-#navbar{display:flex;background:var(--card);border-bottom:2px solid var(--bdr);overflow-x:auto;scrollbar-width:none;position:sticky;top:54px;z-index:190}
-#navbar::-webkit-scrollbar{display:none}
-.navbtn{flex:1;min-width:70px;padding:11px 4px 9px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'DM Sans';font-size:.68rem;font-weight:700;color:var(--dim);border-bottom:3px solid transparent;transition:color .15s,border-color .15s}
-.navbtn .ico{font-size:1.35rem}
-.navbtn.active{color:var(--grn);border-bottom-color:var(--grn)}
+/* UNIT */
+.unit-sec{margin-bottom:28px}
+.unit-hdr{border-radius:16px;padding:15px 17px;display:flex;align-items:center;gap:13px;position:relative;box-shadow:0 4px 0}
+.unit-hdr.lk{filter:grayscale(.7);opacity:.55}
+.uh-icon{font-size:1.9rem;background:rgba(255,255,255,.22);border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.uh-t{font-family:'DM Serif Display';font-size:1rem;color:#fff;margin-bottom:2px}
+.uh-s{font-size:.73rem;color:rgba(255,255,255,.82)}
+.uh-prog{position:absolute;right:14px;top:50%;transform:translateY(-50%);text-align:center}
+.uh-pn{font-family:'DM Serif Display';font-size:1rem;color:#fff}
+.uh-pl{font-size:.6rem;color:rgba(255,255,255,.68);font-weight:700;text-transform:uppercase}
+.skip-btn{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);border-radius:50px;padding:5px 13px;margin-top:8px;font-size:.73rem;font-weight:800;color:#fff;cursor:pointer;transition:background .15s;width:fit-content}
+.skip-btn:hover{background:rgba(255,255,255,.25)}
+.lesson-path{position:relative;display:flex;flex-direction:column;align-items:center;padding:12px 0 6px}
+.lesson-path::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:3px;background:var(--bdr);transform:translateX(-50%);z-index:0;border-radius:50px}
+.ln{position:relative;z-index:1;margin:9px 0;display:flex;flex-direction:column;align-items:center;gap:5px}
+.ln:nth-child(3n+1){margin-left:-90px}
+.ln:nth-child(3n+2){margin-left:0}
+.ln:nth-child(3n+3){margin-left:90px}
+.lbtn{width:66px;height:66px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.5rem;position:relative;transition:transform .12s}
+.lbtn:active:not(.lk){transform:scale(.92)}
+.lbtn.done{background:var(--grn);box-shadow:0 5px 0 var(--grnd)}
+.lbtn.mastered{background:linear-gradient(135deg,#FFD700,#FFA500);box-shadow:0 5px 0 #B8760A}
+.lbtn.current{background:var(--blu);box-shadow:0 5px 0 var(--blud);animation:bob 2s ease infinite}
+.lbtn.lk{background:var(--card2);box-shadow:0 4px 0 var(--bdr);cursor:not-allowed;opacity:.55}
+.lbtn.boss.done{background:linear-gradient(135deg,var(--gld),#FFB800);box-shadow:0 5px 0 var(--gldd)}
+.lbtn.boss.current{background:linear-gradient(135deg,#FF6B00,var(--gld));box-shadow:0 5px 0 var(--gldd);animation:bob 2s ease infinite}
+.lbtn.boss.mastered{background:linear-gradient(135deg,#FF6B00,#FFD700);box-shadow:0 5px 0 #8B4000}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.lbtn .crown{position:absolute;top:-11px;font-size:.9rem}
+.lbtn .lstars{position:absolute;bottom:-7px;background:var(--card);border:2px solid var(--bdr);border-radius:50px;padding:1px 5px;font-size:.58rem;white-space:nowrap}
+.ln-lbl{font-size:.67rem;font-weight:800;color:var(--dim);text-align:center;max-width:82px;line-height:1.25}
+.ln-type{font-size:.59rem;color:var(--dim);opacity:.65;text-align:center}
 
-/* ── PAGES ── */
-#main{max-width:580px;margin:0 auto;padding:14px 12px 130px}
-.page{display:none}.page.show{display:block;animation:fadein .2s ease}
-@keyframes fadein{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+/* MODAL */
+#modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:none;align-items:flex-end;justify-content:center}
+#modal-ov.show{display:flex}
+.mc{background:var(--card);border-radius:24px 24px 0 0;padding:26px 20px calc(24px + env(safe-area-inset-bottom));max-width:640px;width:100%;animation:sup .3s cubic-bezier(.34,1.56,.64,1)}
+@keyframes sup{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.mc-icon{font-size:3.2rem;text-align:center;margin-bottom:10px}
+.mc-title{font-family:'DM Serif Display';font-size:1.4rem;text-align:center;margin-bottom:4px}
+.mc-sub{font-size:.84rem;color:var(--dim);text-align:center;margin-bottom:14px}
+.mc-stars{display:flex;justify-content:center;gap:6px;margin-bottom:14px;font-size:1.7rem}
+.mc-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
+.mc-stat{background:var(--card2);border:1.5px solid var(--bdr);border-radius:12px;padding:10px 6px;text-align:center}
+.mc-sv{font-family:'DM Serif Display';font-size:1.15rem}.mc-sl{font-size:.62rem;font-weight:700;color:var(--dim);margin-top:2px;text-transform:uppercase;letter-spacing:.05em}
+.mc-go{display:block;width:100%;padding:14px;border-radius:50px;border:none;background:var(--grn);color:#fff;font-family:'DM Sans';font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 4px 0 var(--grnd);margin-bottom:10px;transition:transform .1s,box-shadow .1s}
+.mc-go:active{transform:translateY(3px);box-shadow:none}
+.mc-skip-go{background:linear-gradient(90deg,var(--pur),#7D3C98);box-shadow:0 4px 0 var(--purd)}
+.mc-cancel{display:block;width:100%;padding:12px;border-radius:50px;border:2px solid var(--bdr);background:transparent;font-family:'DM Sans';font-weight:700;font-size:.9rem;cursor:pointer;color:var(--dim)}
 
-/* ══ COURSE MAP ══ */
-.unit-section{margin-bottom:28px}
-.unit-header{
-  border-radius:16px;padding:16px 18px;margin-bottom:0;
-  display:flex;align-items:center;gap:14px;position:relative;
-}
-.unit-header.locked{opacity:.5}
-.unit-header .uh-icon{font-size:2rem;background:rgba(255,255,255,.25);border-radius:50%;width:48px;height:48px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.unit-header .uh-title{font-family:'DM Serif Display';font-size:1.1rem;color:#fff;margin-bottom:2px}
-.unit-header .uh-sub{font-size:.78rem;color:rgba(255,255,255,.85)}
-.unit-header .uh-badge{position:absolute;top:12px;right:14px;background:rgba(0,0,0,.2);color:#fff;font-size:.7rem;font-weight:800;border-radius:50px;padding:3px 10px}
-
-/* lesson path */
-.lesson-path{
-  display:flex;flex-direction:column;align-items:center;gap:0;
-  padding:10px 0 4px;
-  position:relative;
-}
-.lesson-path::before{
-  content:'';position:absolute;top:0;bottom:0;left:50%;width:3px;
-  background:var(--bdr);transform:translateX(-50%);z-index:0;
-}
-.lesson-node{
-  position:relative;z-index:1;margin:8px 0;
-  display:flex;flex-direction:column;align-items:center;
-}
-/* alternate left/right */
-.lesson-node:nth-child(odd) { margin-left: -80px; }
-.lesson-node:nth-child(even){ margin-left:  80px; }
-
-.lesson-btn{
-  width:64px;height:64px;border-radius:50%;border:none;cursor:pointer;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  font-size:1.5rem;font-weight:800;position:relative;
-  transition:transform .12s,box-shadow .12s;
-}
-.lesson-btn:active{transform:scale(.93)}
-.lesson-btn.done{background:var(--grn);box-shadow:0 5px 0 var(--grnd);color:#fff}
-.lesson-btn.current{background:var(--blu);box-shadow:0 5px 0 var(--blud);color:#fff;animation:bounce-current 1.8s ease infinite}
-.lesson-btn.locked{background:var(--card2);box-shadow:0 4px 0 var(--bdr);color:var(--dim);cursor:not-allowed}
-.lesson-btn.boss{background:linear-gradient(135deg,var(--gld),#FFB800);box-shadow:0 5px 0 var(--gldd);color:#fff}
-.lesson-btn.boss.current{background:linear-gradient(135deg,#FF6B00,#FFB800);animation:bounce-current 1.8s ease infinite}
-@keyframes bounce-current{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-.lesson-label{font-size:.7rem;font-weight:800;color:var(--dim);margin-top:5px;text-align:center;max-width:80px}
-.lesson-btn .crown{position:absolute;top:-10px;font-size:.9rem}
-.lesson-btn .stars{position:absolute;bottom:-6px;font-size:.65rem;background:var(--card);border:1.5px solid var(--bdr);border-radius:50px;padding:1px 5px;white-space:nowrap}
-
-/* ── STREAK BANNER ── */
-.streak-banner{background:linear-gradient(90deg,#FF9600,#FFB800);color:#fff;border-radius:var(--R);padding:13px 15px;margin-bottom:14px;display:flex;align-items:center;gap:11px;box-shadow:0 4px 0 var(--gldd)}
-.sb-fire{font-size:1.8rem}.sb-t{font-weight:800;font-size:.9rem}.sb-s{font-size:.78rem;opacity:.88;margin-top:2px}
-
-/* ── LESSON HEADER (in quiz) ── */
-.lesson-hd{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.closebtn{width:36px;height:36px;border-radius:50%;border:2px solid var(--bdr);background:var(--card);cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.prog-bg{flex:1;height:14px;background:var(--card2);border-radius:50px;overflow:hidden;border:2px solid var(--bdr)}
-.prog-fill{height:100%;background:linear-gradient(90deg,var(--grn),#89E219);border-radius:50px;transition:width .4s cubic-bezier(.34,1.56,.64,1);position:relative}
-.prog-fill::after{content:'';position:absolute;top:3px;left:5px;right:5px;height:4px;background:rgba(255,255,255,.4);border-radius:50px}
-.hearts-strip{display:flex;gap:2px;font-size:.95rem;flex-shrink:0}
-
-/* ── Q CARD ── */
-.qcard{background:var(--card);border:2px solid var(--bdr);border-radius:18px;padding:18px;margin-bottom:14px}
-.qtag{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);margin-bottom:9px;display:flex;align-items:center;gap:6px}
-.diff-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+/* QUIZ */
+.quiz-hd{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.qclose{width:38px;height:38px;border-radius:50%;border:2px solid var(--bdr);background:var(--card);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.qpbg{flex:1;height:15px;background:var(--card2);border-radius:50px;overflow:hidden;border:2px solid var(--bdr)}
+.qpfill{height:100%;background:linear-gradient(90deg,var(--grn),#89E219);border-radius:50px;transition:width .4s cubic-bezier(.34,1.56,.64,1);position:relative}
+.qpfill::after{content:'';position:absolute;top:3px;left:5px;right:5px;height:5px;background:rgba(255,255,255,.38);border-radius:50px}
+.hrow{display:flex;gap:3px;font-size:1.05rem;flex-shrink:0}
+.qcard{background:var(--card);border:2px solid var(--bdr);border-radius:var(--Rlg);padding:19px;margin-bottom:13px}
+.qtag{font-size:.67rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);margin-bottom:9px;display:flex;align-items:center;gap:7px}
+.dpip{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .qmain{font-size:1.4rem;font-weight:700;line-height:1.3}
-.qsub{font-size:.85rem;color:var(--dim);margin-top:5px}
-.qexample{background:var(--card2);border-radius:9px;padding:9px 12px;margin-top:10px;font-size:.85rem;color:var(--dim);border-left:3px solid var(--blu)}
+.qsub{font-size:.84rem;color:var(--dim);margin-top:5px}
+.qhint{background:var(--blubg);border-radius:9px;padding:8px 11px;margin-top:9px;font-size:.82rem;color:var(--blud);border-left:3px solid var(--blu);font-weight:600}
+.cl{display:flex;flex-direction:column;gap:9px;margin-bottom:13px}
+.cho{width:100%;padding:13px 14px;background:var(--card);border:2.5px solid var(--bdr);border-radius:var(--R);cursor:pointer;font-family:'DM Sans';font-weight:700;font-size:.95rem;color:var(--txt);text-align:left;display:flex;align-items:center;gap:9px;box-shadow:0 4px 0 var(--bdr);transition:transform .1s,box-shadow .1s}
+.cho:active:not(:disabled){transform:translateY(3px);box-shadow:none}
+.cho-lbl{width:28px;height:28px;border-radius:8px;flex-shrink:0;background:var(--card2);border:2px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800;color:var(--dim)}
+.cho:hover:not(:disabled){border-color:var(--blu);background:var(--blubg)}
+.cho:hover:not(:disabled) .cho-lbl{background:var(--blu);border-color:var(--blu);color:#fff}
+.cho.correct{border-color:var(--grn)!important;background:var(--grnbg)!important;box-shadow:0 4px 0 var(--grnd)!important;animation:qpop .3s}
+.cho.correct .cho-lbl{background:var(--grn);border-color:var(--grn);color:#fff}
+.cho.wrong{border-color:var(--red)!important;background:var(--redbg)!important;box-shadow:0 4px 0 var(--redd)!important;animation:qwob .35s}
+.cho.wrong .cho-lbl{background:var(--red);border-color:var(--red);color:#fff}
+@keyframes qpop{0%{transform:scale(1)}45%{transform:scale(1.04)}100%{transform:scale(1)}}
+@keyframes qwob{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}60%{transform:translateX(6px)}}
+.spsl{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;margin-bottom:13px;min-height:50px}
+.spslot{min-width:36px;height:44px;padding:0 4px;background:var(--card);border:2.5px solid var(--bdr);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.05rem;font-weight:900;transition:all .15s;box-shadow:0 3px 0 var(--bdr)}
+.spslot.filled{background:var(--blubg);border-color:var(--blu);color:var(--blud);box-shadow:0 3px 0 var(--blud)}
+.spslot.hinted{background:var(--card2);color:var(--dim);box-shadow:none}
+.spslot.ok{background:var(--grnbg)!important;border-color:var(--grn)!important;color:var(--grnd)!important;box-shadow:0 3px 0 var(--grnd)!important}
+.spslot.ng{background:var(--redbg)!important;border-color:var(--red)!important;color:var(--redd)!important;box-shadow:0 3px 0 var(--redd)!important}
+.spchips{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin-bottom:11px}
+.spchip{padding:9px 14px;border-radius:50px;background:var(--card);border:2.5px solid var(--bdr);font-size:.9rem;font-weight:800;cursor:pointer;box-shadow:0 4px 0 var(--bdr);transition:all .12s}
+.spchip:hover{border-color:var(--blu);background:var(--blubg)}.spchip:active{transform:translateY(3px);box-shadow:none}
+.spchip.used{opacity:.2;pointer-events:none}
+.spacts{display:flex;gap:8px;margin-bottom:11px}
+.spdel{padding:9px 15px;border-radius:50px;background:var(--card2);border:2px solid var(--bdr);font-size:.83rem;font-weight:700;cursor:pointer;box-shadow:0 3px 0 var(--bdr)}
+.spdel:active{transform:translateY(2px);box-shadow:none}
+.playwrap{display:flex;flex-direction:column;align-items:center;margin:15px 0 8px;gap:7px}
+.playring{width:90px;height:90px;border-radius:50%;background:var(--blu);box-shadow:0 6px 0 var(--blud);border:none;cursor:pointer;font-size:2.2rem;display:flex;align-items:center;justify-content:center;transition:transform .12s,box-shadow .12s;animation:glw 2.5s ease infinite}
+.playring:active{transform:translateY(5px);box-shadow:0 1px 0 var(--blud)}
+@keyframes glw{0%,100%{box-shadow:0 6px 0 var(--blud),0 0 0 0 rgba(28,176,246,.4)}60%{box-shadow:0 6px 0 var(--blud),0 0 0 15px rgba(28,176,246,0)}}
+.playhint{font-size:.78rem;color:var(--dim);font-weight:700}
+.slowbtn{padding:6px 13px;border-radius:50px;border:1.5px solid var(--bdr);background:var(--card2);font-size:.73rem;font-weight:700;cursor:pointer;color:var(--dim)}
+.stgt{min-height:50px;background:var(--card);border:2.5px solid var(--bdr);border-radius:var(--R);padding:9px 13px;margin-bottom:11px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;box-shadow:0 3px 0 var(--bdr)}
+.sw{padding:5px 11px;background:var(--card2);border:2px solid var(--bdr);border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .12s}
+.sw:hover{border-color:var(--red);background:var(--redbg)}
+.sw.ok{background:var(--grnbg);border-color:var(--grn);cursor:default}
+.sw.ng{background:var(--redbg);border-color:var(--red);cursor:default}
+.sblank{min-width:38px;height:26px;border-bottom:3px solid var(--bdr);display:inline-flex;align-items:center;justify-content:center;font-size:.82rem;color:var(--dim)}
+.sbk{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.bw{padding:9px 14px;background:var(--card);border:2.5px solid var(--bdr);border-radius:10px;font-size:.88rem;font-weight:700;cursor:pointer;box-shadow:0 4px 0 var(--bdr);transition:all .12s}
+.bw:hover{border-color:var(--blu);background:var(--blubg)}.bw:active{transform:translateY(3px);box-shadow:none}.bw.used{opacity:.2;pointer-events:none}
+.mcols{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:13px}
+.mbtn{padding:12px 9px;background:var(--card);border:2.5px solid var(--bdr);border-radius:var(--R);cursor:pointer;font-family:'DM Sans';font-weight:700;font-size:.88rem;color:var(--txt);text-align:center;box-shadow:0 4px 0 var(--bdr);transition:all .12s}
+.mbtn:active{transform:translateY(3px);box-shadow:none}
+.mbtn.sel{border-color:var(--blu);background:var(--blubg);color:var(--blud);box-shadow:0 4px 0 var(--blud)}
+.mbtn.mat{border-color:var(--grn);background:var(--grnbg);color:var(--grnd);pointer-events:none;animation:qpop .3s;box-shadow:0 4px 0 var(--grnd)}
+.mbtn.wfl{border-color:var(--red);background:var(--redbg);animation:qwob .35s}
+.typein{width:100%;padding:14px 15px;font-family:'DM Sans';font-size:1.1rem;font-weight:700;background:var(--card);border:2.5px solid var(--bdr);border-radius:var(--R);outline:none;color:var(--txt);box-shadow:0 4px 0 var(--bdr);transition:all .15s;margin-bottom:13px}
+.typein:focus{border-color:var(--blu);box-shadow:0 4px 0 var(--blud)}
+.typein.ok{border-color:var(--grn);background:var(--grnbg);box-shadow:0 4px 0 var(--grnd)}
+.typein.ng{border-color:var(--red);background:var(--redbg);animation:qwob .35s}
+.abtn{display:block;width:100%;padding:14px;border-radius:50px;border:none;font-family:'DM Sans';font-weight:900;font-size:.97rem;cursor:pointer;transition:transform .12s,box-shadow .12s}
+.abtn.gray{background:var(--card2);border:2.5px solid var(--bdr);color:var(--dim);box-shadow:0 4px 0 var(--bdr)}
+.abtn.green{background:var(--grn);color:#fff;box-shadow:0 5px 0 var(--grnd)}
+.abtn.green:active{transform:translateY(4px);box-shadow:none}
 
-/* ── CHOICES ── */
-.choice-list{display:flex;flex-direction:column;gap:9px;margin-bottom:14px}
-.choice-btn{width:100%;padding:13px 15px;background:var(--card);border:2px solid var(--bdr);border-radius:var(--R);cursor:pointer;font-family:'DM Sans';font-weight:700;font-size:.95rem;color:var(--txt);text-align:left;display:flex;align-items:center;gap:10px;box-shadow:0 3px 0 var(--bdr);transition:transform .1s,box-shadow .1s}
-.choice-btn:active:not(:disabled){transform:translateY(2px);box-shadow:none}
-.choice-lbl{width:27px;height:27px;border-radius:7px;flex-shrink:0;background:var(--card2);border:1.5px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800;color:var(--dim)}
-.choice-btn:hover:not(:disabled){border-color:#84D8F5;background:#F5FBFF}
-.choice-btn:hover:not(:disabled) .choice-lbl{background:var(--blubg);border-color:var(--blu);color:var(--blu)}
-.choice-btn.correct{border-color:var(--grn)!important;background:var(--grnbg)!important;animation:pop .3s}
-.choice-btn.correct .choice-lbl{background:var(--grn);border-color:var(--grn);color:#fff}
-.choice-btn.wrong{border-color:var(--red)!important;background:var(--redbg)!important;animation:wob .35s}
-.choice-btn.wrong .choice-lbl{background:var(--red);border-color:var(--red);color:#fff}
-@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.04)}100%{transform:scale(1)}}
-@keyframes wob{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(5px)}}
+/* FEEDBACK */
+#fbfoot{position:fixed;bottom:0;left:0;right:0;z-index:500;transform:translateY(100%);transition:transform .28s cubic-bezier(.34,1.56,.64,1);border-top:3px solid transparent;padding:15px 15px calc(env(safe-area-inset-bottom)+70px)}
+#fbfoot.show{transform:translateY(0)}
+#fbfoot.fbok{background:var(--grnbg);border-color:var(--grn)}
+#fbfoot.fbng{background:var(--redbg);border-color:var(--red)}
+.fbin{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:11px}
+.fbico{font-size:1.8rem;flex-shrink:0}
+.fbtx{flex:1}.fbtit{font-size:.97rem;font-weight:900}
+.fbtit.ok{color:var(--grnd)}.fbtit.ng{color:var(--red)}
+.fbsub{font-size:.78rem;color:var(--dim);margin-top:2px}
+.fbbtn{padding:12px 20px;border-radius:50px;border:none;font-family:'DM Sans';font-weight:900;font-size:.88rem;cursor:pointer;flex-shrink:0;transition:transform .1s,box-shadow .1s}
+.fbbtn.ok{background:var(--grn);color:#fff;box-shadow:0 4px 0 var(--grnd)}
+.fbbtn.ng{background:var(--red);color:#fff;box-shadow:0 4px 0 var(--redd)}
+.fbbtn:active{transform:translateY(3px);box-shadow:none!important}
 
-/* ── SPELL ── */
-.spell-slots{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin-bottom:14px;min-height:50px}
-.sp-slot{min-width:38px;height:46px;padding:0 5px;background:var(--card);border:2px solid var(--bdr);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;transition:all .15s}
-.sp-slot.filled{background:var(--blubg);border-color:var(--blu);color:var(--blud)}
-.sp-slot.hinted{background:var(--card2);color:var(--dim)}
-.sp-slot.ok{background:var(--grnbg)!important;border-color:var(--grn)!important;color:var(--grnd)!important}
-.sp-slot.ng{background:var(--redbg)!important;border-color:var(--red)!important;color:var(--red)!important}
-.spell-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin-bottom:12px}
-.sp-chip{padding:9px 14px;border-radius:50px;background:var(--card);border:2px solid var(--bdr);font-size:.9rem;font-weight:800;cursor:pointer;box-shadow:0 3px 0 var(--bdr);transition:all .12s}
-.sp-chip:hover{border-color:var(--blu);background:var(--blubg)}.sp-chip:active{transform:translateY(2px);box-shadow:none}
-.sp-chip.used{opacity:.2;pointer-events:none}
-.spell-actions{display:flex;gap:8px;margin-bottom:12px}
-.sp-del{padding:9px 15px;border-radius:50px;background:var(--card2);border:2px solid var(--bdr);font-size:.85rem;font-weight:700;cursor:pointer;box-shadow:0 3px 0 var(--bdr)}
-.sp-del:active{transform:translateY(2px);box-shadow:none}
+/* NO HEARTS */
+#nohearts{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:600;display:none;align-items:center;justify-content:center;padding:20px}
+#nohearts.show{display:flex}
+.nhcard{background:var(--card);border-radius:24px;padding:28px 22px;max-width:340px;width:100%;text-align:center}
+.nhicon{font-size:3.8rem;margin-bottom:10px}
+.nhtit{font-family:'DM Serif Display';font-size:1.45rem;margin-bottom:7px}
+.nhsub{font-size:.85rem;color:var(--dim);margin-bottom:16px}
+.nhtimer{font-size:1.7rem;font-weight:900;color:var(--red);margin-bottom:18px;font-family:'DM Serif Display'}
+.nhbtn{display:block;width:100%;padding:13px;border-radius:50px;border:none;background:var(--grn);color:#fff;font-family:'DM Sans';font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 4px 0 var(--grnd)}
 
-/* ── LISTEN ── */
-.listen-play{display:flex;justify-content:center;margin:18px 0 6px}
-.play-btn{width:88px;height:88px;border-radius:50%;background:var(--blu);box-shadow:0 5px 0 var(--blud);border:none;cursor:pointer;font-size:2.1rem;display:flex;align-items:center;justify-content:center;transition:transform .12s,box-shadow .12s;animation:rpulse 2.4s ease infinite}
-.play-btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--blud)}
-@keyframes rpulse{0%,100%{box-shadow:0 5px 0 var(--blud),0 0 0 0 rgba(28,176,246,.4)}60%{box-shadow:0 5px 0 var(--blud),0 0 0 14px rgba(28,176,246,0)}}
-.listen-hint{text-align:center;font-size:.8rem;color:var(--dim);font-weight:700;margin-bottom:12px}
+/* RESULT */
+.resh{text-align:center;padding:26px 0 14px}
+.resowl{font-size:4.8rem;display:block;animation:boin .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes boin{from{transform:scale(0) rotate(-20deg)}to{transform:scale(1) rotate(0)}}
+.restit{font-family:'DM Serif Display';font-size:1.7rem;margin:10px 0 4px}
+.ressub{font-size:.86rem;color:var(--dim);margin-bottom:18px}
+.resstars{display:flex;justify-content:center;gap:9px;margin-bottom:18px}
+.resstars .rs{font-size:2.6rem;animation:stpop .4s cubic-bezier(.34,1.56,.64,1) both}
+.rs:nth-child(2){animation-delay:.1s}.rs:nth-child(3){animation-delay:.2s}
+@keyframes stpop{from{transform:scale(0) rotate(-30deg)}to{transform:scale(1) rotate(0)}}
+.resstats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:18px}
+.rst{background:var(--card);border:2px solid var(--bdr);border-radius:var(--R);padding:13px;text-align:center}
+.rstv{font-family:'DM Serif Display';font-size:1.85rem}
+.rstv.g{color:var(--grn)}.rstv.r{color:var(--red)}.rstv.o{color:var(--gld)}
+.rstl{font-size:.68rem;font-weight:700;color:var(--dim);margin-top:3px;text-transform:uppercase;letter-spacing:.05em}
+.resbtns{display:flex;gap:9px}
+.rbtn{flex:1;padding:13px;border-radius:50px;font-family:'DM Sans';font-weight:900;font-size:.9rem;cursor:pointer;transition:all .12s}
+.rbtn.out{border:2.5px solid var(--bdr);background:var(--card);box-shadow:0 4px 0 var(--bdr)}
+.rbtn.grn{border:none;background:var(--grn);color:#fff;box-shadow:0 4px 0 var(--grnd)}
+.rbtn:active{transform:translateY(3px);box-shadow:none}
 
-/* ── SENTENCE ── */
-.sent-target{min-height:50px;background:var(--card);border:2px solid var(--bdr);border-radius:var(--R);padding:9px 13px;margin-bottom:11px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.sent-word{padding:5px 11px;background:var(--card2);border:2px solid var(--bdr);border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .12s}
-.sent-word:hover{border-color:var(--red);background:var(--redbg)}
-.sent-word.ok{background:var(--grnbg);border-color:var(--grn);cursor:default}
-.sent-word.ng{background:var(--redbg);border-color:var(--red);cursor:default}
-.sent-blank{min-width:36px;height:26px;border-bottom:3px solid var(--bdr);display:inline-flex;align-items:center;justify-content:center;font-size:.82rem;color:var(--dim)}
-.sent-bank{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
-.bank-word{padding:9px 14px;background:var(--card);border:2px solid var(--bdr);border-radius:9px;font-size:.9rem;font-weight:700;cursor:pointer;box-shadow:0 3px 0 var(--bdr);transition:all .12s}
-.bank-word:hover{border-color:var(--blu);background:var(--blubg)}.bank-word:active{transform:translateY(2px);box-shadow:none}
-.bank-word.used{opacity:.2;pointer-events:none}
+/* ACHIEVEMENTS */
+.achhero{background:linear-gradient(135deg,var(--gld),#FFB800);border-radius:var(--Rlg);padding:17px;margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.ahi{font-size:2.1rem}.aht{font-family:'DM Serif Display';font-size:1.1rem;color:#fff}.ahs{font-size:.76rem;color:rgba(255,255,255,.85);margin-top:2px}
+.achgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.acard{background:var(--card);border:2px solid var(--bdr);border-radius:var(--R);padding:12px;display:flex;align-items:center;gap:9px;opacity:.3;transition:all .2s}
+.acard.on{opacity:1;border-color:var(--gld);box-shadow:0 2px 0 var(--gldd)}
+.acard .ai{font-size:1.45rem;flex-shrink:0;filter:grayscale(1)}.acard.on .ai{filter:none}
+.acard .an{font-size:.8rem;font-weight:800;margin-bottom:2px}.acard .ad{font-size:.67rem;color:var(--dim)}
 
-/* ── MATCH (new type) ── */
-.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px}
-.match-btn{padding:13px 10px;background:var(--card);border:2px solid var(--bdr);border-radius:var(--R);cursor:pointer;font-family:'DM Sans';font-weight:700;font-size:.9rem;color:var(--txt);text-align:center;box-shadow:0 3px 0 var(--bdr);transition:all .12s}
-.match-btn:active{transform:translateY(2px);box-shadow:none}
-.match-btn.selected{border-color:var(--blu);background:var(--blubg);color:var(--blud)}
-.match-btn.matched{border-color:var(--grn);background:var(--grnbg);color:var(--grnd);pointer-events:none;animation:pop .3s}
-.match-btn.wrong-flash{border-color:var(--red);background:var(--redbg);animation:wob .35s}
+/* PROFILE */
+.pfhero{background:linear-gradient(135deg,#1A1710,#3A3020);border-radius:var(--Rlg);padding:22px;margin-bottom:14px;text-align:center;color:#fff}
+.pfav{font-size:3.8rem;margin-bottom:9px}
+.pfname{font-family:'DM Serif Display';font-size:1.4rem;margin-bottom:3px}
+.pfsince{font-size:.76rem;opacity:.62}
+.pfstats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:13px}
+.ps{background:rgba(255,255,255,.1);border-radius:11px;padding:11px;text-align:center}
+.psv{font-family:'DM Serif Display';font-size:1.4rem;color:var(--gld)}
+.psl{font-size:.63rem;opacity:.68;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.uprrow{display:flex;align-items:center;gap:9px;margin-bottom:9px;background:var(--card);border:1.5px solid var(--bdr);border-radius:11px;padding:11px 13px}
+.upri{font-size:1.25rem;flex-shrink:0}.uprn{font-size:.83rem;font-weight:700;flex:1}
+.uprbg{width:75px;height:8px;background:var(--card2);border-radius:50px;overflow:hidden;border:1.5px solid var(--bdr)}
+.uprfill{height:100%;border-radius:50px;transition:width .5s}
+.uprpct{font-size:.72rem;font-weight:800;color:var(--dim);min-width:28px;text-align:right}
 
-/* ── TYPE INPUT (new type) ── */
-.type-input-wrap{position:relative;margin-bottom:14px}
-.type-input{
-  width:100%;padding:14px 16px;font-family:'DM Sans';font-size:1.1rem;font-weight:700;
-  background:var(--card);border:2px solid var(--bdr);border-radius:var(--R);
-  outline:none;transition:border-color .15s;color:var(--txt);
-  box-shadow:0 3px 0 var(--bdr);
-}
-.type-input:focus{border-color:var(--blu);box-shadow:0 3px 0 var(--blud)}
-.type-input.ok{border-color:var(--grn);background:var(--grnbg);box-shadow:0 3px 0 var(--grnd)}
-.type-input.ng{border-color:var(--red);background:var(--redbg);box-shadow:0 3px 0 var(--redd)}
-
-/* ── ACTION BTN ── */
-.action-btn{display:block;width:100%;padding:14px;border-radius:50px;border:none;font-family:'DM Sans';font-weight:800;font-size:.95rem;cursor:pointer;transition:transform .12s,box-shadow .12s;margin-top:2px}
-.action-btn.gray{background:var(--card2);border:2px solid var(--bdr);color:var(--dim);box-shadow:0 3px 0 var(--bdr)}
-.action-btn.green{background:var(--grn);color:#fff;box-shadow:0 4px 0 var(--grnd)}
-.action-btn.green:active{transform:translateY(3px);box-shadow:none}
-
-/* ── FEEDBACK FOOTER ── */
-#fb-footer{position:fixed;bottom:0;left:0;right:0;z-index:400;transform:translateY(100%);transition:transform .28s cubic-bezier(.34,1.56,.64,1);padding:16px 14px calc(16px + env(safe-area-inset-bottom));border-top:3px solid transparent}
-#fb-footer.show{transform:translateY(0)}
-#fb-footer.fb-ok{background:var(--grnbg);border-color:var(--grn)}
-#fb-footer.fb-ng{background:var(--redbg);border-color:var(--red)}
-.fb-inner{max-width:580px;margin:0 auto;display:flex;align-items:center;gap:12px}
-.fb-icon{font-size:1.75rem;flex-shrink:0}
-.fb-texts{flex:1}
-.fb-title{font-size:.98rem;font-weight:800}.fb-title.ok{color:var(--grnd)}.fb-title.ng{color:var(--red)}
-.fb-sub{font-size:.8rem;color:var(--dim);margin-top:2px}
-.fb-next{padding:12px 20px;border-radius:50px;border:none;font-family:'DM Sans';font-weight:800;font-size:.9rem;cursor:pointer;flex-shrink:0}
-.fb-next.ok{background:var(--grn);color:#fff;box-shadow:0 4px 0 var(--grnd)}
-.fb-next.ng{background:var(--red);color:#fff;box-shadow:0 4px 0 var(--redd)}
-.fb-next:active{transform:translateY(2px);box-shadow:none!important}
-
-/* ── LESSON START MODAL ── */
-#lesson-modal{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.4)}
-#lesson-modal.show{display:flex}
-.lm-card{background:var(--card);border-radius:24px 24px 0 0;padding:28px 20px 36px;max-width:580px;width:100%;animation:slideup .3s cubic-bezier(.34,1.56,.64,1)}
-@keyframes slideup{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.lm-icon{font-size:3.5rem;text-align:center;margin-bottom:14px}
-.lm-title{font-family:'DM Serif Display';font-size:1.4rem;text-align:center;margin-bottom:6px}
-.lm-sub{font-size:.88rem;color:var(--dim);text-align:center;margin-bottom:18px}
-.lm-info{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:22px}
-.lm-stat{background:var(--card2);border:1.5px solid var(--bdr);border-radius:12px;padding:12px;text-align:center}
-.lm-stat-val{font-family:'DM Serif Display';font-size:1.3rem}
-.lm-stat-lbl{font-size:.7rem;font-weight:700;color:var(--dim);margin-top:2px;text-transform:uppercase;letter-spacing:.05em}
-.lm-start{display:block;width:100%;padding:15px;border-radius:50px;border:none;background:var(--grn);color:#fff;font-family:'DM Sans';font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 4px 0 var(--grnd);margin-bottom:10px}
-.lm-start:active{transform:translateY(3px);box-shadow:none}
-.lm-cancel{display:block;width:100%;padding:13px;border-radius:50px;border:2px solid var(--bdr);background:transparent;font-family:'DM Sans';font-weight:700;font-size:.9rem;cursor:pointer;color:var(--dim)}
-
-/* ── RESULT ── */
-.result-hero{text-align:center;padding:26px 0 14px}
-.result-owl{font-size:4.5rem;display:block;margin-bottom:10px;animation:bouncein .5s cubic-bezier(.34,1.56,.64,1)}
-@keyframes bouncein{from{transform:scale(0)}to{transform:scale(1)}}
-.result-title{font-family:'DM Serif Display';font-size:1.65rem;margin-bottom:4px}
-.result-sub{color:var(--dim);font-size:.86rem;margin-bottom:18px}
-.result-stars{display:flex;justify-content:center;gap:10px;margin-bottom:18px}
-.result-stars .star{font-size:2.5rem;animation:star-pop .4s cubic-bezier(.34,1.56,.64,1) both}
-.result-stars .star:nth-child(2){animation-delay:.1s}
-.result-stars .star:nth-child(3){animation-delay:.2s}
-@keyframes star-pop{from{transform:scale(0) rotate(-30deg)}to{transform:scale(1) rotate(0)}}
-.result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:18px}
-.rstat{background:var(--card);border:2px solid var(--bdr);border-radius:var(--R);padding:13px;text-align:center}
-.rstat-val{font-family:'DM Serif Display';font-size:1.85rem}.rstat-val.g{color:var(--grn)}.rstat-val.r{color:var(--red)}.rstat-val.o{color:var(--gld)}
-.rstat-lbl{font-size:.7rem;font-weight:700;color:var(--dim);margin-top:3px;text-transform:uppercase;letter-spacing:.05em}
-.result-btns{display:flex;gap:9px}
-.rbtn-out{flex:1;padding:13px;border-radius:50px;border:2px solid var(--bdr);background:var(--card);font-family:'DM Sans';font-weight:800;font-size:.9rem;cursor:pointer;box-shadow:0 3px 0 var(--bdr)}
-.rbtn-grn{flex:1;padding:13px;border-radius:50px;border:none;background:var(--grn);color:#fff;font-family:'DM Sans';font-weight:800;font-size:.9rem;cursor:pointer;box-shadow:0 4px 0 var(--grnd)}
-.rbtn-out:active,.rbtn-grn:active{transform:translateY(2px);box-shadow:none}
-
-/* ── ACHIEVEMENTS ── */
-.ach-hero{background:linear-gradient(135deg,var(--gld),#FFB800);border-radius:18px;padding:17px;margin-bottom:14px;display:flex;align-items:center;gap:12px}
-.ach-hero-i{font-size:2.1rem}.ach-hero-t{font-family:'DM Serif Display';font-size:1.1rem;color:#fff}.ach-hero-s{font-size:.78rem;color:rgba(255,255,255,.85);margin-top:2px}
-.ach-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.ach-card{background:var(--card);border:2px solid var(--bdr);border-radius:var(--R);padding:12px;display:flex;align-items:center;gap:9px;opacity:.35;transition:opacity .2s,border-color .2s}
-.ach-card.unlocked{opacity:1;border-color:var(--gld)}
-.ach-card .ach-i{font-size:1.45rem;flex-shrink:0;filter:grayscale(1)}.ach-card.unlocked .ach-i{filter:none}
-.ach-card .ach-n{font-size:.82rem;font-weight:800;margin-bottom:2px}.ach-card .ach-d{font-size:.69rem;color:var(--dim)}
-
-/* ── FLOATERS ── */
-.xp-float{position:fixed;font-weight:800;font-size:.95rem;color:var(--grn);pointer-events:none;z-index:500;animation:xpup .85s ease forwards}
-@keyframes xpup{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-50px)}}
-.notif-pop{position:fixed;top:60px;right:13px;z-index:600;background:var(--gld);color:#fff;font-weight:800;font-size:.82rem;border-radius:50px;padding:7px 14px;box-shadow:0 4px 0 var(--gldd);pointer-events:none;animation:npin .3s cubic-bezier(.34,1.56,.64,1),npout .3s ease 1.5s forwards}
-@keyframes npin{from{opacity:0;transform:translateX(60px)}to{opacity:1;transform:translateX(0)}}
-@keyframes npout{to{opacity:0;transform:translateX(60px)}}
-.combo-pop{position:fixed;top:50%;left:50%;transform:translate(-50%,-60%) scale(0);z-index:500;pointer-events:none;font-family:'DM Serif Display';font-size:2.1rem;color:var(--gld);text-shadow:0 2px 14px rgba(255,150,0,.4);opacity:0;transition:all .25s cubic-bezier(.34,1.56,.64,1)}
-.combo-pop.show{transform:translate(-50%,-60%) scale(1);opacity:1}
-.confetti-piece{position:fixed;pointer-events:none;z-index:600;border-radius:2px;animation:cfall linear forwards}
-@keyframes cfall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+/* FLOATERS */
+.xpf{position:fixed;font-weight:900;font-size:1rem;color:var(--grn);pointer-events:none;z-index:700;animation:xpup .9s ease forwards}
+@keyframes xpup{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-55px)}}
+.notif{position:fixed;top:68px;right:13px;z-index:700;background:var(--txt);color:#fff;font-weight:800;font-size:.8rem;border-radius:50px;padding:8px 15px;box-shadow:0 4px 14px rgba(0,0,0,.25);pointer-events:none;animation:npin .32s cubic-bezier(.34,1.56,.64,1),npout .3s ease 1.9s forwards;max-width:230px;text-align:center;line-height:1.3}
+@keyframes npin{from{opacity:0;transform:translateX(75px)}to{opacity:1;transform:translateX(0)}}
+@keyframes npout{to{opacity:0;transform:translateX(75px)}}
+.cpop{position:fixed;top:50%;left:50%;transform:translate(-50%,-60%) scale(0);z-index:700;pointer-events:none;font-family:'DM Serif Display';font-size:2.3rem;color:var(--gld);text-shadow:0 3px 18px rgba(255,150,0,.5);opacity:0;transition:all .27s cubic-bezier(.34,1.56,.64,1)}
+.cpop.show{transform:translate(-50%,-60%) scale(1);opacity:1}
+.cfp{position:fixed;pointer-events:none;z-index:700;border-radius:2px;animation:cfall linear forwards}
+@keyframes cfall{to{transform:translateY(115vh) rotate(720deg);opacity:0}}
+.secttitle{font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);margin:0 0 9px}
 </style>
 </head>
 <body>
 
 <div id="topbar">
-  <div class="logo">Word<b>Up!</b></div>
+  <div class="logo">azq<b>EN</b></div>
   <div class="tstats">
-    <div class="tstat">❤️&nbsp;<span id="t-hearts">5</span></div>
-    <div class="tstat">🔥&nbsp;<span id="t-streak">0</span></div>
-    <div class="tstat">💎&nbsp;<span id="t-gems">0</span></div>
+    <div class="tstat">❤️&thinsp;<span id="ts-hearts">5</span><span class="htimer" id="htimer" style="display:none"></span></div>
+    <div class="tstat">🔥&thinsp;<span id="ts-streak">0</span></div>
+    <div class="tstat">💎&thinsp;<span id="ts-gems">0</span></div>
   </div>
 </div>
 <div id="xprow">
-  <div id="xp-lv">Lv.<span id="xp-lv-num">1</span></div>
+  <div id="xp-lv">Lv.<span id="xpn">1</span></div>
   <div id="xp-bg"><div id="xp-fill"></div></div>
-  <div id="xp-num"><span id="xp-cur">0</span>/<span id="xp-max">100</span></div>
+  <div id="xp-frac"><span id="xpc">0</span>/<span id="xpm">120</span> XP</div>
 </div>
 <nav id="navbar">
-  <button class="navbtn active" data-page="learn"><span class="ico">🗺️</span>コース</button>
-  <button class="navbtn" data-page="ach"><span class="ico">🏆</span>実績</button>
+  <button class="nb on" data-p="learn"><span class="ni">🗺️</span>コース</button>
+  <button class="nb" data-p="ach"><span class="ni">🏆</span>実績</button>
+  <button class="nb" data-p="profile"><span class="ni">👤</span>プロフィール</button>
 </nav>
-
-<div id="main">
-
-  <!-- LEARN MAP -->
+<div id="wrap">
   <div id="page-learn" class="page show">
-    <div class="streak-banner">
+    <div class="course-hdr">
+      <h2>英語マスターへの道 🌍</h2>
+      <p>10ユニット・<span id="tlc">0</span>レッスンで英語を極めよう</p>
+      <div class="ch-stats">
+        <div><div class="ch-sv" id="ch-done">0</div><div class="ch-sl">完了</div></div>
+        <div><div class="ch-sv" id="ch-tot">0</div><div class="ch-sl">合計</div></div>
+        <div><div class="ch-sv" id="ch-pct">0%</div><div class="ch-sl">進捗</div></div>
+      </div>
+    </div>
+    <div class="streak-ban">
       <div class="sb-fire">🔥</div>
-      <div>
-        <div class="sb-t"><span id="home-streak-num">0</span>日間ストリーク！ <span id="streak-today-badge" style="display:none;background:rgba(255,255,255,.3);border-radius:50px;padding:1px 8px;font-size:.72rem">✅ 今日完了</span></div>
-        <div class="sb-s" id="streak-sub-txt">今日も練習しよう！</div>
+      <div class="sb-body">
+        <div class="sb-t"><span id="sb-str">0</span>日間ストリーク！
+          <span id="td-badge" style="display:none;background:rgba(255,255,255,.28);border-radius:50px;padding:1px 8px;font-size:.71rem">✅ 今日完了</span>
+        </div>
+        <div class="sb-s" id="sb-sub">今日もレッスンしよう！</div>
       </div>
+      <div class="sb-lv" id="sb-lv">Lv.1</div>
     </div>
-    <div id="course-map"><!-- rendered by JS --></div>
+    <div id="cmap"></div>
   </div>
-
-  <!-- LESSON QUIZ -->
   <div id="page-quiz" class="page">
-    <div class="lesson-hd">
-      <button class="closebtn" id="quiz-close">✕</button>
-      <div class="prog-bg"><div class="prog-fill" id="quiz-prog"></div></div>
-      <div class="hearts-strip" id="quiz-hearts"></div>
+    <div class="quiz-hd">
+      <button class="qclose" id="qx">✕</button>
+      <div class="qpbg"><div class="qpfill" id="qprog"></div></div>
+      <div class="hrow" id="qhearts"></div>
     </div>
-    <div id="quiz-body"><!-- rendered per question --></div>
+    <div id="qbody"></div>
   </div>
-
-  <!-- RESULT -->
-  <div id="page-result" class="page">
-    <div class="result-hero">
-      <span class="result-owl" id="result-owl">🦉</span>
-      <div class="result-title" id="result-title">よくできました！</div>
-      <div class="result-sub" id="result-sub"></div>
-    </div>
-    <div class="result-stars" id="result-stars"></div>
-    <div class="result-stats">
-      <div class="rstat"><div class="rstat-val g" id="result-cor">0</div><div class="rstat-lbl">✅ 正解</div></div>
-      <div class="rstat"><div class="rstat-val r" id="result-wrg">0</div><div class="rstat-lbl">❌ ミス</div></div>
-      <div class="rstat"><div class="rstat-val o" id="result-xp">0</div><div class="rstat-lbl">⭐ XP</div></div>
-    </div>
-    <div class="result-btns">
-      <button class="rbtn-out" onclick="goPage('learn')">🗺️ コースへ</button>
-      <button class="rbtn-grn" id="result-retry">🔄 もう一回！</button>
-    </div>
-  </div>
-
-  <!-- ACHIEVEMENTS -->
   <div id="page-ach" class="page">
-    <div class="ach-hero">
-      <div class="ach-hero-i">🏆</div>
-      <div>
-        <div class="ach-hero-t">実績コレクション</div>
-        <div class="ach-hero-s"><span id="ach-unlocked">0</span> / <span id="ach-total">0</span> 解除済み</div>
+    <div class="achhero">
+      <div class="ahi">🏆</div>
+      <div><div class="aht">実績コレクション</div><div class="ahs"><span id="acnt">0</span>/<span id="atot">0</span> 解除済み</div></div>
+    </div>
+    <div class="achgrid" id="achgrid"></div>
+  </div>
+  <div id="page-profile" class="page">
+    <div class="pfhero">
+      <div class="pfav">🦉</div>
+      <div class="pfname">学習者</div>
+      <div class="pfsince">azqEN で英語学習中</div>
+      <div class="pfstats">
+        <div class="ps"><div class="psv" id="pf-lv">1</div><div class="psl">Level</div></div>
+        <div class="ps"><div class="psv" id="pf-str">0</div><div class="psl">Streak</div></div>
+        <div class="ps"><div class="psv" id="pf-cor">0</div><div class="psl">正解数</div></div>
       </div>
     </div>
-    <div class="ach-grid" id="ach-grid"></div>
+    <div class="secttitle" style="margin-top:4px">ユニット進捗</div>
+    <div id="uprlist"></div>
+    <button class="abtn gray" style="margin-top:10px" onclick="if(confirm('データをリセットしますか？'))resetAll()">🗑 データリセット</button>
   </div>
-
-</div>
-
-<!-- LESSON START MODAL -->
-<div id="lesson-modal">
-  <div class="lm-card">
-    <div class="lm-icon" id="lm-icon">🌱</div>
-    <div class="lm-title" id="lm-title">レッスン1</div>
-    <div class="lm-sub" id="lm-sub">基本の単語を学ぼう</div>
-    <div class="lm-info">
-      <div class="lm-stat"><div class="lm-stat-val" id="lm-qs">5</div><div class="lm-stat-lbl">問題数</div></div>
-      <div class="lm-stat"><div class="lm-stat-val" id="lm-diff">⭐</div><div class="lm-stat-lbl">難易度</div></div>
-      <div class="lm-stat"><div class="lm-stat-val" id="lm-xp">50</div><div class="lm-stat-lbl">XP</div></div>
+  <div id="page-result" class="page">
+    <div class="resh">
+      <span class="resowl" id="resowl">🦉</span>
+      <div class="restit" id="restit">ナイス！</div>
+      <div class="ressub" id="ressub"></div>
     </div>
-    <button class="lm-start" id="lm-start-btn">はじめる！</button>
-    <button class="lm-cancel" onclick="closeModal()">キャンセル</button>
-  </div>
-</div>
-
-<!-- FEEDBACK FOOTER -->
-<div id="fb-footer">
-  <div class="fb-inner">
-    <div class="fb-icon" id="fb-icon">✅</div>
-    <div class="fb-texts">
-      <div class="fb-title" id="fb-title">正解！</div>
-      <div class="fb-sub" id="fb-sub"></div>
+    <div class="resstars" id="resstars"></div>
+    <div class="resstats">
+      <div class="rst"><div class="rstv g" id="rescor">0</div><div class="rstl">✅ 正解</div></div>
+      <div class="rst"><div class="rstv r" id="reswrg">0</div><div class="rstl">❌ ミス</div></div>
+      <div class="rst"><div class="rstv o" id="resxp">0</div><div class="rstl">⭐ XP</div></div>
     </div>
-    <button class="fb-next" id="fb-next-btn">次へ →</button>
+    <div class="resbtns">
+      <button class="rbtn out" onclick="goPage('learn')">🗺️ コースへ</button>
+      <button class="rbtn grn" id="res-retry">🔄 もう一回！</button>
+    </div>
   </div>
 </div>
-
-<div class="combo-pop" id="combo-pop"></div>
-
+<div id="modal-ov">
+  <div class="mc">
+    <div class="mc-icon" id="mc-icon">🌱</div>
+    <div class="mc-title" id="mc-title">レッスン</div>
+    <div class="mc-sub" id="mc-sub">説明</div>
+    <div class="mc-stars" id="mc-stars">☆☆☆</div>
+    <div class="mc-stats">
+      <div class="mc-stat"><div class="mc-sv" id="mc-qs">5</div><div class="mc-sl">問題</div></div>
+      <div class="mc-stat"><div class="mc-sv" id="mc-diff">⭐</div><div class="mc-sl">難易度</div></div>
+      <div class="mc-stat"><div class="mc-sv" id="mc-type">4択</div><div class="mc-sl">形式</div></div>
+      <div class="mc-stat"><div class="mc-sv" id="mc-xp">50</div><div class="mc-sl">XP</div></div>
+    </div>
+    <button class="mc-go" id="mc-go">はじめる！ →</button>
+    <button class="mc-cancel" onclick="closeModal()">キャンセル</button>
+  </div>
+</div>
+<div id="nohearts">
+  <div class="nhcard">
+    <div class="nhicon">💔</div>
+    <div class="nhtit">ハートがなくなった！</div>
+    <div class="nhsub">25分で1つ回復。また挑戦しよう！</div>
+    <div class="nhtimer" id="nhtimer">25:00</div>
+    <button class="nhbtn" onclick="document.getElementById('nohearts').classList.remove('show')">コースに戻る</button>
+  </div>
+</div>
+<div id="fbfoot">
+  <div class="fbin">
+    <div class="fbico" id="fbico">✅</div>
+    <div class="fbtx">
+      <div class="fbtit" id="fbtit">正解！</div>
+      <div class="fbsub" id="fbsub"></div>
+    </div>
+    <button class="fbbtn" id="fbbtn">次へ →</button>
+  </div>
+</div>
+<div class="cpop" id="cpop"></div>
 <script>
-// ══════════════════════════════════════════════════════
-//  COURSE CURRICULUM  (5 Units × ~5 Lessons each)
-//  Difficulty 1=easy … 5=hard
-//  Types: vocab4 | spell | listen | sentence | match | typewrite
-// ══════════════════════════════════════════════════════
-const CURRICULUM = [
-  // ─────────────── UNIT 1: 超基本 ───────────────
-  {
-    id:'u1', title:'超かんたん英語', icon:'🌱', color:'#58CC02', dark:'#46a800',
-    desc:'身近な単語を覚えよう',
-    lessons:[
-      {
-        id:'u1l1', title:'動物の名前', icon:'🐱', diff:1,
-        qs:[
-          {type:'vocab4', jp:'🐱 猫', en:'Cat',    ch:['Cat','Dog','Bird','Fish']},
-          {type:'vocab4', jp:'🐶 犬', en:'Dog',    ch:['Dog','Cat','Rabbit','Horse']},
-          {type:'vocab4', jp:'🐦 鳥', en:'Bird',   ch:['Bird','Fish','Cat','Rabbit']},
-          {type:'vocab4', jp:'🐟 魚', en:'Fish',   ch:['Fish','Bird','Dog','Snake']},
-          {type:'spell',  jp:'🐱 猫', en:'CAT'},
-        ]
-      },
-      {
-        id:'u1l2', title:'食べ物', icon:'🍎', diff:1,
-        qs:[
-          {type:'vocab4', jp:'🍎 りんご', en:'Apple',  ch:['Apple','Orange','Banana','Grape']},
-          {type:'vocab4', jp:'🍌 バナナ', en:'Banana',  ch:['Banana','Apple','Mango','Grape']},
-          {type:'vocab4', jp:'🍊 オレンジ',en:'Orange', ch:['Orange','Apple','Lemon','Peach']},
-          {type:'spell',  jp:'🍎 りんご',  en:'APPLE'},
-          {type:'listen', jp:'🍌 バナナ',  en:'Banana', ch:['Banana','Apple','Orange','Grape']},
-        ]
-      },
-      {
-        id:'u1l3', title:'色', icon:'🎨', diff:1,
-        qs:[
-          {type:'vocab4', jp:'🔴 赤い', en:'Red',    ch:['Red','Blue','Green','Yellow']},
-          {type:'vocab4', jp:'🔵 青い', en:'Blue',   ch:['Blue','Red','Purple','Orange']},
-          {type:'vocab4', jp:'🟢 緑',   en:'Green',  ch:['Green','Blue','Red','Brown']},
-          {type:'spell',  jp:'🔴 赤い', en:'RED'},
-          {type:'listen', jp:'🔵 青い', en:'Blue',   ch:['Blue','Red','Green','Yellow']},
-        ]
-      },
-      {
-        id:'u1l4', title:'数字', icon:'🔢', diff:1,
-        qs:[
-          {type:'vocab4', jp:'1 いち', en:'One',   ch:['One','Two','Three','Four']},
-          {type:'vocab4', jp:'2 に',   en:'Two',   ch:['Two','One','Three','Five']},
-          {type:'vocab4', jp:'3 さん', en:'Three', ch:['Three','Two','Four','Six']},
-          {type:'spell',  jp:'1 いち', en:'ONE'},
-          {type:'listen', jp:'2 に',   en:'Two',   ch:['Two','One','Three','Four']},
-        ]
-      },
-      {
-        id:'u1l5', title:'復習テスト①', icon:'⭐', diff:2, isBoss:true,
-        qs:[
-          {type:'vocab4', jp:'🐶 犬',   en:'Dog',    ch:['Dog','Cat','Rabbit','Horse']},
-          {type:'spell',  jp:'🍎 りんご',en:'APPLE'},
-          {type:'vocab4', jp:'🔵 青い', en:'Blue',   ch:['Blue','Red','Green','Yellow']},
-          {type:'listen', jp:'🍌 バナナ',en:'Banana', ch:['Banana','Apple','Orange','Grape']},
-          {type:'match',  pairs:[['Cat','猫'],['Dog','犬'],['Red','赤'],['Blue','青']]},
-        ]
-      },
-    ]
-  },
-
-  // ─────────────── UNIT 2: 基本単語 ───────────────
-  {
-    id:'u2', title:'基本の単語', icon:'📚', color:'#1CB0F6', dark:'#0a8bc4',
-    desc:'よく使う単語を増やそう',
-    lessons:[
-      {
-        id:'u2l1', title:'乗り物', icon:'🚗', diff:2,
-        qs:[
-          {type:'vocab4', jp:'🚗 車',    en:'Car',      ch:['Car','Bus','Train','Plane']},
-          {type:'vocab4', jp:'🚌 バス',  en:'Bus',      ch:['Bus','Car','Taxi','Truck']},
-          {type:'vocab4', jp:'✈️ 飛行機',en:'Airplane', ch:['Airplane','Train','Car','Ship']},
-          {type:'spell',  jp:'🚌 バス',  en:'BUS'},
-          {type:'listen', jp:'✈️ 飛行機',en:'Airplane', ch:['Airplane','Train','Car','Ship']},
-        ]
-      },
-      {
-        id:'u2l2', title:'場所', icon:'🏫', diff:2,
-        qs:[
-          {type:'vocab4', jp:'🏫 学校', en:'School',   ch:['School','Hospital','Park','Store']},
-          {type:'vocab4', jp:'🏥 病院', en:'Hospital', ch:['Hospital','School','Hotel','Bank']},
-          {type:'vocab4', jp:'🏠 家',   en:'House',    ch:['House','Hotel','Office','Castle']},
-          {type:'spell',  jp:'🏠 家',   en:'HOUSE'},
-          {type:'listen', jp:'🏫 学校', en:'School',   ch:['School','Hospital','Park','Store']},
-        ]
-      },
-      {
-        id:'u2l3', title:'基本動詞', icon:'🏃', diff:2,
-        qs:[
-          {type:'vocab4', jp:'🏃 走る',  en:'Run',   ch:['Run','Jump','Sleep','Eat']},
-          {type:'vocab4', jp:'🍽 食べる',en:'Eat',   ch:['Eat','Drink','Sleep','Walk']},
-          {type:'vocab4', jp:'😴 眠る',  en:'Sleep', ch:['Sleep','Eat','Run','Fly']},
-          {type:'spell',  jp:'🏃 走る',  en:'RUN'},
-          {type:'listen', jp:'🍽 食べる',en:'Eat',   ch:['Eat','Drink','Sleep','Walk']},
-        ]
-      },
-      {
-        id:'u2l4', title:'形容詞①', icon:'📏', diff:2,
-        qs:[
-          {type:'vocab4', jp:'📏 大きい',en:'Big',       ch:['Big','Small','Fast','Slow']},
-          {type:'vocab4', jp:'🔬 小さい',en:'Small',     ch:['Small','Big','Long','Short']},
-          {type:'vocab4', jp:'😊 美しい',en:'Beautiful', ch:['Beautiful','Ugly','Small','Fast']},
-          {type:'spell',  jp:'📏 大きい',en:'BIG'},
-          {type:'listen', jp:'😊 美しい',en:'Beautiful', ch:['Beautiful','Ugly','Small','Fast']},
-        ]
-      },
-      {
-        id:'u2l5', title:'復習テスト②', icon:'⭐', diff:3, isBoss:true,
-        qs:[
-          {type:'vocab4', jp:'✈️ 飛行機',en:'Airplane', ch:['Airplane','Train','Car','Ship']},
-          {type:'spell',  jp:'🏠 家',    en:'HOUSE'},
-          {type:'listen', jp:'🏃 走る',  en:'Run',      ch:['Run','Jump','Sleep','Eat']},
-          {type:'sentence',jp:'私は走ります。',ans:['I','run','.'],pool:['I','run','eat','sleep','.']},
-          {type:'match',  pairs:[['Run','走る'],['Eat','食べる'],['Big','大きい'],['Small','小さい']]},
-        ]
-      },
-    ]
-  },
-
-  // ─────────────── UNIT 3: フレーズ ───────────────
-  {
-    id:'u3', title:'かんたんフレーズ', icon:'💬', color:'#FF9600', dark:'#cc7800',
-    desc:'文を作って話せるようになろう',
-    lessons:[
-      {
-        id:'u3l1', title:'自己紹介', icon:'👋', diff:3,
-        qs:[
-          {type:'vocab4', jp:'👤 名前', en:'Name', ch:['Name','Age','Face','Hair']},
-          {type:'sentence',jp:'私の名前はハナです。',ans:['My','name','is','Hana','.'],pool:['My','name','is','Hana','She','was','.']},
-          {type:'typewrite',jp:'私は〜です。',en:'I am',hint:'I ___'},
-          {type:'listen',  jp:'名前',   en:'Name', ch:['Name','Age','Face','Hair']},
-          {type:'sentence',jp:'あなたの名前は何ですか？',ans:['What','is','your','name','?'],pool:['What','is','your','name','My','was','?']},
-        ]
-      },
-      {
-        id:'u3l2', title:'好きなもの', icon:'❤️', diff:3,
-        qs:[
-          {type:'sentence',jp:'私は犬が好きです。',      ans:['I','like','dogs','.'],    pool:['I','like','dogs','cats','hate','dislike','.']},
-          {type:'sentence',jp:'私は音楽が好きです。',    ans:['I','like','music','.'],   pool:['I','like','music','sport','hate','play','.']},
-          {type:'typewrite',jp:'〜が好き',en:'like',hint:'I ___ cats'},
-          {type:'listen',  jp:'好き',    en:'Like',  ch:['Like','Love','Hate','Want']},
-          {type:'vocab4',  jp:'❤️ 好き',en:'Like',  ch:['Like','Love','Hate','Want']},
-        ]
-      },
-      {
-        id:'u3l3', title:'行動を言う', icon:'🏃', diff:3,
-        qs:[
-          {type:'sentence',jp:'彼は速く走ります。',      ans:['He','runs','fast','.'],   pool:['He','runs','fast','slow','She','jumps','.']},
-          {type:'sentence',jp:'彼女は学校に行きます。',  ans:['She','goes','to','school','.'],pool:['She','goes','to','school','he','runs','.']},
-          {type:'typewrite',jp:'走る（三人称）',en:'runs',hint:'He ___ fast'},
-          {type:'listen',  jp:'走る',    en:'Run',   ch:['Run','Jump','Sleep','Fly']},
-          {type:'sentence',jp:'彼らは英語を勉強します。',ans:['They','study','English','.'],pool:['They','study','English','Japanese','we','eat','.']},
-        ]
-      },
-      {
-        id:'u3l4', title:'天気・状態', icon:'☀️', diff:3,
-        qs:[
-          {type:'vocab4',  jp:'☀️ 晴れ', en:'Sunny',  ch:['Sunny','Rainy','Cloudy','Windy']},
-          {type:'vocab4',  jp:'🌧 雨',   en:'Rainy',  ch:['Rainy','Sunny','Snowy','Foggy']},
-          {type:'sentence',jp:'今日は晴れています。',    ans:['Today','is','sunny','.'],  pool:['Today','is','sunny','rainy','we','play','.']},
-          {type:'spell',   jp:'☀️ 晴れ', en:'SUNNY'},
-          {type:'listen',  jp:'晴れ',    en:'Sunny',  ch:['Sunny','Rainy','Cloudy','Windy']},
-        ]
-      },
-      {
-        id:'u3l5', title:'復習テスト③', icon:'⭐', diff:4, isBoss:true,
-        qs:[
-          {type:'sentence',jp:'私は犬が好きです。',      ans:['I','like','dogs','.'],    pool:['I','like','dogs','cats','hate','dislike','.']},
-          {type:'typewrite',jp:'彼女は学校に行く',en:'goes',hint:'She ___ to school'},
-          {type:'listen',  jp:'晴れ',    en:'Sunny',  ch:['Sunny','Rainy','Cloudy','Windy']},
-          {type:'sentence',jp:'今日は晴れています。',    ans:['Today','is','sunny','.'],  pool:['Today','is','sunny','rainy','we','play','.']},
-          {type:'match',   pairs:[['Sunny','晴れ'],['Rainy','雨'],['Like','好き'],['Run','走る']]},
-        ]
-      },
-    ]
-  },
-
-  // ─────────────── UNIT 4: 応用文法 ───────────────
-  {
-    id:'u4', title:'応用文法', icon:'🧠', color:'#CE82FF', dark:'#a853e0',
-    desc:'より自然な英語表現を学ぼう',
-    lessons:[
-      {
-        id:'u4l1', title:'現在進行形', icon:'🏊', diff:4,
-        qs:[
-          {type:'vocab4',  jp:'🏊 泳いでいる',en:'Swimming', ch:['Swimming','Running','Eating','Sleeping']},
-          {type:'sentence',jp:'私は今泳いでいます。',ans:['I','am','swimming','now','.'],pool:['I','am','swimming','now','He','run','.']},
-          {type:'typewrite',jp:'〜しています',en:'am',hint:'I ___ running'},
-          {type:'listen',  jp:'泳いでいる', en:'Swimming', ch:['Swimming','Running','Eating','Sleeping']},
-          {type:'sentence',jp:'彼女は今走っています。',ans:['She','is','running','now','.'],pool:['She','is','running','now','I','am','.']},
-        ]
-      },
-      {
-        id:'u4l2', title:'can／できる', icon:'💪', diff:4,
-        qs:[
-          {type:'vocab4',  jp:'💪 できる',en:'Can', ch:['Can','Will','Must','Shall']},
-          {type:'sentence',jp:'私は泳げます。',    ans:['I','can','swim','.'],  pool:['I','can','swim','run','will','must','.']},
-          {type:'sentence',jp:'彼は飛べません。',  ans:['He','cannot','fly','.'],pool:['He','cannot','fly','run','can','swim','.']},
-          {type:'typewrite',jp:'できる',en:'can',hint:'I ___ swim'},
-          {type:'listen',  jp:'できる',   en:'Can',  ch:['Can','Will','Must','Shall']},
-        ]
-      },
-      {
-        id:'u4l3', title:'過去形', icon:'⏰', diff:4,
-        qs:[
-          {type:'vocab4',  jp:'食べた（過去）',en:'Ate',    ch:['Ate','Eat','Eaten','Eating']},
-          {type:'vocab4',  jp:'走った（過去）',en:'Ran',    ch:['Ran','Run','Running','Runs']},
-          {type:'sentence',jp:'私は昨日走りました。',ans:['I','ran','yesterday','.'],pool:['I','ran','yesterday','run','will','today','.']},
-          {type:'spell',   jp:'食べた（過去）',en:'ATE'},
-          {type:'listen',  jp:'食べた（過去）',en:'Ate',   ch:['Ate','Eat','Eaten','Eats']},
-        ]
-      },
-      {
-        id:'u4l4', title:'疑問文', icon:'❓', diff:4,
-        qs:[
-          {type:'sentence',jp:'あなたは学生ですか？',  ans:['Are','you','a','student','?'],pool:['Are','you','a','student','Is','he','?']},
-          {type:'sentence',jp:'あなたは何が好きですか？',ans:['What','do','you','like','?'],pool:['What','do','you','like','How','does','?']},
-          {type:'typewrite',jp:'〜ですか？（be動詞）',en:'Are',hint:'___ you a student?'},
-          {type:'listen',  jp:'あなた',   en:'You',  ch:['You','He','She','They']},
-          {type:'vocab4',  jp:'❓ 何',    en:'What', ch:['What','Who','Where','When']},
-        ]
-      },
-      {
-        id:'u4l5', title:'復習テスト④', icon:'⭐', diff:5, isBoss:true,
-        qs:[
-          {type:'sentence',jp:'私は今泳いでいます。',   ans:['I','am','swimming','now','.'],pool:['I','am','swimming','now','He','run','.']},
-          {type:'sentence',jp:'私は泳げます。',         ans:['I','can','swim','.'],  pool:['I','can','swim','run','will','must','.']},
-          {type:'typewrite',jp:'食べた（過去形）',en:'Ate',hint:'I ___ dinner'},
-          {type:'listen',  jp:'できる',   en:'Can',  ch:['Can','Will','Must','Shall']},
-          {type:'match',   pairs:[['Ran','走った'],['Ate','食べた'],['Can','できる'],['Are','ですか']]},
-        ]
-      },
-    ]
-  },
-
-  // ─────────────── UNIT 5: 実践英語 ───────────────
-  {
-    id:'u5', title:'実践英語', icon:'🌍', color:'#FF4B4B', dark:'#c40000',
-    desc:'実際の場面で使える英語！',
-    lessons:[
-      {
-        id:'u5l1', title:'買い物', icon:'🛒', diff:5,
-        qs:[
-          {type:'vocab4',  jp:'💰 値段',  en:'Price',     ch:['Price','Place','Peace','Piece']},
-          {type:'sentence',jp:'これはいくらですか？',ans:['How','much','is','this','?'],pool:['How','much','is','this','What','price','?']},
-          {type:'typewrite',jp:'いくら？',en:'much',hint:'How ___ is this?'},
-          {type:'listen',  jp:'値段',     en:'Price',     ch:['Price','Place','Peace','Piece']},
-          {type:'sentence',jp:'私はこれが欲しいです。',ans:['I','want','this','.'],pool:['I','want','this','that','need','like','.']},
-        ]
-      },
-      {
-        id:'u5l2', title:'道案内', icon:'🗺️', diff:5,
-        qs:[
-          {type:'vocab4',  jp:'➡️ 右',   en:'Right', ch:['Right','Left','Straight','Back']},
-          {type:'vocab4',  jp:'⬅️ 左',   en:'Left',  ch:['Left','Right','Up','Down']},
-          {type:'sentence',jp:'右に曲がってください。',ans:['Please','turn','right','.'],pool:['Please','turn','right','left','go','straight','.']},
-          {type:'spell',   jp:'➡️ 右',   en:'RIGHT'},
-          {type:'listen',  jp:'左',       en:'Left',  ch:['Left','Right','Straight','Back']},
-        ]
-      },
-      {
-        id:'u5l3', title:'気持ちを伝える', icon:'😊', diff:5,
-        qs:[
-          {type:'vocab4',  jp:'😊 嬉しい',en:'Happy',  ch:['Happy','Sad','Angry','Scared']},
-          {type:'vocab4',  jp:'😢 悲しい',en:'Sad',    ch:['Sad','Happy','Angry','Bored']},
-          {type:'sentence',jp:'私はとても嬉しいです。',ans:['I','am','very','happy','.'],pool:['I','am','very','happy','so','sad','.']},
-          {type:'spell',   jp:'😊 嬉しい',en:'HAPPY'},
-          {type:'listen',  jp:'嬉しい',   en:'Happy', ch:['Happy','Sad','Angry','Scared']},
-        ]
-      },
-      {
-        id:'u5l4', title:'未来の話', icon:'🚀', diff:5,
-        qs:[
-          {type:'sentence',jp:'私は明日学校に行きます。',ans:['I','will','go','to','school','tomorrow','.'],pool:['I','will','go','to','school','tomorrow','yesterday','.']},
-          {type:'typewrite',jp:'〜するつもり',en:'will',hint:'I ___ go tomorrow'},
-          {type:'vocab4',  jp:'明日',     en:'Tomorrow', ch:['Tomorrow','Yesterday','Today','Soon']},
-          {type:'listen',  jp:'明日',     en:'Tomorrow', ch:['Tomorrow','Yesterday','Today','Soon']},
-          {type:'sentence',jp:'彼女は医者になるでしょう。',ans:['She','will','be','a','doctor','.'],pool:['She','will','be','a','doctor','teacher','.']},
-        ]
-      },
-      {
-        id:'u5l5', title:'最終テスト🏆', icon:'👑', diff:5, isBoss:true,
-        qs:[
-          {type:'sentence',jp:'これはいくらですか？',   ans:['How','much','is','this','?'],pool:['How','much','is','this','What','price','?']},
-          {type:'sentence',jp:'右に曲がってください。', ans:['Please','turn','right','.'],pool:['Please','turn','right','left','go','straight','.']},
-          {type:'typewrite',jp:'嬉しい',en:'happy',hint:'I am ___ today'},
-          {type:'match',   pairs:[['Happy','嬉しい'],['Right','右'],['Tomorrow','明日'],['Will','するつもり']]},
-          {type:'sentence',jp:'私は明日学校に行きます。',ans:['I','will','go','to','school','tomorrow','.'],pool:['I','will','go','to','school','tomorrow','yesterday','.']},
-        ]
-      },
-    ]
-  },
+// ── DATA ──
+function q(type,data){return{type,...data};}
+const CUR=[
+{id:'u1',title:'超かんたん英語',icon:'🌱',color:'#58CC02',dark:'#3D8F01',desc:'身近な単語からスタート！',lessons:[
+{id:'u1-1',title:'動物①',icon:'🐱',diff:1,types:['v4','sp'],qs:[q('v4',{jp:'🐱 猫',en:'Cat',ch:['Cat','Dog','Bird','Fish']}),q('v4',{jp:'🐶 犬',en:'Dog',ch:['Dog','Cat','Rabbit','Horse']}),q('v4',{jp:'🐦 鳥',en:'Bird',ch:['Bird','Fish','Cat','Rabbit']}),q('sp',{jp:'🐱 猫',en:'CAT'}),q('v4',{jp:'🐟 魚',en:'Fish',ch:['Fish','Bird','Dog','Snake']})]},
+{id:'u1-2',title:'食べ物①',icon:'🍎',diff:1,types:['v4','li'],qs:[q('v4',{jp:'🍎 りんご',en:'Apple',ch:['Apple','Orange','Banana','Grape']}),q('v4',{jp:'🍌 バナナ',en:'Banana',ch:['Banana','Apple','Mango','Grape']}),q('li',{jp:'🍊 オレンジ',en:'Orange',ch:['Orange','Apple','Lemon','Peach']}),q('sp',{jp:'🍎 りんご',en:'APPLE'}),q('v4',{jp:'🍇 ぶどう',en:'Grape',ch:['Grape','Apple','Banana','Mango']})]},
+{id:'u1-3',title:'色',icon:'🎨',diff:1,types:['v4','sp'],qs:[q('v4',{jp:'🔴 赤',en:'Red',ch:['Red','Blue','Green','Yellow']}),q('v4',{jp:'🔵 青',en:'Blue',ch:['Blue','Red','Purple','Orange']}),q('v4',{jp:'🟢 緑',en:'Green',ch:['Green','Blue','Red','Brown']}),q('sp',{jp:'🔴 赤',en:'RED'}),q('li',{jp:'🔵 青',en:'Blue',ch:['Blue','Red','Green','Yellow']})]},
+{id:'u1-4',title:'数字①',icon:'🔢',diff:1,types:['v4','sp'],qs:[q('v4',{jp:'1',en:'One',ch:['One','Two','Three','Four']}),q('v4',{jp:'2',en:'Two',ch:['Two','One','Three','Five']}),q('v4',{jp:'3',en:'Three',ch:['Three','Two','Four','Six']}),q('sp',{jp:'1',en:'ONE'}),q('ma',{pairs:[['One','1'],['Two','2'],['Three','3'],['Four','4']]})]},
+{id:'u1-5',title:'数字②',icon:'🔟',diff:1,types:['v4','ma'],qs:[q('v4',{jp:'5',en:'Five',ch:['Five','Four','Six','Seven']}),q('v4',{jp:'6',en:'Six',ch:['Six','Five','Seven','Eight']}),q('v4',{jp:'10',en:'Ten',ch:['Ten','Eight','Six','Twelve']}),q('sp',{jp:'5',en:'FIVE'}),q('ma',{pairs:[['Five','5'],['Six','6'],['Seven','7'],['Ten','10']]})]},
+{id:'u1-6',title:'マッチ練習①',icon:'🃏',diff:1,types:['ma'],qs:[q('ma',{pairs:[['Cat','猫'],['Dog','犬'],['Bird','鳥'],['Fish','魚']]}),q('ma',{pairs:[['Red','赤'],['Blue','青'],['Green','緑'],['Yellow','黄']]}),q('ma',{pairs:[['Apple','りんご'],['Banana','バナナ'],['Orange','オレンジ'],['Grape','ぶどう']]})]},
+{id:'u1-boss',title:'ユニット1テスト',icon:'⭐',diff:2,isBoss:true,types:['v4','sp','li','ma'],qs:[q('v4',{jp:'🐱 猫',en:'Cat',ch:['Cat','Dog','Bird','Fish']}),q('sp',{jp:'🍎 りんご',en:'APPLE'}),q('li',{jp:'🔵 青',en:'Blue',ch:['Blue','Red','Green','Yellow']}),q('v4',{jp:'3',en:'Three',ch:['Three','Two','Four','Six']}),q('ma',{pairs:[['Cat','猫'],['Red','赤'],['One','1'],['Apple','りんご']]}),q('sp',{jp:'🐶 犬',en:'DOG'})]}
+]},
+{id:'u2',title:'基本単語',icon:'📚',color:'#1CB0F6',dark:'#0A8BC4',desc:'よく使う単語を増やそう',lessons:[
+{id:'u2-1',title:'乗り物',icon:'🚗',diff:2,types:['v4','sp'],qs:[q('v4',{jp:'🚗 車',en:'Car',ch:['Car','Bus','Train','Plane']}),q('v4',{jp:'🚌 バス',en:'Bus',ch:['Bus','Car','Taxi','Truck']}),q('v4',{jp:'✈️ 飛行機',en:'Airplane',ch:['Airplane','Rocket','Helicopter','Ship']}),q('sp',{jp:'🚗 車',en:'CAR'}),q('li',{jp:'✈️ 飛行機',en:'Airplane',ch:['Airplane','Train','Car','Ship']})]},
+{id:'u2-2',title:'場所',icon:'🏫',diff:2,types:['v4','sp','ma'],qs:[q('v4',{jp:'🏫 学校',en:'School',ch:['School','Hospital','Park','Store']}),q('v4',{jp:'🏥 病院',en:'Hospital',ch:['Hospital','School','Hotel','Bank']}),q('v4',{jp:'🏠 家',en:'House',ch:['House','Hotel','Office','Castle']}),q('sp',{jp:'🏠 家',en:'HOUSE'}),q('ma',{pairs:[['School','学校'],['Hospital','病院'],['House','家'],['Store','店']]})]},
+{id:'u2-3',title:'動詞①',icon:'🏃',diff:2,types:['v4','sp','li'],qs:[q('v4',{jp:'🏃 走る',en:'Run',ch:['Run','Jump','Sleep','Eat']}),q('v4',{jp:'🍽 食べる',en:'Eat',ch:['Eat','Drink','Sleep','Walk']}),q('v4',{jp:'😴 眠る',en:'Sleep',ch:['Sleep','Eat','Run','Fly']}),q('sp',{jp:'🏃 走る',en:'RUN'}),q('li',{jp:'🍽 食べる',en:'Eat',ch:['Eat','Drink','Sleep','Walk']})]},
+{id:'u2-4',title:'動詞②',icon:'🏊',diff:2,types:['v4','sp','ma'],qs:[q('v4',{jp:'🏊 泳ぐ',en:'Swim',ch:['Swim','Run','Jump','Fly']}),q('v4',{jp:'📖 読む',en:'Read',ch:['Read','Write','Draw','Sing']}),q('v4',{jp:'✍ 書く',en:'Write',ch:['Write','Read','Draw','Paint']}),q('sp',{jp:'📖 読む',en:'READ'}),q('ma',{pairs:[['Run','走る'],['Eat','食べる'],['Swim','泳ぐ'],['Read','読む']]})]},
+{id:'u2-5',title:'形容詞①',icon:'📏',diff:2,types:['v4','sp','li'],qs:[q('v4',{jp:'📏 大きい',en:'Big',ch:['Big','Small','Fast','Slow']}),q('v4',{jp:'🔬 小さい',en:'Small',ch:['Small','Big','Long','Short']}),q('v4',{jp:'⚡ 速い',en:'Fast',ch:['Fast','Slow','Big','Long']}),q('sp',{jp:'📏 大きい',en:'BIG'}),q('li',{jp:'⚡ 速い',en:'Fast',ch:['Fast','Slow','Big','Small']})]},
+{id:'u2-6',title:'形容詞②',icon:'🌡',diff:2,types:['v4','sp','ma'],qs:[q('v4',{jp:'🔥 暑い',en:'Hot',ch:['Hot','Cold','Warm','Cool']}),q('v4',{jp:'🥶 寒い',en:'Cold',ch:['Cold','Hot','Warm','Cool']}),q('v4',{jp:'😊 嬉しい',en:'Happy',ch:['Happy','Sad','Angry','Scared']}),q('sp',{jp:'🔥 暑い',en:'HOT'}),q('ma',{pairs:[['Hot','暑い'],['Cold','寒い'],['Happy','嬉しい'],['Sad','悲しい']]})]},
+{id:'u2-7',title:'身体',icon:'💪',diff:2,types:['v4','sp','li'],qs:[q('v4',{jp:'👁 目',en:'Eye',ch:['Eye','Ear','Nose','Mouth']}),q('v4',{jp:'👃 鼻',en:'Nose',ch:['Nose','Eye','Ear','Hand']}),q('v4',{jp:'✋ 手',en:'Hand',ch:['Hand','Foot','Head','Arm']}),q('sp',{jp:'👁 目',en:'EYE'}),q('li',{jp:'✋ 手',en:'Hand',ch:['Hand','Foot','Head','Arm']})]},
+{id:'u2-8',title:'家族',icon:'👨‍👩‍👧',diff:2,types:['v4','sp','ma'],qs:[q('v4',{jp:'👨 お父さん',en:'Father',ch:['Father','Mother','Brother','Sister']}),q('v4',{jp:'👩 お母さん',en:'Mother',ch:['Mother','Father','Brother','Sister']}),q('v4',{jp:'👦 兄弟',en:'Brother',ch:['Brother','Sister','Father','Mother']}),q('sp',{jp:'👨 父',en:'FATHER'}),q('ma',{pairs:[['Father','父'],['Mother','母'],['Brother','兄/弟'],['Sister','姉/妹']]})]},
+{id:'u2-boss',title:'ユニット2テスト',icon:'⭐',diff:3,isBoss:true,types:['v4','sp','li','ma'],qs:[q('v4',{jp:'✈️ 飛行機',en:'Airplane',ch:['Airplane','Train','Car','Ship']}),q('sp',{jp:'🏠 家',en:'HOUSE'}),q('li',{jp:'🏃 走る',en:'Run',ch:['Run','Jump','Sleep','Eat']}),q('v4',{jp:'📏 大きい',en:'Big',ch:['Big','Small','Fast','Slow']}),q('ma',{pairs:[['Run','走る'],['Hot','暑い'],['Eye','目'],['Father','父']]}),q('v4',{jp:'😊 嬉しい',en:'Happy',ch:['Happy','Sad','Angry','Scared']})]}
+]},
+{id:'u3',title:'かんたんフレーズ',icon:'💬',color:'#FF9600',dark:'#B86D00',desc:'文を作り始めよう！',lessons:[
+{id:'u3-1',title:'I am ...',icon:'👤',diff:2,types:['se','tw'],qs:[q('se',{jp:'私は学生です。',ans:['I','am','a','student','.'],pool:['I','am','a','student','he','teacher','.']}),q('tw',{jp:'私は〜です',en:'am',hint:'I ___ a student.'}),q('v4',{jp:'学生',en:'Student',ch:['Student','Teacher','Doctor','Nurse']}),q('se',{jp:'私は先生です。',ans:['I','am','a','teacher','.'],pool:['I','am','a','teacher','student','nurse','.']}),q('tw',{jp:'先生',en:'teacher',hint:'I am a ___.'}) ]},
+{id:'u3-2',title:'自己紹介',icon:'👋',diff:2,types:['se','tw'],qs:[q('se',{jp:'私の名前はハナです。',ans:['My','name','is','Hana','.'],pool:['My','name','is','Hana','Her','was','.']}),q('tw',{jp:'名前',en:'name',hint:'My ___ is Hana.'}),q('v4',{jp:'名前',en:'Name',ch:['Name','Age','Face','Hair']}),q('se',{jp:'あなたの名前は何ですか？',ans:['What','is','your','name','?'],pool:['What','is','your','name','How','My','?']}),q('tw',{jp:'何',en:'What',hint:'___ is your name?'})]},
+{id:'u3-3',title:'好きなもの',icon:'❤️',diff:3,types:['se','tw'],qs:[q('se',{jp:'私は犬が好きです。',ans:['I','like','dogs','.'],pool:['I','like','dogs','cats','hate','dislike','.']}),q('se',{jp:'私は音楽が好きです。',ans:['I','like','music','.'],pool:['I','like','music','sport','hate','play','.']}),q('tw',{jp:'好き',en:'like',hint:'I ___ cats.'}),q('v4',{jp:'好き',en:'Like',ch:['Like','Love','Hate','Want']}),q('se',{jp:'彼女は花が好きです。',ans:['She','likes','flowers','.'],pool:['She','likes','flowers','trees','hate','want','.']})]},
+{id:'u3-4',title:'行動を言う',icon:'🏃',diff:3,types:['se','tw'],qs:[q('se',{jp:'彼は速く走ります。',ans:['He','runs','fast','.'],pool:['He','runs','fast','slow','She','jumps','.']}),q('se',{jp:'彼女は学校に行きます。',ans:['She','goes','to','school','.'],pool:['She','goes','to','school','he','runs','.']}),q('tw',{jp:'走る（三人称）',en:'runs',hint:'He ___ fast.'}),q('se',{jp:'彼らは英語を勉強します。',ans:['They','study','English','.'],pool:['They','study','English','Japanese','we','eat','.']}),q('se',{jp:'私たちはサッカーをします。',ans:['We','play','soccer','.'],pool:['We','play','soccer','tennis','they','go','.']})]},
+{id:'u3-5',title:'天気',icon:'☀️',diff:3,types:['v4','se','sp'],qs:[q('v4',{jp:'☀️ 晴れ',en:'Sunny',ch:['Sunny','Rainy','Cloudy','Windy']}),q('v4',{jp:'🌧 雨',en:'Rainy',ch:['Rainy','Sunny','Snowy','Foggy']}),q('se',{jp:'今日は晴れています。',ans:['Today','is','sunny','.'],pool:['Today','is','sunny','rainy','we','play','.']}),q('sp',{jp:'☀️ 晴れ',en:'SUNNY'}),q('li',{jp:'晴れ',en:'Sunny',ch:['Sunny','Rainy','Cloudy','Windy']})]},
+{id:'u3-6',title:'時間の表現',icon:'⏰',diff:3,types:['v4','se','ma'],qs:[q('v4',{jp:'今日',en:'Today',ch:['Today','Yesterday','Tomorrow','Now']}),q('v4',{jp:'明日',en:'Tomorrow',ch:['Tomorrow','Today','Yesterday','Later']}),q('v4',{jp:'昨日',en:'Yesterday',ch:['Yesterday','Today','Tomorrow','Before']}),q('se',{jp:'今日は月曜日です。',ans:['Today','is','Monday','.'],pool:['Today','is','Monday','Tuesday','Yesterday','was','.']}),q('ma',{pairs:[['Today','今日'],['Tomorrow','明日'],['Yesterday','昨日'],['Now','今']]})]},
+{id:'u3-7',title:'曜日',icon:'📅',diff:3,types:['v4','sp','ma'],qs:[q('v4',{jp:'月曜日',en:'Monday',ch:['Monday','Tuesday','Wednesday','Thursday']}),q('v4',{jp:'水曜日',en:'Wednesday',ch:['Wednesday','Monday','Friday','Sunday']}),q('v4',{jp:'金曜日',en:'Friday',ch:['Friday','Monday','Wednesday','Saturday']}),q('sp',{jp:'月曜日',en:'MONDAY'}),q('ma',{pairs:[['Monday','月'],['Wednesday','水'],['Friday','金'],['Sunday','日']]})]},
+{id:'u3-boss',title:'ユニット3テスト',icon:'⭐',diff:4,isBoss:true,types:['v4','se','tw','ma'],qs:[q('se',{jp:'私は犬が好きです。',ans:['I','like','dogs','.'],pool:['I','like','dogs','cats','hate','dislike','.']}),q('tw',{jp:'彼女は学校に行く',en:'goes',hint:'She ___ to school.'}),q('se',{jp:'今日は晴れています。',ans:['Today','is','sunny','.'],pool:['Today','is','sunny','rainy','we','play','.']}),q('ma',{pairs:[['Today','今日'],['Sunny','晴れ'],['Like','好き'],['Monday','月曜日']]}),q('v4',{jp:'明日',en:'Tomorrow',ch:['Tomorrow','Today','Yesterday','Later']}),q('se',{jp:'彼は速く走ります。',ans:['He','runs','fast','.'],pool:['He','runs','fast','slow','She','jumps','.']}),]}
+]},
+{id:'u4',title:'文法の基礎',icon:'🧱',color:'#9B59B6',dark:'#6C3483',desc:'英語の仕組みを学ぼう',lessons:[
+{id:'u4-1',title:'be動詞',icon:'🔗',diff:3,types:['se','tw','ma'],qs:[q('se',{jp:'私は学生です。',ans:['I','am','a','student','.'],pool:['I','am','is','student','a','be','.']}),q('se',{jp:'彼は医者です。',ans:['He','is','a','doctor','.'],pool:['He','is','am','doctor','a','are','.']}),q('se',{jp:'彼らは友達です。',ans:['They','are','friends','.'],pool:['They','are','am','friends','is','we','.']}),q('tw',{jp:'彼女は〜です',en:'is',hint:'She ___ a nurse.'}),q('ma',{pairs:[['I','am'],['He','is'],['She','is'],['They','are']]})]},
+{id:'u4-2',title:'否定文',icon:'🚫',diff:3,types:['se','tw'],qs:[q('se',{jp:'私は学生ではありません。',ans:['I','am','not','a','student','.'],pool:['I','am','not','a','student','is','.']}),q('se',{jp:'彼は医者ではありません。',ans:['He','is','not','a','doctor','.'],pool:['He','is','not','a','doctor','am','.']}),q('tw',{jp:'〜ではない',en:'not',hint:'I am ___ a student.'}),q('v4',{jp:'否定',en:'Not',ch:['Not','Yes','And','But']}),q('se',{jp:'私は猫が好きではありません。',ans:['I','do','not','like','cats','.'],pool:['I','do','not','like','cats','am','.']})]},
+{id:'u4-3',title:'疑問文',icon:'❓',diff:3,types:['se','tw','v4'],qs:[q('se',{jp:'あなたは学生ですか？',ans:['Are','you','a','student','?'],pool:['Are','you','a','student','Is','he','?']}),q('se',{jp:'彼は先生ですか？',ans:['Is','he','a','teacher','?'],pool:['Is','he','a','teacher','Are','she','?']}),q('se',{jp:'あなたは何が好きですか？',ans:['What','do','you','like','?'],pool:['What','do','you','like','How','does','?']}),q('tw',{jp:'〜ですか？（2人称）',en:'Are',hint:'___ you a student?'}),q('v4',{jp:'何',en:'What',ch:['What','Who','Where','When']})]},
+{id:'u4-4',title:'現在進行形',icon:'🏊',diff:4,types:['se','tw','ma'],qs:[q('v4',{jp:'泳いでいる',en:'Swimming',ch:['Swimming','Running','Eating','Sleeping']}),q('se',{jp:'私は今泳いでいます。',ans:['I','am','swimming','now','.'],pool:['I','am','swimming','now','He','run','.']}),q('tw',{jp:'〜しています（一人称）',en:'am',hint:'I ___ running.'}),q('se',{jp:'彼女は今走っています。',ans:['She','is','running','now','.'],pool:['She','is','running','now','I','am','.']}),q('ma',{pairs:[['Swimming','泳いでいる'],['Running','走っている'],['Eating','食べている'],['Sleeping','眠っている']]})]},
+{id:'u4-5',title:'can / できる',icon:'💪',diff:4,types:['se','tw'],qs:[q('v4',{jp:'できる',en:'Can',ch:['Can','Will','Must','Shall']}),q('se',{jp:'私は泳げます。',ans:['I','can','swim','.'],pool:['I','can','swim','run','will','must','.']}),q('se',{jp:'彼は飛べません。',ans:['He','cannot','fly','.'],pool:['He','cannot','fly','run','can','swim','.']}),q('tw',{jp:'できる',en:'can',hint:'I ___ swim.'}),q('se',{jp:'あなたは歌えますか？',ans:['Can','you','sing','?'],pool:['Can','you','sing','dance','Will','shall','?']})]},
+{id:'u4-6',title:'過去形①',icon:'⏰',diff:4,types:['v4','se','sp'],qs:[q('v4',{jp:'歩いた（過去）',en:'Walked',ch:['Walked','Walk','Walking','Walks']}),q('se',{jp:'私は昨日歩きました。',ans:['I','walked','yesterday','.'],pool:['I','walked','yesterday','walk','today','will','.']}),q('sp',{jp:'歩いた',en:'WALKED'}),q('tw',{jp:'歩いた',en:'walked',hint:'I ___ home yesterday.'}),q('v4',{jp:'勉強した（過去）',en:'Studied',ch:['Studied','Study','Studying','Studies']})]},
+{id:'u4-7',title:'過去形②（不規則）',icon:'⚡',diff:4,types:['v4','se','ma'],qs:[q('v4',{jp:'食べた（不規則）',en:'Ate',ch:['Ate','Eat','Eaten','Eating']}),q('v4',{jp:'走った',en:'Ran',ch:['Ran','Run','Running','Runs']}),q('v4',{jp:'行った',en:'Went',ch:['Went','Go','Going','Gone']}),q('se',{jp:'私は昨日走りました。',ans:['I','ran','yesterday','.'],pool:['I','ran','yesterday','run','will','today','.']}),q('ma',{pairs:[['Eat','Ate'],['Run','Ran'],['Go','Went'],['See','Saw']]})]},
+{id:'u4-8',title:'未来形',icon:'🚀',diff:4,types:['se','tw','ma'],qs:[q('v4',{jp:'〜するつもり',en:'Will',ch:['Will','Can','Must','Shall']}),q('se',{jp:'私は明日学校に行きます。',ans:['I','will','go','to','school','tomorrow','.'],pool:['I','will','go','to','school','tomorrow','yesterday','.']}),q('tw',{jp:'〜するつもり',en:'will',hint:'I ___ go tomorrow.'}),q('se',{jp:'彼女は医者になるでしょう。',ans:['She','will','be','a','doctor','.'],pool:['She','will','be','a','doctor','teacher','.']}),q('ma',{pairs:[['Will go','行くだろう'],['Will eat','食べるだろう'],['Will run','走るだろう'],['Will be','なるだろう']]})]},
+{id:'u4-boss',title:'ユニット4テスト',icon:'⭐',diff:5,isBoss:true,types:['v4','se','tw','ma'],qs:[q('se',{jp:'私は今泳いでいます。',ans:['I','am','swimming','now','.'],pool:['I','am','swimming','now','He','run','.']}),q('se',{jp:'私は泳げます。',ans:['I','can','swim','.'],pool:['I','can','swim','run','will','must','.']}),q('tw',{jp:'走った（過去）',en:'ran',hint:'He ___ fast yesterday.'}),q('ma',{pairs:[['Eat','Ate'],['Run','Ran'],['Will','するつもり'],['Can','できる']]}),q('se',{jp:'彼女は医者になるでしょう。',ans:['She','will','be','a','doctor','.'],pool:['She','will','be','a','doctor','teacher','.']}),]}
+]},
+{id:'u5',title:'日常英会話',icon:'🗣',color:'#E91E8C',dark:'#A0145E',desc:'実際の会話表現を学ぼう',lessons:[
+{id:'u5-1',title:'挨拶',icon:'👋',diff:3,types:['v4','li','tw'],qs:[q('v4',{jp:'こんにちは',en:'Hello',ch:['Hello','Goodbye','Please','Thank you']}),q('v4',{jp:'ありがとう',en:'Thank you',ch:['Thank you','Sorry','Please','Hello']}),q('v4',{jp:'すみません',en:'Excuse me',ch:['Excuse me','Sorry','Please','Pardon']}),q('li',{jp:'こんにちは',en:'Hello',ch:['Hello','Goodbye','Please','Thank you']}),q('tw',{jp:'ありがとう',en:'Thank you',hint:'___ very much!'})]},
+{id:'u5-2',title:'買い物',icon:'🛒',diff:4,types:['se','tw','li'],qs:[q('v4',{jp:'値段',en:'Price',ch:['Price','Place','Peace','Piece']}),q('se',{jp:'これはいくらですか？',ans:['How','much','is','this','?'],pool:['How','much','is','this','What','price','?']}),q('tw',{jp:'いくら？',en:'much',hint:'How ___ is this?'}),q('se',{jp:'私はこれが欲しいです。',ans:['I','want','this','.'],pool:['I','want','this','that','need','like','.']}),q('li',{jp:'値段',en:'Price',ch:['Price','Place','Peace','Piece']})]},
+{id:'u5-3',title:'道案内',icon:'🗺️',diff:4,types:['v4','se','sp'],qs:[q('v4',{jp:'右',en:'Right',ch:['Right','Left','Straight','Back']}),q('v4',{jp:'左',en:'Left',ch:['Left','Right','Up','Down']}),q('se',{jp:'右に曲がってください。',ans:['Please','turn','right','.'],pool:['Please','turn','right','left','go','straight','.']}),q('sp',{jp:'右',en:'RIGHT'}),q('li',{jp:'左',en:'Left',ch:['Left','Right','Straight','Back']})]},
+{id:'u5-4',title:'感情表現',icon:'😊',diff:4,types:['v4','se','ma'],qs:[q('v4',{jp:'怒り',en:'Angry',ch:['Angry','Happy','Sad','Scared']}),q('v4',{jp:'驚き',en:'Surprised',ch:['Surprised','Bored','Tired','Happy']}),q('se',{jp:'私はとても嬉しいです。',ans:['I','am','very','happy','.'],pool:['I','am','very','happy','so','sad','.']}),q('sp',{jp:'嬉しい',en:'HAPPY'}),q('ma',{pairs:[['Happy','嬉しい'],['Sad','悲しい'],['Angry','怒り'],['Surprised','驚き']]})]},
+{id:'u5-5',title:'趣味',icon:'🎨',diff:4,types:['v4','se','tw'],qs:[q('v4',{jp:'趣味',en:'Hobby',ch:['Hobby','Job','Dream','Skill']}),q('se',{jp:'私の趣味は絵を描くことです。',ans:['My','hobby','is','drawing','pictures','.'],pool:['My','hobby','is','drawing','pictures','painting','.']}),q('tw',{jp:'趣味',en:'hobby',hint:'My ___ is singing.'}),q('li',{jp:'趣味',en:'Hobby',ch:['Hobby','Job','Dream','Skill']}),q('v4',{jp:'料理',en:'Cooking',ch:['Cooking','Drawing','Reading','Gaming']})]},
+{id:'u5-6',title:'健康',icon:'💊',diff:4,types:['v4','se','ma'],qs:[q('v4',{jp:'病気',en:'Sick',ch:['Sick','Healthy','Tired','Hurt']}),q('v4',{jp:'痛い',en:'Pain',ch:['Pain','Sick','Hurt','Ache']}),q('se',{jp:'私は頭が痛いです。',ans:['I','have','a','headache','.'],pool:['I','have','a','headache','stomachache','feel','.']}),q('tw',{jp:'病気',en:'sick',hint:'I am feeling ___.'}),q('ma',{pairs:[['Sick','病気'],['Pain','痛み'],['Healthy','健康'],['Tired','疲れた']]})]},
+{id:'u5-boss',title:'ユニット5テスト',icon:'⭐',diff:5,isBoss:true,types:['v4','se','tw','ma'],qs:[q('se',{jp:'これはいくらですか？',ans:['How','much','is','this','?'],pool:['How','much','is','this','What','price','?']}),q('se',{jp:'右に曲がってください。',ans:['Please','turn','right','.'],pool:['Please','turn','right','left','go','straight','.']}),q('tw',{jp:'ありがとう',en:'Thank you',hint:'___ very much!'}),q('ma',{pairs:[['Happy','嬉しい'],['Right','右'],['Sick','病気'],['Hobby','趣味']]}),q('v4',{jp:'値段',en:'Price',ch:['Price','Place','Peace','Piece']}),]}
+]},
+{id:'u6',title:'中級文法',icon:'📐',color:'#00BCD4',dark:'#00838F',desc:'より正確な英語を目指そう',lessons:[
+{id:'u6-1',title:'前置詞①',icon:'📍',diff:4,types:['v4','se','ma'],qs:[q('v4',{jp:'〜の中に',en:'In',ch:['In','On','At','Under']}),q('v4',{jp:'〜の上に',en:'On',ch:['On','In','Under','Over']}),q('se',{jp:'本は机の上にあります。',ans:['The','book','is','on','the','desk','.'],pool:['The','book','is','on','in','desk','.']}),q('tw',{jp:'〜の中に',en:'in',hint:'The cat is ___ the box.'}),q('ma',{pairs:[['In','〜の中'],['On','〜の上'],['Under','〜の下'],['At','〜で']]})]},
+{id:'u6-2',title:'接続詞',icon:'🔗',diff:4,types:['v4','se','ma'],qs:[q('v4',{jp:'そして',en:'And',ch:['And','But','Or','So']}),q('v4',{jp:'しかし',en:'But',ch:['But','And','Or','Because']}),q('se',{jp:'私はりんごとバナナが好きです。',ans:['I','like','apples','and','bananas','.'],pool:['I','like','apples','and','bananas','or','.']}),q('tw',{jp:'しかし',en:'but',hint:'I like cats, ___ I have a dog.'}),q('ma',{pairs:[['And','そして'],['But','しかし'],['Or','または'],['Because','なぜなら']]})]},
+{id:'u6-3',title:'比較級・最上級',icon:'📊',diff:5,types:['v4','se','ma'],qs:[q('v4',{jp:'〜より大きい',en:'Bigger',ch:['Bigger','Biggest','Big','More big']}),q('v4',{jp:'最も大きい',en:'Biggest',ch:['Biggest','Bigger','Most big','Big']}),q('se',{jp:'象はライオンより大きいです。',ans:['An','elephant','is','bigger','than','a','lion','.'],pool:['An','elephant','is','bigger','than','a','lion','smaller','.']}),q('tw',{jp:'〜より大きい',en:'bigger',hint:'An elephant is ___ than a dog.'}),q('ma',{pairs:[['Big','Bigger'],['Fast','Faster'],['Small','Smaller'],['Good','Best']]})]},
+{id:'u6-4',title:'現在完了形',icon:'✅',diff:5,types:['v4','se','tw'],qs:[q('v4',{jp:'〜したことがある',en:'Have done',ch:['Have done','Did','Do','Will do']}),q('se',{jp:'私は日本食を食べたことがあります。',ans:['I','have','eaten','Japanese','food','.'],pool:['I','have','eaten','Japanese','food','ate','.']}),q('tw',{jp:'食べたことある（完了）',en:'have eaten',hint:'I ___ sushi before.'}),q('v4',{jp:'行ったことがある（完了）',en:'Have been',ch:['Have been','Went','Will go','Go']}),q('se',{jp:'彼女はパリに行ったことがあります。',ans:['She','has','been','to','Paris','.'],pool:['She','has','been','to','Paris','went','.']})]},
+{id:'u6-5',title:'受動態',icon:'🔄',diff:5,types:['v4','se','tw'],qs:[q('v4',{jp:'〜される',en:'Is done',ch:['Is done','Does','Is doing','Did']}),q('se',{jp:'この映画は多くの人に見られています。',ans:['This','movie','is','watched','by','many','people','.'],pool:['This','movie','is','watched','by','many','people','sees','.']}),q('tw',{jp:'〜される',en:'is watched',hint:'English ___ worldwide.'}),q('ma',{pairs:[['Active','能動態'],['Passive','受動態'],['Is made','作られる'],['Is seen','見られる']]}),q('v4',{jp:'〜作られる',en:'Is made',ch:['Is made','Makes','Made','Making']})]},
+{id:'u6-6',title:'関係代名詞',icon:'🔧',diff:5,types:['v4','se','tw'],qs:[q('v4',{jp:'〜する人（関係代名詞）',en:'Who',ch:['Who','Which','What','Where']}),q('se',{jp:'私は猫を飼っている人を知っています。',ans:['I','know','a','person','who','has','a','cat','.'],pool:['I','know','a','person','who','has','cat','which','.']}),q('tw',{jp:'〜する人（人の関係代名詞）',en:'who',hint:'A doctor is a person ___ helps sick people.'}),q('se',{jp:'これは私が読んだ本です。',ans:['This','is','the','book','that','I','read','.'],pool:['This','is','the','book','that','I','read','which','.']}),q('ma',{pairs:[['who','人を修飾'],['which','物を修飾'],['that','人・物両方'],['where','場所']]})]},
+{id:'u6-boss',title:'ユニット6テスト',icon:'⭐',diff:5,isBoss:true,types:['v4','se','tw','ma'],qs:[q('se',{jp:'本は机の上にあります。',ans:['The','book','is','on','the','desk','.'],pool:['The','book','is','on','in','desk','.']}),q('v4',{jp:'〜より大きい',en:'Bigger',ch:['Bigger','Biggest','Big','More big']}),q('se',{jp:'私は日本食を食べたことがあります。',ans:['I','have','eaten','Japanese','food','.'],pool:['I','have','eaten','Japanese','food','ate','.']}),q('tw',{jp:'しかし',en:'but',hint:'I like cats, ___ I have a dog.'}),q('ma',{pairs:[['In','〜の中'],['Bigger','〜より大きい'],['Who','人を修飾'],['Have eaten','食べたことある']]}),]}
+]},
+{id:'u7',title:'実践英語',icon:'🌍',color:'#FF6B35',dark:'#C74A1C',desc:'リアルな場面で使える英語！',lessons:[
+{id:'u7-1',title:'仕事・職業',icon:'💼',diff:4,types:['v4','se','sp'],qs:[q('v4',{jp:'医者',en:'Doctor',ch:['Doctor','Teacher','Engineer','Lawyer']}),q('v4',{jp:'教師',en:'Teacher',ch:['Teacher','Doctor','Nurse','Pilot']}),q('v4',{jp:'エンジニア',en:'Engineer',ch:['Engineer','Doctor','Chef','Lawyer']}),q('se',{jp:'私はエンジニアになりたいです。',ans:['I','want','to','be','an','engineer','.'],pool:['I','want','to','be','an','engineer','teacher','.']}),q('sp',{jp:'医者',en:'DOCTOR'})]},
+{id:'u7-2',title:'スポーツ',icon:'⚽',diff:3,types:['v4','se','li'],qs:[q('v4',{jp:'サッカー',en:'Soccer',ch:['Soccer','Tennis','Baseball','Basketball']}),q('v4',{jp:'テニス',en:'Tennis',ch:['Tennis','Soccer','Golf','Swimming']}),q('v4',{jp:'バスケットボール',en:'Basketball',ch:['Basketball','Volleyball','Baseball','Soccer']}),q('se',{jp:'私はサッカーをします。',ans:['I','play','soccer','.'],pool:['I','play','soccer','tennis','watch','basketball','.']}),q('li',{jp:'テニス',en:'Tennis',ch:['Tennis','Soccer','Golf','Swimming']})]},
+{id:'u7-3',title:'旅行',icon:'✈️',diff:4,types:['v4','se','tw'],qs:[q('v4',{jp:'パスポート',en:'Passport',ch:['Passport','Ticket','Visa','Luggage']}),q('v4',{jp:'ホテル',en:'Hotel',ch:['Hotel','Hostel','Motel','Airbnb']}),q('se',{jp:'私はホテルを予約したいです。',ans:['I','want','to','book','a','hotel','.'],pool:['I','want','to','book','a','hotel','hostel','.']}),q('tw',{jp:'予約する',en:'book',hint:'I want to ___ a room.'}),q('li',{jp:'パスポート',en:'Passport',ch:['Passport','Ticket','Visa','Luggage']})]},
+{id:'u7-4',title:'テクノロジー',icon:'💻',diff:4,types:['v4','se','sp'],qs:[q('v4',{jp:'コンピューター',en:'Computer',ch:['Computer','Phone','Tablet','Laptop']}),q('v4',{jp:'インターネット',en:'Internet',ch:['Internet','Network','Wifi','Server']}),q('se',{jp:'私はコンピューターを使います。',ans:['I','use','a','computer','.'],pool:['I','use','a','computer','phone','laptop','.']}),q('sp',{jp:'コンピューター',en:'COMPUTER'}),q('li',{jp:'インターネット',en:'Internet',ch:['Internet','Network','Wifi','Server']})]},
+{id:'u7-5',title:'環境・自然',icon:'🌿',diff:4,types:['v4','se','tw'],qs:[q('v4',{jp:'森',en:'Forest',ch:['Forest','Desert','Ocean','Mountain']}),q('v4',{jp:'川',en:'River',ch:['River','Lake','Ocean','Stream']}),q('se',{jp:'私たちは地球を守る必要があります。',ans:['We','need','to','protect','the','earth','.'],pool:['We','need','to','protect','the','earth','planet','.']}),q('tw',{jp:'保護する',en:'protect',hint:'We need to ___ the forest.'}),q('ma',{pairs:[['Forest','森'],['River','川'],['Ocean','海'],['Mountain','山']]})]},
+{id:'u7-6',title:'学校・勉強',icon:'📝',diff:4,types:['v4','se','tw'],qs:[q('v4',{jp:'宿題',en:'Homework',ch:['Homework','Test','Exam','Project']}),q('v4',{jp:'試験',en:'Exam',ch:['Exam','Test','Quiz','Homework']}),q('se',{jp:'私は宿題を終わらせなければなりません。',ans:['I','must','finish','my','homework','.'],pool:['I','must','finish','my','homework','exam','should','.']}),q('tw',{jp:'〜しなければならない',en:'must',hint:'I ___ study hard.'}),q('ma',{pairs:[['Homework','宿題'],['Exam','試験'],['Study','勉強'],['Grade','成績']]})]},
+{id:'u7-boss',title:'ユニット7テスト',icon:'⭐',diff:5,isBoss:true,types:['v4','se','tw','ma'],qs:[q('v4',{jp:'医者',en:'Doctor',ch:['Doctor','Teacher','Engineer','Lawyer']}),q('se',{jp:'私はホテルを予約したいです。',ans:['I','want','to','book','a','hotel','.'],pool:['I','want','to','book','a','hotel','hostel','.']}),q('tw',{jp:'保護する',en:'protect',hint:'We need to ___ the forest.'}),q('ma',{pairs:[['Doctor','医者'],['Soccer','サッカー'],['Computer','コンピューター'],['Homework','宿題']]}),q('se',{jp:'私はコンピューターを使います。',ans:['I','use','a','computer','.'],pool:['I','use','a','computer','phone','laptop','.']}),]}
+]},
+{id:'u8',title:'上級表現',icon:'🎓',color:'#795548',dark:'#4E342E',desc:'ネイティブに近い表現を学ぼう',lessons:[
+{id:'u8-1',title:'仮定法',icon:'💭',diff:5,types:['v4','se','tw'],qs:[q('v4',{jp:'もし〜なら（仮定）',en:'If',ch:['If','When','Because','Although']}),q('se',{jp:'もし私が鳥なら、飛べるでしょう。',ans:['If','I','were','a','bird',',','I','could','fly','.'],pool:['If','I','were','a','bird',',','I','could','fly','can','.']}),q('tw',{jp:'もし〜なら（仮定法）',en:'If I were',hint:'___ rich, I would travel.'}),q('v4',{jp:'仮定法過去',en:'Were',ch:['Were','Was','Am','Is']}),q('se',{jp:'もし私がお金持ちなら、旅行するでしょう。',ans:['If','I','were','rich',',','I','would','travel','.'],pool:['If','I','were','rich',',','I','would','travel','can','.']})]},
+{id:'u8-2',title:'接続副詞',icon:'🔗',diff:5,types:['v4','se','ma'],qs:[q('v4',{jp:'したがって',en:'Therefore',ch:['Therefore','However','Moreover','Meanwhile']}),q('v4',{jp:'しかしながら',en:'However',ch:['However','Therefore','Moreover','Although']}),q('v4',{jp:'さらに',en:'Moreover',ch:['Moreover','However','Therefore','Meanwhile']}),q('se',{jp:'彼女は一生懸命勉強した。したがって合格した。',ans:['She','studied','hard','.','Therefore',',','she','passed','.'],pool:['She','studied','hard','.','Therefore',',','she','passed','However','.']}),q('ma',{pairs:[['Therefore','したがって'],['However','しかし'],['Moreover','さらに'],['Meanwhile','一方で']]})]},
+{id:'u8-3',title:'ビジネス英語',icon:'💼',diff:5,types:['v4','se','tw'],qs:[q('v4',{jp:'会議',en:'Meeting',ch:['Meeting','Conference','Seminar','Workshop']}),q('v4',{jp:'期限',en:'Deadline',ch:['Deadline','Schedule','Timetable','Agenda']}),q('se',{jp:'会議は3時に始まります。',ans:['The','meeting','starts','at','three','.'],pool:['The','meeting','starts','at','three','conference','.']}),q('tw',{jp:'期限',en:'deadline',hint:'What is the ___ for this project?'}),q('li',{jp:'会議',en:'Meeting',ch:['Meeting','Conference','Seminar','Workshop']})]},
+{id:'u8-4',title:'慣用表現',icon:'🌟',diff:5,types:['v4','tw','ma'],qs:[q('v4',{jp:'諦めないで',en:'Never give up',ch:['Never give up','Always give in','Just stop','Keep failing']}),q('v4',{jp:'頑張れ',en:'Go for it',ch:['Go for it','Give up','Back off','Step down']}),q('tw',{jp:'諦めないで',en:'never give up',hint:'You should ___.'}),q('v4',{jp:'どういたしまして',en:"You're welcome",ch:["You're welcome","No problem","My pleasure","Don't mention it"]}),q('ma',{pairs:[['Go for it','頑張れ'],['Never give up','諦めるな'],["You're welcome",'どういたして'],['My pleasure','喜んで']]})]},
+{id:'u8-boss',title:'ユニット8テスト',icon:'⭐',diff:5,isBoss:true,types:['v4','se','tw','ma'],qs:[q('se',{jp:'もし私が鳥なら、飛べるでしょう。',ans:['If','I','were','a','bird',',','I','could','fly','.'],pool:['If','I','were','a','bird',',','I','could','fly','can','.']}),q('v4',{jp:'したがって',en:'Therefore',ch:['Therefore','However','Moreover','Although']}),q('tw',{jp:'期限',en:'deadline',hint:'What is the ___ for this project?'}),q('v4',{jp:'諦めないで',en:'Never give up',ch:['Never give up','Always give in','Just stop','Keep failing']}),q('ma',{pairs:[['Therefore','したがって'],['Meeting','会議'],['Never give up','諦めるな'],["You're welcome",'どういたして']]}),]}
+]},
+{id:'u9',title:'上級語彙',icon:'🔬',color:'#3F51B5',dark:'#283593',desc:'難易度の高い語彙を習得しよう',lessons:[
+{id:'u9-1',title:'科学用語',icon:'🧬',diff:5,types:['v4','sp','tw'],qs:[q('v4',{jp:'仮説',en:'Hypothesis',ch:['Hypothesis','Theory','Fact','Conclusion']}),q('v4',{jp:'実験',en:'Experiment',ch:['Experiment','Research','Study','Analysis']}),q('sp',{jp:'仮説',en:'HYPOTHESIS'}),q('tw',{jp:'仮説',en:'hypothesis',hint:'The scientist tested his ___.'}),q('li',{jp:'実験',en:'Experiment',ch:['Experiment','Research','Study','Analysis']})]},
+{id:'u9-2',title:'経済用語',icon:'📈',diff:5,types:['v4','tw','ma'],qs:[q('v4',{jp:'インフレーション',en:'Inflation',ch:['Inflation','Deflation','Recession','Growth']}),q('v4',{jp:'需要と供給',en:'Supply and demand',ch:['Supply and demand','Import and export','Revenue and cost','Income and tax']}),q('tw',{jp:'インフレーション',en:'inflation',hint:'___ causes prices to rise.'}),q('ma',{pairs:[['Inflation','インフレ'],['Recession','不景気'],['Revenue','収益'],['Tax','税金']]}),q('v4',{jp:'経済成長',en:'Economic growth',ch:['Economic growth','Financial loss','Market crash','Trade deficit']})]},
+{id:'u9-3',title:'法律用語',icon:'⚖️',diff:5,types:['v4','tw','ma'],qs:[q('v4',{jp:'契約',en:'Contract',ch:['Contract','Agreement','Deal','Treaty']}),q('v4',{jp:'訴訟',en:'Lawsuit',ch:['Lawsuit','Dispute','Conflict','Argument']}),q('v4',{jp:'判決',en:'Verdict',ch:['Verdict','Decision','Choice','Ruling']}),q('tw',{jp:'契約',en:'contract',hint:'Please sign the ___.'}),q('ma',{pairs:[['Contract','契約'],['Lawsuit','訴訟'],['Verdict','判決'],['Attorney','弁護士']]})]},
+{id:'u9-4',title:'医療用語',icon:'🏥',diff:5,types:['v4','sp','tw'],qs:[q('v4',{jp:'診断',en:'Diagnosis',ch:['Diagnosis','Treatment','Symptom','Medicine']}),q('v4',{jp:'症状',en:'Symptom',ch:['Symptom','Disease','Cure','Medicine']}),q('v4',{jp:'手術',en:'Surgery',ch:['Surgery','Treatment','Therapy','Procedure']}),q('sp',{jp:'診断',en:'DIAGNOSIS'}),q('tw',{jp:'症状',en:'symptom',hint:'What are your ___s?'})]},
+{id:'u9-5',title:'哲学・思想',icon:'🤔',diff:5,types:['v4','tw','ma'],qs:[q('v4',{jp:'倫理',en:'Ethics',ch:['Ethics','Morals','Values','Norms']}),q('v4',{jp:'意識',en:'Consciousness',ch:['Consciousness','Awareness','Perception','Reality']}),q('v4',{jp:'抽象的',en:'Abstract',ch:['Abstract','Concrete','Literal','Virtual']}),q('tw',{jp:'倫理',en:'ethics',hint:'Medical ___ is very important.'}),q('ma',{pairs:[['Ethics','倫理'],['Consciousness','意識'],['Abstract','抽象的'],['Rational','合理的']]})]},
+{id:'u9-6',title:'環境・科学',icon:'🌱',diff:5,types:['v4','se','tw'],qs:[q('v4',{jp:'気候変動',en:'Climate change',ch:['Climate change','Weather change','Season shift','Temperature rise']}),q('v4',{jp:'再生可能エネルギー',en:'Renewable energy',ch:['Renewable energy','Fossil fuel','Nuclear power','Solar panel']}),q('se',{jp:'気候変動は深刻な問題です。',ans:['Climate','change','is','a','serious','problem','.'],pool:['Climate','change','is','a','serious','problem','issue','.']}),q('tw',{jp:'再生可能エネルギー',en:'renewable energy',hint:'We need more ___ sources.'}),q('v4',{jp:'炭素排出量',en:'Carbon emission',ch:['Carbon emission','Air pollution','Water waste','Land erosion']})]},
+{id:'u9-boss',title:'ユニット9テスト',icon:'⭐',diff:5,isBoss:true,types:['v4','tw','ma'],qs:[q('v4',{jp:'仮説',en:'Hypothesis',ch:['Hypothesis','Theory','Fact','Conclusion']}),q('tw',{jp:'インフレーション',en:'inflation',hint:'___ causes prices to rise.'}),q('v4',{jp:'診断',en:'Diagnosis',ch:['Diagnosis','Treatment','Symptom','Medicine']}),q('ma',{pairs:[['Hypothesis','仮説'],['Inflation','インフレ'],['Surgery','手術'],['Consciousness','意識']]}),q('v4',{jp:'気候変動',en:'Climate change',ch:['Climate change','Weather change','Season shift','Temperature rise']}),]}
+]},
+{id:'u10',title:'マスターレベル',icon:'👑',color:'#FF9600',dark:'#8B5E00',desc:'英語の頂点へ！最高難度に挑戦',lessons:[
+{id:'u10-1',title:'高度な文法',icon:'📐',diff:5,types:['v4','se','tw'],qs:[q('v4',{jp:'倒置（強調）',en:'Inversion',ch:['Inversion','Conversion','Diversion','Reversion']}),q('se',{jp:'疲れていたので、彼女は早く寝た。',ans:['Feeling','tired',',','she','went','to','bed','early','.'],pool:['Feeling','tired',',','she','went','to','bed','early','Because','.']}),q('tw',{jp:'倒置（〜してこそ）',en:'Only then',hint:'___ did I realize my mistake.'}),q('v4',{jp:'分詞構文',en:'Participial phrase',ch:['Participial phrase','Gerund phrase','Infinitive phrase','Clause']}),q('se',{jp:'もし私が鳥なら飛べるでしょう。',ans:['If','I','were','a','bird',',','I','could','fly','.'],pool:['If','I','were','a','bird',',','I','could','fly','can','.']})]},
+{id:'u10-2',title:'ニュアンス表現',icon:'🎭',diff:5,types:['v4','tw','ma'],qs:[q('v4',{jp:'曖昧な',en:'Ambiguous',ch:['Ambiguous','Clear','Definite','Precise']}),q('v4',{jp:'皮肉な',en:'Ironic',ch:['Ironic','Sincere','Literal','Direct']}),q('tw',{jp:'曖昧な',en:'ambiguous',hint:'His answer was too ___ to understand.'}),q('v4',{jp:'微妙な',en:'Subtle',ch:['Subtle','Obvious','Clear','Loud']}),q('ma',{pairs:[['Ambiguous','曖昧'],['Ironic','皮肉'],['Subtle','微妙'],['Implicit','暗黙']]})]},
+{id:'u10-3',title:'文学表現',icon:'✍️',diff:5,types:['v4','tw','ma'],qs:[q('v4',{jp:'伏線',en:'Foreshadowing',ch:['Foreshadowing','Flashback','Metaphor','Symbolism']}),q('v4',{jp:'語り手',en:'Narrator',ch:['Narrator','Author','Character','Protagonist']}),q('v4',{jp:'クライマックス',en:'Climax',ch:['Climax','Resolution','Rising action','Exposition']}),q('tw',{jp:'伏線',en:'foreshadowing',hint:'The author used ___ to hint at the ending.'}),q('ma',{pairs:[['Foreshadowing','伏線'],['Narrator','語り手'],['Climax','クライマックス'],['Theme','テーマ']]})]},
+{id:'u10-4',title:'スピーチ技術',icon:'🎤',diff:5,types:['v4','se','tw'],qs:[q('v4',{jp:'説得する',en:'Persuade',ch:['Persuade','Dissuade','Discourage','Confuse']}),q('v4',{jp:'論理的な',en:'Logical',ch:['Logical','Emotional','Rational','Analytical']}),q('se',{jp:'まず最初に、次に、最後に。',ans:['First',',','next',',','finally','.'],pool:['First',',','next',',','finally','then','.']}),q('tw',{jp:'説得する',en:'persuade',hint:'He tried to ___ me to join.'}),q('ma',{pairs:[['Persuade','説得'],['Logical','論理的'],['Evidence','証拠'],['Conclude','結論']]})]},
+{id:'u10-5',title:'学術英語',icon:'📝',diff:5,types:['v4','tw','ma'],qs:[q('v4',{jp:'論文',en:'Thesis',ch:['Thesis','Essay','Report','Article']}),q('v4',{jp:'文献引用',en:'Citation',ch:['Citation','Reference','Source','Bibliography']}),q('v4',{jp:'研究方法論',en:'Methodology',ch:['Methodology','Method','Approach','Technique']}),q('tw',{jp:'論文',en:'thesis',hint:'I am writing my ___ on AI.'}),q('ma',{pairs:[['Thesis','論文'],['Citation','引用'],['Methodology','方法論'],['Abstract','要旨']]})]},
+{id:'u10-6',title:'ネイティブ表現',icon:'🌟',diff:5,types:['v4','tw','ma'],qs:[q('v4',{jp:'土壇場で',en:'At the last minute',ch:['At the last minute','In the nick of time','Against the clock','Down to the wire']}),q('v4',{jp:'内緒にする',en:'Keep it under wraps',ch:['Keep it under wraps','Spill the beans','Let the cat out','Break the ice']}),q('tw',{jp:'内緒にする',en:'keep it under wraps',hint:'Please ___ until we announce it.'}),q('v4',{jp:'場を和ませる',en:'Break the ice',ch:['Break the ice','Spill the beans','Hit the sack','Pull all-nighter']}),q('ma',{pairs:[['At the last minute','土壇場で'],['Spill the beans','秘密をばらす'],['Break the ice','場を和ませる'],['Hit the sack','寝る']]})]},
+{id:'u10-7',title:'総合発音練習',icon:'🗣️',diff:5,types:['li','tw'],qs:[q('li',{jp:'temperature（温度）',en:'temperature',ch:['temperature','temporal','temptation','temperate']}),q('li',{jp:'particularly（特に）',en:'particularly',ch:['particularly','partially','practically','precisely']}),q('tw',{jp:'particularly（特に）',en:'particularly',hint:'I ___ like jazz music.'}),q('li',{jp:'sophisticated（洗練された）',en:'sophisticated',ch:['sophisticated','complicated','segregated','exacerbated']}),q('tw',{jp:'sophisticated（洗練された）',en:'sophisticated',hint:'She has a ___ taste in fashion.'})]},
+{id:'u10-boss',title:'🏆 最終テスト',icon:'👑',diff:5,isBoss:true,types:['v4','se','tw','ma','li'],qs:[q('se',{jp:'疲れていたので、彼女は早く寝た。',ans:['Feeling','tired',',','she','went','to','bed','early','.'],pool:['Feeling','tired',',','she','went','to','bed','early','Because','.']}),q('v4',{jp:'気候変動',en:'Climate change',ch:['Climate change','Weather change','Season shift','Temperature rise']}),q('tw',{jp:'曖昧な',en:'ambiguous',hint:'His answer was too ___ to understand.'}),q('ma',{pairs:[['Thesis','論文'],['Persuade','説得'],['Foreshadowing','伏線'],['Consciousness','意識']]}),q('li',{jp:'sophisticated（洗練された）',en:'sophisticated',ch:['sophisticated','complicated','segregated','exacerbated']}),q('v4',{jp:'伏線',en:'Foreshadowing',ch:['Foreshadowing','Flashback','Metaphor','Symbolism']}),]}
+]},
 ];
 
-// flatten all lesson IDs in order
-const ALL_LESSON_IDS = CURRICULUM.flatMap(u => u.lessons.map(l => l.id));
+const ALL_IDS=CUR.flatMap(u=>u.lessons.map(l=>l.id));
+const TOTAL=ALL_IDS.length;
 
-const ACH_DATA = [
-  {id:'first',   ic:'🌟', nm:'初正解！',       ds:'はじめて正解した'},
-  {id:'combo5',  ic:'🔥', nm:'コンボ×5',       ds:'5連続正解達成'},
-  {id:'combo10', ic:'💥', nm:'コンボ×10',      ds:'10連続正解達成'},
-  {id:'lv3',     ic:'🚀', nm:'Lv.3達成',       ds:'レベル3になった'},
-  {id:'lv5',     ic:'👑', nm:'Lv.5達成',       ds:'レベル5になった'},
-  {id:'u1done',  ic:'🌱', nm:'Unit1クリア',    ds:'超かんたん英語を制覇'},
-  {id:'u2done',  ic:'📚', nm:'Unit2クリア',    ds:'基本の単語を制覇'},
-  {id:'u3done',  ic:'💬', nm:'Unit3クリア',    ds:'フレーズを制覇'},
-  {id:'u4done',  ic:'🧠', nm:'Unit4クリア',    ds:'応用文法を制覇'},
-  {id:'u5done',  ic:'🌍', nm:'全コース制覇！', ds:'全レッスンをクリアした'},
-  {id:'pf',      ic:'💎', nm:'パーフェクト！', ds:'ノーミスクリア'},
-  {id:'streak3', ic:'🔥', nm:'3日連続',        ds:'3日連続ストリーク'},
-  {id:'streak7', ic:'💫', nm:'1週間連続',      ds:'7日連続ストリーク'},
-  {id:'g100',    ic:'💍', nm:'コレクター',     ds:'宝石100個集めた'},
+const ACHS=[
+  {id:'first',ic:'🌟',nm:'初正解！',ds:'はじめて正解した'},
+  {id:'c5',ic:'🔥',nm:'コンボ×5',ds:'5連続正解'},
+  {id:'c10',ic:'💥',nm:'コンボ×10',ds:'10連続正解'},
+  {id:'c20',ic:'🌈',nm:'コンボ×20',ds:'20連続正解！'},
+  {id:'lv5',ic:'🚀',nm:'Lv.5',ds:'レベル5達成'},
+  {id:'lv10',ic:'🌙',nm:'Lv.10',ds:'レベル10達成'},
+  {id:'lv20',ic:'💫',nm:'Lv.20',ds:'レベル20達成'},
+  {id:'u1c',ic:'🌱',nm:'Unit1クリア',ds:'超かんたん英語を制覇'},
+  {id:'u2c',ic:'📚',nm:'Unit2クリア',ds:'基本単語を制覇'},
+  {id:'u3c',ic:'💬',nm:'Unit3クリア',ds:'フレーズを制覇'},
+  {id:'u4c',ic:'🧱',nm:'Unit4クリア',ds:'文法基礎を制覇'},
+  {id:'u5c',ic:'🗣',nm:'Unit5クリア',ds:'日常会話を制覇'},
+  {id:'u6c',ic:'📐',nm:'Unit6クリア',ds:'中級文法を制覇'},
+  {id:'u7c',ic:'🌍',nm:'Unit7クリア',ds:'実践英語を制覇'},
+  {id:'u8c',ic:'🎓',nm:'Unit8クリア',ds:'上級表現を制覇'},
+  {id:'u9c',ic:'🔬',nm:'Unit9クリア',ds:'上級語彙を制覇'},
+  {id:'u10c',ic:'👑',nm:'全コース制覇！',ds:'全ユニットをクリア！'},
+  {id:'skip1',ic:'⚡',nm:'飛び級！',ds:'スキップテストに合格'},
+  {id:'skip3',ic:'🚁',nm:'高速飛び級',ds:'3回飛び級した'},
+  {id:'pf',ic:'💎',nm:'パーフェクト',ds:'ノーミスクリア'},
+  {id:'s3',ic:'🎯',nm:'3日連続',ds:'3日ストリーク'},
+  {id:'s7',ic:'🔥',nm:'1週間連続',ds:'7日ストリーク'},
+  {id:'s30',ic:'💍',nm:'1ヶ月連続',ds:'30日ストリーク'},
+  {id:'g500',ic:'💰',nm:'宝石500',ds:'宝石500個'},
+  {id:'cor100',ic:'✅',nm:'正解100回',ds:'累計100問正解'},
+  {id:'cor500',ic:'🏅',nm:'正解500回',ds:'累計500問正解'},
+  {id:'cor1000',ic:'🥇',nm:'正解1000回',ds:'累計1000問正解'},
 ];
 
-// ══════════════════════════════════════════════════════
-//  STATE + PERSISTENCE
-// ══════════════════════════════════════════════════════
-function todayStr() {
-  const d = new Date();
-  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+// ── STATE ──
+const MAX_H=5, HREGEN=25*60*1000;
+function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function loadSave(){try{const r=localStorage.getItem('azqen_v2');if(r)return JSON.parse(r);}catch(e){}return null;}
+function initG(){
+  const s=loadSave(),today=todayStr(),now=Date.now();
+  const base={xp:0,lv:1,xpMax:120,hearts:MAX_H,lastHT:now,gems:0,streak:0,lastDate:null,doneToday:false,combo:0,totalCor:0,skipCount:0,ach:{},stars:{},unlocked:'u1-1'};
+  if(!s)return base;
+  let hearts=s.hearts!==undefined?s.hearts:MAX_H,lastHT=s.lastHT||now;
+  if(hearts<MAX_H){const reg=Math.floor((now-lastHT)/HREGEN);if(reg>0){hearts=Math.min(MAX_H,hearts+reg);lastHT=now-(now-lastHT)%HREGEN;}}
+  let streak=s.streak||0,doneToday=false;
+  const last=s.lastDate;
+  if(last===today){doneToday=true;}
+  else if(last){const d=Math.round((new Date(today)-new Date(last))/86400000);if(d===1)doneToday=false;else{streak=0;doneToday=false;}}
+  return{xp:s.xp||0,lv:s.lv||1,xpMax:s.xpMax||120,hearts,lastHT,gems:s.gems||0,streak,lastDate:s.lastDate||null,doneToday,combo:0,totalCor:s.totalCor||0,skipCount:s.skipCount||0,ach:s.ach||{},stars:s.stars||{},unlocked:s.unlocked||'u1-1'};
 }
-function loadSave() {
-  try { const r=localStorage.getItem('wordup_v2'); if(r) return JSON.parse(r); } catch(e) {}
-  return null;
-}
-function initState() {
-  const saved = loadSave();
-  const today = todayStr();
-  const base = {
-    xp:0,lv:1,xpMax:100,hearts:5,gems:0,
-    streak:0,lastDate:null,doneToday:false,
-    combo:0,ach:{},
-    lessonStars:{},      // lessonId → 1|2|3
-    unlockedLesson:'u1l1', // current frontier lesson id
-  };
-  if (!saved) return base;
-  // streak recalc
-  let streak = saved.streak||0, doneToday=false;
-  const last = saved.lastDate;
-  if (last===today) { doneToday=true; }
-  else if (last) {
-    const diff = Math.round((new Date(today)-new Date(last))/86400000);
-    if (diff===1) doneToday=false;
-    else { streak=0; doneToday=false; }
-  }
-  return {
-    xp:saved.xp||0, lv:saved.lv||1, xpMax:saved.xpMax||100,
-    hearts:saved.hearts!==undefined?saved.hearts:5,
-    gems:saved.gems||0, streak, lastDate:saved.lastDate||null, doneToday,
-    combo:0, ach:saved.ach||{},
-    lessonStars:saved.lessonStars||{},
-    unlockedLesson:saved.unlockedLesson||'u1l1',
-  };
-}
-function saveState() {
-  try {
-    localStorage.setItem('wordup_v2', JSON.stringify({
-      xp:G.xp,lv:G.lv,xpMax:G.xpMax,hearts:G.hearts,gems:G.gems,
-      streak:G.streak,lastDate:G.lastDate,
-      ach:G.ach,lessonStars:G.lessonStars,unlockedLesson:G.unlockedLesson,
-    }));
-  } catch(e) {}
-}
-const G = initState();
+const G=initG();
+function save(){try{localStorage.setItem('azqen_v2',JSON.stringify({xp:G.xp,lv:G.lv,xpMax:G.xpMax,hearts:G.hearts,lastHT:G.lastHT,gems:G.gems,streak:G.streak,lastDate:G.lastDate,totalCor:G.totalCor,skipCount:G.skipCount,ach:G.ach,stars:G.stars,unlocked:G.unlocked}));}catch(e){}}
+function resetAll(){localStorage.removeItem('azqen_v2');location.reload();}
 
-// ══════════════════════════════════════════════════════
-//  AUDIO
-// ══════════════════════════════════════════════════════
+// ── AUDIO ──
 let _ac=null;
-function getAC(){if(!_ac)_ac=new(window.AudioContext||window.webkitAudioContext)();return _ac;}
-function tone(f,d,t,g){
-  try{const ac=getAC(),o=ac.createOscillator(),gn=ac.createGain();o.connect(gn);gn.connect(ac.destination);o.type=t||'sine';o.frequency.value=f;gn.gain.setValueAtTime(g||.15,ac.currentTime);gn.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.start();o.stop(ac.currentTime+d);}catch(e){}
-}
-function sfxOK()   {tone(440,.07);setTimeout(()=>tone(550,.07),75);setTimeout(()=>tone(660,.18),150);}
-function sfxNG()   {tone(220,.14,'sawtooth',.1);setTimeout(()=>tone(180,.22,'sawtooth',.08),120);}
-function sfxCombo(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>tone(f,.1),i*65));}
-function sfxLvUp() {[523,659,784,1047,1319].forEach((f,i)=>setTimeout(()=>tone(f,.14),i*75));}
-function sfxTap()  {tone(600,.04,'sine',.07);}
-function vibOK()   {try{navigator.vibrate&&navigator.vibrate([40,20,40]);}catch(e){}}
-function vibNG()   {try{navigator.vibrate&&navigator.vibrate([110]);}catch(e){}}
+function ac(){if(!_ac)_ac=new(window.AudioContext||window.webkitAudioContext)();return _ac;}
+function tone(f,d,t,g){try{const c=ac(),o=c.createOscillator(),gn=c.createGain();o.connect(gn);gn.connect(c.destination);o.type=t||'sine';o.frequency.value=f;gn.gain.setValueAtTime(g||.13,c.currentTime);gn.gain.exponentialRampToValueAtTime(.001,c.currentTime+d);o.start();o.stop(c.currentTime+d);}catch(e){}}
+function sfxOK(){tone(440,.06);setTimeout(()=>tone(554,.06),65);setTimeout(()=>tone(659,.18),130);}
+function sfxNG(){tone(220,.12,'sawtooth',.1);setTimeout(()=>tone(185,.2,'sawtooth',.08),110);}
+function sfxCombo(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>tone(f,.09),i*60));}
+function sfxLvUp(){[523,659,784,1047,1319].forEach((f,i)=>setTimeout(()=>tone(f,.13),i*72));}
+function sfxSkip(){[784,988,1175,1568].forEach((f,i)=>setTimeout(()=>tone(f,.12),i*55));}
+function sfxTap(){tone(600,.04,'sine',.07);}
+function vib(p){try{navigator.vibrate&&navigator.vibrate(p);}catch(e){}}
 
-// ══════════════════════════════════════════════════════
-//  UI HELPERS
-// ══════════════════════════════════════════════════════
+// ── HEART TIMER ──
+function startHeartTimer(){
+  setInterval(()=>{
+    if(G.hearts>=MAX_H)return;
+    const el=Date.now()-G.lastHT,reg=Math.floor(el/HREGEN);
+    if(reg>0){G.hearts=Math.min(MAX_H,G.hearts+reg);G.lastHT=Date.now()-el%HREGEN;save();refreshTop();}
+    const rem=HREGEN-(Date.now()-G.lastHT)%HREGEN;
+    const m=Math.floor(rem/60000),s2=Math.floor((rem%60000)/1000);
+    const txt=m+':'+String(s2).padStart(2,'0');
+    const ht=document.getElementById('htimer'),nh=document.getElementById('nhtimer');
+    if(ht){ht.style.display=G.hearts<MAX_H?'inline':'none';ht.textContent=txt;}
+    if(nh)nh.textContent=txt;
+  },1000);
+}
+
+// ── UI ──
 function refreshTop(){
-  document.getElementById('t-hearts').textContent='❤️'.repeat(Math.max(0,G.hearts))||'💔';
-  document.getElementById('t-streak').textContent=G.streak;
-  document.getElementById('t-gems').textContent=G.gems;
-  document.getElementById('xp-lv-num').textContent=G.lv;
+  document.getElementById('ts-hearts').textContent='❤️'.repeat(Math.max(0,G.hearts))||'💔';
+  document.getElementById('ts-streak').textContent=G.streak;
+  document.getElementById('ts-gems').textContent=G.gems;
+  document.getElementById('xpn').textContent=G.lv;
   document.getElementById('xp-fill').style.width=(G.xp/G.xpMax*100)+'%';
-  document.getElementById('xp-cur').textContent=G.xp;
-  document.getElementById('xp-max').textContent=G.xpMax;
-  document.getElementById('home-streak-num').textContent=G.streak;
-  const badge=document.getElementById('streak-today-badge');
-  if(badge) badge.style.display=G.doneToday?'inline':'none';
-  const sub=document.getElementById('streak-sub-txt');
-  if(sub) sub.textContent=G.doneToday?'今日のレッスン完了！また明日ね 😊':G.streak>0?'今日も練習してストリークを守ろう！':'今日レッスンを完了するとストリーク開始！';
+  document.getElementById('xpc').textContent=G.xp;
+  document.getElementById('xpm').textContent=G.xpMax;
+  document.getElementById('sb-str').textContent=G.streak;
+  document.getElementById('sb-lv').textContent='Lv.'+G.lv;
+  document.getElementById('td-badge').style.display=G.doneToday?'inline':'none';
+  const sub=document.getElementById('sb-sub');
+  if(sub)sub.textContent=G.doneToday?'今日のレッスン完了！また明日ね 😊':G.streak>0?'今日も練習してストリークを守ろう！':'今日レッスンを完了するとストリーク開始！';
+  const ht=document.getElementById('htimer');if(ht)ht.style.display=G.hearts<MAX_H?'inline':'none';
 }
-function drawHearts(elId,n){
-  const el=document.getElementById(elId);
-  if(!el)return;
-  el.innerHTML=Array.from({length:5},(_,i)=>`<span style="opacity:${i<n?1:.2}">${i<n?'❤️':'🩶'}</span>`).join('');
-}
+function drawHearts(id,n){const el=document.getElementById(id);if(!el)return;el.innerHTML=Array.from({length:MAX_H},(_,i)=>`<span style="opacity:${i<n?1:.18}">${i<n?'❤️':'🩶'}</span>`).join('');}
 function goPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));
-  document.querySelectorAll('.navbtn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
   document.getElementById('page-'+id).classList.add('show');
-  const navMap={learn:0,ach:1};
-  if(navMap[id]!==undefined) document.querySelectorAll('.navbtn')[navMap[id]].classList.add('active');
+  const m={learn:0,ach:1,profile:2};if(m[id]!==undefined)document.querySelectorAll('.nb')[m[id]].classList.add('on');
   hideFB();
-  if(id==='learn') renderCourseMap();
-  else if(id==='ach') renderAch();
+  if(id==='learn')renderMap();
+  else if(id==='ach')renderAch();
+  else if(id==='profile')renderProfile();
 }
-document.getElementById('navbar').addEventListener('click',function(e){
-  const btn=e.target.closest('.navbtn');
-  if(btn) goPage(btn.dataset.page);
-});
+document.getElementById('navbar').addEventListener('click',e=>{const b=e.target.closest('.nb');if(b)goPage(b.dataset.p);});
 
-// floaters
-function notify(msg){const el=document.createElement('div');el.className='notif-pop';el.textContent=msg;document.body.appendChild(el);setTimeout(()=>el.remove(),1900);}
-function showComboPop(n){const el=document.getElementById('combo-pop');el.textContent=(n>=10?'🔥':'⚡')+' コンボ ×'+n+'!';el.classList.add('show');setTimeout(()=>el.classList.remove('show'),900);}
-function xpFloat(amt,x,y){const el=document.createElement('div');el.className='xp-float';el.textContent='+'+amt+' XP';el.style.left=(x||window.innerWidth/2-20)+'px';el.style.top=(y||200)+'px';document.body.appendChild(el);setTimeout(()=>el.remove(),900);}
-function confetti(x,y){
-  const C=['#58CC02','#1CB0F6','#FF9600','#FF4B4B','#CE82FF','#FFD700'];
-  for(let i=0;i<20;i++){const c=document.createElement('div');c.className='confetti-piece';c.style.cssText=`left:${x+(Math.random()-.5)*130}px;top:${y}px;width:${6+Math.random()*7}px;height:${6+Math.random()*7}px;background:${C[i%C.length]};animation-duration:${.75+Math.random()*.55}s;animation-delay:${Math.random()*.12}s;transform:rotate(${Math.random()*360}deg)`;document.body.appendChild(c);setTimeout(()=>c.remove(),1600);}
-}
+// ── FLOATERS ──
+function notify(msg){const el=document.createElement('div');el.className='notif';el.textContent=msg;document.body.appendChild(el);setTimeout(()=>el.remove(),2300);}
+function showCombo(n){const el=document.getElementById('cpop');el.textContent=(n>=20?'💥':n>=10?'🔥':'⚡')+' コンボ×'+n+'!';el.classList.add('show');setTimeout(()=>el.classList.remove('show'),900);}
+function xpFloat(amt,x,y){const el=document.createElement('div');el.className='xpf';el.textContent='+'+amt+' XP';el.style.left=(x??window.innerWidth/2-20)+'px';el.style.top=(y??200)+'px';document.body.appendChild(el);setTimeout(()=>el.remove(),950);}
+function confetti(x,y){const C=['#58CC02','#1CB0F6','#FF9600','#FF4B4B','#9B59B6','#FFD700'];for(let i=0;i<22;i++){const c=document.createElement('div');c.className='cfp';c.style.cssText=`left:${x+(Math.random()-.5)*140}px;top:${y}px;width:${5+Math.random()*8}px;height:${5+Math.random()*8}px;background:${C[i%C.length]};animation-duration:${.75+Math.random()*.6}s;animation-delay:${Math.random()*.13}s;transform:rotate(${Math.random()*360}deg)`;document.body.appendChild(c);setTimeout(()=>c.remove(),1700);}}
 
+// ── REWARDS ──
 function gainXP(amt,x,y){
-  G.xp+=amt; G.gems+=Math.ceil(amt/5);
-  xpFloat(amt,x,y);
-  while(G.xp>=G.xpMax){G.xp-=G.xpMax;G.lv++;G.xpMax=Math.round(G.xpMax*1.4);sfxLvUp();vibOK();notify('🎊 レベルアップ！ Lv.'+G.lv);if(G.lv>=3)unlock('lv3');if(G.lv>=5)unlock('lv5');}
-  if(G.gems>=100)unlock('g100');
-  saveState(); refreshTop();
+  G.xp+=amt;G.gems+=Math.ceil(amt/4);xpFloat(amt,x,y);
+  while(G.xp>=G.xpMax){G.xp-=G.xpMax;G.lv++;G.xpMax=Math.round(G.xpMax*1.35);sfxLvUp();vib([40,20,40,20,80]);notify('🎊 レベルアップ！ Lv.'+G.lv);if(G.lv>=5)unlock('lv5');if(G.lv>=10)unlock('lv10');if(G.lv>=20)unlock('lv20');}
+  if(G.gems>=500)unlock('g500');
+  save();refreshTop();
 }
 function onCorrect(btn,xpAmt){
-  sfxOK();vibOK();
+  sfxOK();vib([40,20,40]);
   const r=btn?btn.getBoundingClientRect():{left:window.innerWidth/2,top:200,width:0};
   const cx=r.left+r.width/2,cy=r.top;
-  confetti(cx,cy); gainXP(xpAmt,cx,cy);
-  G.combo++;
-  if(G.combo>=5){sfxCombo();showComboPop(G.combo);unlock('combo5');}
-  if(G.combo>=10)unlock('combo10');
+  confetti(cx,cy);gainXP(xpAmt,cx,cy);
+  G.combo++;G.totalCor++;
+  if(G.combo>=5){sfxCombo();showCombo(G.combo);unlock('c5');}
+  if(G.combo>=10)unlock('c10');if(G.combo>=20)unlock('c20');
   unlock('first');
+  if(G.totalCor>=100)unlock('cor100');if(G.totalCor>=500)unlock('cor500');if(G.totalCor>=1000)unlock('cor1000');
 }
-function onWrong(){sfxNG();vibNG();G.combo=0;G.hearts=Math.max(0,G.hearts-1);refreshTop();}
-function unlock(id){if(G.ach[id])return;G.ach[id]=true;const a=ACH_DATA.find(x=>x.id===id);if(a)notify(a.ic+' 実績解除: '+a.nm);saveState();}
+function onWrong(){
+  sfxNG();vib([120]);G.combo=0;
+  G.hearts=Math.max(0,G.hearts-1);
+  if(G.hearts<=0&&!G.lastHT)G.lastHT=Date.now();
+  save();refreshTop();
+  if(G.hearts<=0){hideFB();setTimeout(()=>document.getElementById('nohearts').classList.add('show'),400);}
+}
+function unlock(id){if(G.ach[id])return;G.ach[id]=true;const a=ACHS.find(x=>x.id===id);if(a)setTimeout(()=>notify(a.ic+' 実績解除: '+a.nm),300);save();}
 
-// ══════════════════════════════════════════════════════
-//  FEEDBACK FOOTER
-// ══════════════════════════════════════════════════════
+// ── FEEDBACK FOOTER ──
 let _fbCB=null;
-function showFB(ok,correctStr,subTxt,cb){
-  const f=document.getElementById('fb-footer');
-  const ic=document.getElementById('fb-icon');
-  const tit=document.getElementById('fb-title');
-  const sub=document.getElementById('fb-sub');
-  const btn=document.getElementById('fb-next-btn');
-  f.className=ok?'show fb-ok':'show fb-ng';
-  ic.textContent=ok?'✅':'❌';
-  tit.className='fb-title '+(ok?'ok':'ng');
-  tit.textContent=ok?'正解！すごい！':'惜しい！';
-  sub.textContent=ok?(subTxt||''):'正解: '+correctStr;
-  btn.className='fb-next '+(ok?'ok':'ng');
+function showFB(ok,cor,sub,cb){
+  const f=document.getElementById('fbfoot');
+  f.className=ok?'show fbok':'show fbng';
+  document.getElementById('fbico').textContent=ok?'✅':'❌';
+  const t=document.getElementById('fbtit');t.className='fbtit '+(ok?'ok':'ng');t.textContent=ok?'正解！すごい！':'惜しい！';
+  document.getElementById('fbsub').textContent=ok?(sub||''):'正解: '+cor;
+  const b=document.getElementById('fbbtn');b.className='fbbtn '+(ok?'ok':'ng');
   _fbCB=cb;
 }
-function hideFB(){document.getElementById('fb-footer').className='';_fbCB=null;}
-document.getElementById('fb-next-btn').addEventListener('click',function(){sfxTap();const cb=_fbCB;hideFB();if(cb)cb();});
+function hideFB(){document.getElementById('fbfoot').className='';_fbCB=null;}
+document.getElementById('fbbtn').addEventListener('click',()=>{
+  if(G.hearts<=0)return;sfxTap();const cb=_fbCB;hideFB();if(cb)cb();
+});
 
-// ══════════════════════════════════════════════════════
-//  COURSE MAP RENDERER
-// ══════════════════════════════════════════════════════
-function getLessonState(lessonId){
-  const idx=ALL_LESSON_IDS.indexOf(lessonId);
-  const unlockedIdx=ALL_LESSON_IDS.indexOf(G.unlockedLesson);
-  if(G.lessonStars[lessonId]) return 'done';
-  if(idx===unlockedIdx) return 'current';
-  if(idx<unlockedIdx) return 'done'; // safety
-  return 'locked';
+// ── COURSE MAP ──
+function lstate(lid){
+  const ui=ALL_IDS.indexOf(lid),uu=ALL_IDS.indexOf(G.unlocked);
+  if(G.stars[lid]>=3)return'mastered';
+  if(G.stars[lid]>=1)return'done';
+  if(ui===uu)return'current';
+  if(ui<uu)return'done';
+  return'lk';
 }
-
-function renderCourseMap(){
+function renderMap(){
   refreshTop();
-  const map=document.getElementById('course-map');
-  map.innerHTML='';
-  CURRICULUM.forEach((unit,ui)=>{
-    const unitUnlockedIdx=ALL_LESSON_IDS.indexOf(G.unlockedLesson);
-    const firstLessonIdx=ALL_LESSON_IDS.indexOf(unit.lessons[0].id);
-    const unitLocked = firstLessonIdx > unitUnlockedIdx;
-
-    const sec=document.createElement('div');
-    sec.className='unit-section';
-
-    // Header
-    const hdr=document.createElement('div');
-    hdr.className='unit-header'+(unitLocked?' locked':'');
-    hdr.style.background=unitLocked?'#ccc':`linear-gradient(135deg,${unit.color},${unit.dark})`;
-    hdr.style.boxShadow=unitLocked?'none':`0 4px 0 ${unit.dark}`;
-    hdr.style.borderRadius='16px';
-
-    // count completed lessons in unit
-    const doneCount=unit.lessons.filter(l=>G.lessonStars[l.id]).length;
-    hdr.innerHTML=`
-      <div class="uh-icon">${unit.icon}</div>
-      <div>
-        <div class="uh-title">${unit.title}</div>
-        <div class="uh-sub">${unit.desc}</div>
-      </div>
-      <div class="uh-badge">${doneCount}/${unit.lessons.length}</div>
-    `;
+  const map=document.getElementById('cmap');map.innerHTML='';
+  let doneTotal=0;
+  CUR.forEach(unit=>{
+    const dc=unit.lessons.filter(l=>G.stars[l.id]>=1).length;
+    doneTotal+=dc;
+    const fi=ALL_IDS.indexOf(unit.lessons[0].id),ui=ALL_IDS.indexOf(G.unlocked);
+    const ulk=fi>ui;
+    const sec=document.createElement('div');sec.className='unit-sec';
+    const hdr=document.createElement('div');hdr.className='unit-hdr'+(ulk?' lk':'');
+    hdr.style.background=ulk?'#B0A89A':`linear-gradient(135deg,${unit.color},${unit.dark})`;
+    hdr.style.boxShadow=`0 4px 0 ${ulk?'#888':unit.dark}`;
+    hdr.innerHTML=`<div class="uh-icon">${unit.icon}</div><div style="flex:1"><div class="uh-t">${unit.title}</div><div class="uh-s">${unit.desc}</div>${!ulk?`<button class="skip-btn" onclick="openSkip('${unit.id}',event)">⚡ 飛び級テスト</button>`:''}</div><div class="uh-prog"><div class="uh-pn">${dc}/${unit.lessons.length}</div><div class="uh-pl">完了</div></div>`;
     sec.appendChild(hdr);
-
-    // Lesson path
-    const path=document.createElement('div');
-    path.className='lesson-path';
-
+    const path=document.createElement('div');path.className='lesson-path';
     unit.lessons.forEach(lesson=>{
-      const st=getLessonState(lesson.id);
-      const node=document.createElement('div');
-      node.className='lesson-node';
-
+      const st=lstate(lesson.id);
+      const node=document.createElement('div');node.className='ln';
       const btn=document.createElement('button');
-      btn.className='lesson-btn '+st+(lesson.isBoss?' boss':'');
-
-      const stars=G.lessonStars[lesson.id]||0;
-      let starsHTML='';
-      if(stars>0) starsHTML=`<span class="stars">${'⭐'.repeat(stars)}</span>`;
-      if(lesson.isBoss&&st!=='locked') btn.innerHTML=`<span class="crown">👑</span>${lesson.icon}${starsHTML}`;
-      else btn.innerHTML=lesson.icon+starsHTML;
-
-      if(st!=='locked'){
-        btn.addEventListener('click',()=>openLessonModal(unit,lesson));
-      }
-
-      const lbl=document.createElement('div');
-      lbl.className='lesson-label';
-      lbl.textContent=lesson.title;
-      if(st==='locked') lbl.style.opacity='.4';
-
-      node.appendChild(btn);
-      node.appendChild(lbl);
+      btn.className='lbtn '+st+(lesson.isBoss?' boss':'');
+      const stars=G.stars[lesson.id]||0;
+      const sh=stars>0?`<span class="lstars">${'⭐'.repeat(stars)}</span>`:'';
+      btn.innerHTML=(lesson.isBoss?`<span class="crown">👑</span>`:'')+lesson.icon+sh;
+      if(st!=='lk')btn.addEventListener('click',()=>openModal(unit,lesson,false));
+      const lbl=document.createElement('div');lbl.className='ln-lbl';lbl.textContent=lesson.title;
+      const tn=document.createElement('div');tn.className='ln-type';
+      const TN={v4:'4択',sp:'スペル',li:'聞取',se:'文章',ma:'マッチ',tw:'入力'};
+      tn.textContent=[...new Set(lesson.types||[])].map(t=>TN[t]||t).join('・');
+      if(st==='lk'){lbl.style.opacity='.3';tn.style.opacity='.3';}
+      node.appendChild(btn);node.appendChild(lbl);node.appendChild(tn);
       path.appendChild(node);
     });
-
-    sec.appendChild(path);
-    map.appendChild(sec);
+    sec.appendChild(path);map.appendChild(sec);
   });
+  document.getElementById('tlc').textContent=TOTAL;
+  document.getElementById('ch-done').textContent=doneTotal;
+  document.getElementById('ch-tot').textContent=TOTAL;
+  document.getElementById('ch-pct').textContent=Math.round(doneTotal/TOTAL*100)+'%';
 }
 
-// ══════════════════════════════════════════════════════
-//  LESSON MODAL
-// ══════════════════════════════════════════════════════
-let _pendingLesson=null;
-function openLessonModal(unit,lesson){
-  sfxTap();
-  _pendingLesson={unit,lesson};
-  const diffStars='⭐'.repeat(lesson.diff)+'☆'.repeat(5-lesson.diff);
-  const xpReward=lesson.qs.length*(8+lesson.diff*4);
-  document.getElementById('lm-icon').textContent=lesson.icon;
-  document.getElementById('lm-title').textContent=lesson.title;
-  document.getElementById('lm-sub').textContent=unit.title+' · '+['','かんたん','やさしい','ふつう','むずかしい','超難しい'][lesson.diff];
-  document.getElementById('lm-qs').textContent=lesson.qs.length;
-  document.getElementById('lm-diff').textContent=diffStars;
-  document.getElementById('lm-xp').textContent=xpReward;
-  document.getElementById('lesson-modal').classList.add('show');
-  document.getElementById('lm-start-btn').onclick=()=>{closeModal();startLesson(_pendingLesson.unit,_pendingLesson.lesson);};
+// ── MODAL ──
+let _pend=null,_isSkip=false;
+function openModal(unit,lesson,isSkip){
+  sfxTap();_pend={unit,lesson};_isSkip=isSkip;
+  const stars=G.stars[lesson.id]||0;
+  document.getElementById('mc-icon').textContent=isSkip?'⚡':lesson.icon;
+  document.getElementById('mc-title').textContent=isSkip?unit.title+' 飛び級テスト':lesson.title;
+  document.getElementById('mc-sub').textContent=isSkip?'合格（80%以上）でこのユニットをまるごとスキップ！':unit.title+' · '+['','易しい','普通','少し難','難しい','超難'][lesson.diff]||'';
+  document.getElementById('mc-stars').innerHTML=isSkip?'⚡⚡⚡':Array.from({length:3},(_,i)=>i<stars?'⭐':'☆').join('');
+  document.getElementById('mc-qs').textContent=lesson.qs.length;
+  document.getElementById('mc-diff').textContent='⭐'.repeat(lesson.diff)+'☆'.repeat(5-lesson.diff);
+  const TN={v4:'4択',sp:'スペル',li:'聞取',se:'文章',ma:'マッチ',tw:'入力'};
+  document.getElementById('mc-type').textContent=[...new Set(lesson.types||[])].map(t=>TN[t]||t).slice(0,2).join('・');
+  document.getElementById('mc-xp').textContent=lesson.qs.length*(10+lesson.diff*5);
+  const go=document.getElementById('mc-go');
+  go.textContent=isSkip?'⚡ 飛び級テストに挑戦！':'はじめる！ →';
+  go.className=isSkip?'mc-go mc-skip-go':'mc-go';
+  go.onclick=()=>{closeModal();startLesson(_pend.unit,_pend.lesson,_isSkip);};
+  document.getElementById('modal-ov').classList.add('show');
 }
-function closeModal(){document.getElementById('lesson-modal').classList.remove('show');}
+function openSkip(uid,e){
+  e.stopPropagation();
+  const unit=CUR.find(u=>u.id===uid);if(!unit)return;
+  const pool=unit.lessons.flatMap(l=>l.qs).sort(()=>Math.random()-.5).slice(0,8);
+  const sl={...unit.lessons[unit.lessons.length-1],id:'__skip__'+uid,title:unit.title+' 飛び級テスト',icon:'⚡',isBoss:false,diff:Math.max(...unit.lessons.map(l=>l.diff||1)),qs:pool};
+  openModal(unit,sl,true);
+}
+function closeModal(){document.getElementById('modal-ov').classList.remove('show');}
+document.getElementById('modal-ov').addEventListener('click',e=>{if(e.target===document.getElementById('modal-ov'))closeModal();});
 
-// ══════════════════════════════════════════════════════
-//  LESSON ENGINE
-// ══════════════════════════════════════════════════════
-const LS={unit:null,lesson:null,qs:[],idx:0,cor:0,wrg:0};
-
-function startLesson(unit,lesson){
-  LS.unit=unit; LS.lesson=lesson;
-  LS.qs=[...lesson.qs]; LS.idx=0; LS.cor=0; LS.wrg=0;
-  G.combo=0;
-  G.hearts=5;
-  refreshTop();
-
+// ── LESSON ENGINE ──
+const LS={unit:null,lesson:null,qs:[],idx:0,cor:0,wrg:0,isSkip:false};
+function startLesson(unit,lesson,isSkip){
+  if(G.hearts<=0){document.getElementById('nohearts').classList.add('show');return;}
+  LS.unit=unit;LS.lesson=lesson;LS.isSkip=isSkip||false;
+  LS.qs=[...lesson.qs];LS.idx=0;LS.cor=0;LS.wrg=0;G.combo=0;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));
   document.getElementById('page-quiz').classList.add('show');
-  document.getElementById('quiz-close').onclick=()=>{if(confirm('レッスンを終了しますか？')){hideFB();goPage('learn');}};
-  renderQuestion();
+  document.getElementById('qx').onclick=()=>{if(confirm('レッスンを終了しますか？')){hideFB();goPage('learn');}};
+  renderQ();
 }
-
-function renderQuestion(){
+function renderQ(){
   if(LS.idx>=LS.qs.length){endLesson();return;}
+  if(G.hearts<=0){hideFB();document.getElementById('nohearts').classList.add('show');return;}
   const q=LS.qs[LS.idx];
-  const pct=(LS.idx/LS.qs.length*100);
-  document.getElementById('quiz-prog').style.width=pct+'%';
-  drawHearts('quiz-hearts',G.hearts);
-
-  const body=document.getElementById('quiz-body');
-  body.innerHTML='';
-
-  const diffColor=['','#58CC02','#89D20A','#FF9600','#FF6B00','#FF4B4B'][LS.lesson.diff]||'#ccc';
-  const diffLabel=['','かんたん','やさしい','ふつう','むずかしい','超難しい'][LS.lesson.diff]||'';
-
-  if(q.type==='vocab4')    renderVocab4(body,q,diffColor,diffLabel);
-  else if(q.type==='spell')   renderSpell(body,q,diffColor,diffLabel);
-  else if(q.type==='listen')  renderListen(body,q,diffColor,diffLabel);
-  else if(q.type==='sentence')renderSentence(body,q,diffColor,diffLabel);
-  else if(q.type==='match')   renderMatch(body,q,diffColor,diffLabel);
-  else if(q.type==='typewrite')renderTypewrite(body,q,diffColor,diffLabel);
+  document.getElementById('qprog').style.width=(LS.idx/LS.qs.length*100)+'%';
+  drawHearts('qhearts',G.hearts);
+  const body=document.getElementById('qbody');body.innerHTML='';
+  const diff=LS.lesson.diff||1;
+  const dc=['','#58CC02','#89D20A','#FF9600','#FF6B35','#FF4B4B'][diff]||'#ccc';
+  const dl=['','易しい','普通','少し難','難しい','超難'][diff]||'';
+  if(q.type==='v4')renderV4(body,q,dc,dl);
+  else if(q.type==='sp')renderSp(body,q,dc,dl);
+  else if(q.type==='li')renderLi(body,q,dc,dl);
+  else if(q.type==='se')renderSe(body,q,dc,dl);
+  else if(q.type==='ma')renderMa(body,q,dc,dl);
+  else if(q.type==='tw')renderTw(body,q,dc,dl);
 }
+function xpQ(){return 10+LS.lesson.diff*5+Math.min(G.combo,10)*2;}
+function nxt(){LS.idx++;renderQ();}
+function chkHeart(){if(G.hearts<=0){hideFB();setTimeout(()=>document.getElementById('nohearts').classList.add('show'),400);return true;}return false;}
 
-function xpForQ(){return 8+LS.lesson.diff*4+G.combo*2;}
-function nextQ(){LS.idx++;renderQuestion();}
-
-// ── VOCAB 4-CHOICE ──
-function renderVocab4(body,q,dc,dl){
-  body.innerHTML=`
-    <div class="qcard">
-      <div class="qtag"><span class="diff-dot" style="background:${dc}"></span>${dl} &nbsp;·&nbsp; 日本語→英語</div>
-      <div class="qmain">${q.jp} の英語は？</div>
-    </div>
-    <div class="choice-list" id="qchoices"></div>
-  `;
-  let locked=false;
+function renderV4(body,q,dc,dl){
+  body.innerHTML=`<div class="qcard"><div class="qtag"><span class="dpip" style="background:${dc}"></span>${dl} · 日本語→英語</div><div class="qmain">${q.jp} の英語は？</div></div><div class="cl" id="qcl"></div>`;
+  let lk=false;
   [...q.ch].sort(()=>Math.random()-.5).forEach((c,i)=>{
-    const btn=document.createElement('button');
-    btn.className='choice-btn';
-    btn.innerHTML=`<span class="choice-lbl">${'ABCD'[i]}</span>${c}`;
-    btn.addEventListener('click',()=>{
-      if(locked)return; locked=true; sfxTap();
-      document.querySelectorAll('#qchoices .choice-btn').forEach(b=>b.disabled=true);
-      if(c===q.en){
-        btn.classList.add('correct'); LS.cor++;
-        onCorrect(btn,xpForQ());
-        showFB(true,'',q.jp+' = '+q.en,nextQ);
-      } else {
-        btn.classList.add('wrong');
-        document.querySelectorAll('#qchoices .choice-btn').forEach(b=>{if(b.textContent.includes(q.en))b.classList.add('correct');});
-        LS.wrg++; onWrong();
-        showFB(false,q.en,'',nextQ);
-      }
+    const b=document.createElement('button');b.className='cho';
+    b.innerHTML=`<span class="cho-lbl">${'ABCD'[i]}</span>${c}`;
+    b.addEventListener('click',()=>{
+      if(lk||G.hearts<=0)return;lk=true;sfxTap();
+      document.querySelectorAll('#qcl .cho').forEach(x=>x.disabled=true);
+      if(c===q.en){b.classList.add('correct');LS.cor++;onCorrect(b,xpQ());showFB(true,'',q.jp+' = '+q.en,nxt);}
+      else{b.classList.add('wrong');document.querySelectorAll('#qcl .cho').forEach(x=>{if(x.textContent.includes(q.en))x.classList.add('correct');});LS.wrg++;onWrong();if(!chkHeart())showFB(false,q.en,'',nxt);}
     });
-    document.getElementById('qchoices').appendChild(btn);
+    document.getElementById('qcl').appendChild(b);
   });
 }
 
-// ── SPELL ──
-function renderSpell(body,q,dc,dl){
-  body.innerHTML=`
-    <div class="qcard">
-      <div class="qtag"><span class="diff-dot" style="background:${dc}"></span>${dl} &nbsp;·&nbsp; スペル</div>
-      <div class="qmain">${q.jp} をスペルしよう</div>
-    </div>
-    <div class="spell-slots" id="sp-slots"></div>
-    <div class="spell-chips" id="sp-chips"></div>
-    <div class="spell-actions">
-      <button class="sp-del" id="sp-del">⌫ 削除</button>
-      <button class="sp-del" style="flex:1" id="sp-hint">💡 ヒント</button>
-    </div>
-  `;
+function renderSp(body,q,dc,dl){
+  body.innerHTML=`<div class="qcard"><div class="qtag"><span class="dpip" style="background:${dc}"></span>${dl} · スペル</div><div class="qmain">${q.jp} をスペルしよう</div></div><div class="spsl" id="spsl"></div><div class="spchips" id="spch"></div><div class="spacts"><button class="spdel" id="spd">⌫ 削除</button><button class="spdel" style="flex:1" id="sph">💡 ヒント</button></div>`;
   const typed=[],hinted=[];
-  function drawSlots(){
-    const box=document.getElementById('sp-slots');
-    if(!box)return;
-    box.innerHTML=''; let ti=0;
-    for(let i=0;i<q.en.length;i++){
-      const s=document.createElement('div');s.className='sp-slot';
-      if(hinted.includes(i)){s.textContent=q.en[i];s.classList.add('hinted');}
-      else if(ti<typed.length){s.textContent=typed[ti++];s.classList.add('filled');}
-      box.appendChild(s);
-    }
-    const nonH=q.en.length-hinted.length;
-    if(typed.length>=nonH) setTimeout(checkSpell,200);
+  function drawSl(){
+    const box=document.getElementById('spsl');if(!box)return;box.innerHTML='';let ti=0;
+    for(let i=0;i<q.en.length;i++){const s=document.createElement('div');s.className='spslot';if(hinted.includes(i)){s.textContent=q.en[i];s.classList.add('hinted');}else if(ti<typed.length){s.textContent=typed[ti++];s.classList.add('filled');}box.appendChild(s);}
+    if(typed.length>=q.en.length-hinted.length)setTimeout(ckSp,200);
   }
-  function checkSpell(){
-    let t=[...typed],ans='';
-    for(let i=0;i<q.en.length;i++) ans+=hinted.includes(i)?q.en[i]:(t.shift()||'');
-    const slots=[...document.querySelectorAll('#sp-slots .sp-slot')];
-    if(ans===q.en){
-      slots.forEach(s=>s.classList.add('ok')); LS.cor++;
-      onCorrect(null,xpForQ());
-      showFB(true,'','完璧！',nextQ);
-    } else {
-      slots.forEach(s=>s.classList.add('ng')); LS.wrg++; onWrong();
-      showFB(false,q.en,'',()=>{typed.length=0;drawSlots();drawChips();});
-    }
+  function ckSp(){
+    let t=[...typed],ans='';for(let i=0;i<q.en.length;i++)ans+=hinted.includes(i)?q.en[i]:(t.shift()||'');
+    const sl=[...document.querySelectorAll('#spsl .spslot')];
+    if(ans===q.en){sl.forEach(s=>s.classList.add('ok'));LS.cor++;onCorrect(null,xpQ());showFB(true,'','完璧！',nxt);}
+    else{sl.forEach(s=>s.classList.add('ng'));LS.wrg++;onWrong();if(!chkHeart())showFB(false,q.en,'',()=>{typed.length=0;drawSl();drawCh();});}
   }
-  function drawChips(){
-    const letters=q.en.split('');
-    const extras='AEIOURSTLN'.split('').filter(l=>!letters.includes(l));
-    const pool=[...letters,...extras.slice(0,4)].sort(()=>Math.random()-.5);
-    const box=document.getElementById('sp-chips');if(!box)return;
-    box.innerHTML='';
-    pool.forEach(l=>{
-      const c=document.createElement('div');c.className='sp-chip';c.textContent=l;
-      c.addEventListener('click',()=>{if(c.classList.contains('used'))return;sfxTap();c.classList.add('used');typed.push(l);drawSlots();});
-      box.appendChild(c);
-    });
+  function drawCh(){
+    const ls=q.en.split(''),ex='AEIOURSTLN'.split('').filter(l=>!ls.includes(l));
+    const pool=[...ls,...ex.slice(0,4)].sort(()=>Math.random()-.5);
+    const box=document.getElementById('spch');if(!box)return;box.innerHTML='';
+    pool.forEach(l=>{const c=document.createElement('div');c.className='spchip';c.textContent=l;c.addEventListener('click',()=>{if(c.classList.contains('used')||G.hearts<=0)return;sfxTap();c.classList.add('used');typed.push(l);drawSl();});box.appendChild(c);});
   }
-  document.getElementById('sp-del').onclick=()=>{
-    if(!typed.length)return;typed.pop();
-    const used=[...document.querySelectorAll('#sp-chips .sp-chip.used')];
-    if(used.length)used[used.length-1].classList.remove('used');
-    drawSlots();
-  };
-  document.getElementById('sp-hint').onclick=()=>{
-    for(let i=0;i<q.en.length;i++){if(!hinted.includes(i)){hinted.push(i);break;}}
-    drawSlots();
-  };
-  drawSlots(); drawChips();
+  document.getElementById('spd').onclick=()=>{if(!typed.length)return;typed.pop();const u=[...document.querySelectorAll('#spch .spchip.used')];if(u.length)u[u.length-1].classList.remove('used');drawSl();};
+  document.getElementById('sph').onclick=()=>{for(let i=0;i<q.en.length;i++){if(!hinted.includes(i)){hinted.push(i);break;}}drawSl();};
+  drawSl();drawCh();
 }
 
-// ── LISTEN ──
-function renderListen(body,q,dc,dl){
-  body.innerHTML=`
-    <div class="qcard">
-      <div class="qtag"><span class="diff-dot" style="background:${dc}"></span>${dl} &nbsp;·&nbsp; リスニング</div>
-      <div class="qmain">音声を聞いて、正しい単語を選んでね</div>
-    </div>
-    <div class="listen-play"><button class="play-btn" id="play-btn">🔊</button></div>
-    <div class="listen-hint" id="listen-hint">タップして音声を再生</div>
-    <div class="choice-list" id="qchoices"></div>
-  `;
-  let plays=0, locked=false;
-  document.getElementById('play-btn').addEventListener('click',()=>{
-    sfxTap(); plays++;
-    document.getElementById('listen-hint').textContent='再生中... ('+plays+'回目) 🎵';
-    const synth=window.speechSynthesis;
-    if(!synth){document.getElementById('listen-hint').textContent='⚠️ 音声未対応';return;}
-    synth.cancel();
-    const utt=new SpeechSynthesisUtterance(q.en);
-    utt.lang='en-US';utt.rate=plays===1?.88:.72;utt.volume=1;
-    utt.onend=()=>{document.getElementById('listen-hint').textContent='聞こえた？答えを選ぼう！';};
-    utt.onerror=()=>{document.getElementById('listen-hint').textContent='⚠️ 音声エラー';};
-    synth.speak(utt);
-  });
+function renderLi(body,q,dc,dl){
+  body.innerHTML=`<div class="qcard"><div class="qtag"><span class="dpip" style="background:${dc}"></span>${dl} · リスニング</div><div class="qmain">音声を聞いて正しい単語を選んでね</div></div><div class="playwrap"><button class="playring" id="plr">🔊</button><div class="playhint" id="plh">タップして再生</div><button class="slowbtn" id="plslow">🐢 ゆっくり</button></div><div class="cl" id="qcl"></div>`;
+  let plays=0,lk=false;
+  function doPlay(slow){
+    const syn=window.speechSynthesis;if(!syn){document.getElementById('plh').textContent='⚠️ 音声未対応';return;}
+    plays++;document.getElementById('plh').textContent='再生中 ('+plays+'回目) 🎵';
+    syn.cancel();const u=new SpeechSynthesisUtterance(q.en);u.lang='en-US';u.rate=slow?.6:.88;u.volume=1;
+    u.onend=()=>{document.getElementById('plh').textContent='聞こえた？答えを選ぼう！';};
+    u.onerror=()=>{document.getElementById('plh').textContent='⚠️ 音声エラー';};
+    syn.speak(u);
+  }
+  document.getElementById('plr').addEventListener('click',()=>doPlay(false));
+  document.getElementById('plslow').addEventListener('click',()=>doPlay(true));
   [...q.ch].sort(()=>Math.random()-.5).forEach((c,i)=>{
-    const btn=document.createElement('button');
-    btn.className='choice-btn';
-    btn.innerHTML=`<span class="choice-lbl">${'ABCD'[i]}</span>${c}`;
-    btn.addEventListener('click',()=>{
-      if(locked)return; locked=true; sfxTap();
-      if(window.speechSynthesis) window.speechSynthesis.cancel();
-      document.querySelectorAll('#qchoices .choice-btn').forEach(b=>b.disabled=true);
-      if(c===q.en){
-        btn.classList.add('correct'); LS.cor++;
-        onCorrect(btn,xpForQ());
-        showFB(true,'','よく聞こえたね！',nextQ);
-      } else {
-        btn.classList.add('wrong');
-        document.querySelectorAll('#qchoices .choice-btn').forEach(b=>{if(b.textContent.includes(q.en))b.classList.add('correct');});
-        LS.wrg++; onWrong();
-        showFB(false,q.en,'',nextQ);
-      }
+    const b=document.createElement('button');b.className='cho';
+    b.innerHTML=`<span class="cho-lbl">${'ABCD'[i]}</span>${c}`;
+    b.addEventListener('click',()=>{
+      if(lk||G.hearts<=0)return;lk=true;sfxTap();
+      if(window.speechSynthesis)window.speechSynthesis.cancel();
+      document.querySelectorAll('#qcl .cho').forEach(x=>x.disabled=true);
+      if(c===q.en){b.classList.add('correct');LS.cor++;onCorrect(b,xpQ());showFB(true,'','よく聞こえたね！',nxt);}
+      else{b.classList.add('wrong');document.querySelectorAll('#qcl .cho').forEach(x=>{if(x.textContent.includes(q.en))x.classList.add('correct');});LS.wrg++;onWrong();if(!chkHeart())showFB(false,q.en,'',nxt);}
     });
-    document.getElementById('qchoices').appendChild(btn);
+    document.getElementById('qcl').appendChild(b);
   });
 }
 
-// ── SENTENCE ──
-function renderSentence(body,q,dc,dl){
-  body.innerHTML=`
-    <div class="qcard">
-      <div class="qtag"><span class="diff-dot" style="background:${dc}"></span>${dl} &nbsp;·&nbsp; 並べ替え</div>
-      <div class="qmain">${q.jp}</div>
-    </div>
-    <div class="sent-target" id="sent-tgt"></div>
-    <div class="sent-bank" id="sent-bank"></div>
-    <button class="action-btn gray" id="sent-check">確認する</button>
-  `;
+function renderSe(body,q,dc,dl){
+  body.innerHTML=`<div class="qcard"><div class="qtag"><span class="dpip" style="background:${dc}"></span>${dl} · 並べ替え</div><div class="qmain">${q.jp}</div></div><div class="stgt" id="stgt"></div><div class="sbk" id="sbk"></div><button class="abtn gray" id="seck">確認する</button>`;
   let sel=[];
-  function drawTgt(){
-    const t=document.getElementById('sent-tgt');if(!t)return;
-    t.innerHTML='';
-    sel.forEach((w,i)=>{
-      const el=document.createElement('div');el.className='sent-word';el.textContent=w;
-      el.addEventListener('click',()=>{sel.splice(i,1);let done=false;document.querySelectorAll('#sent-bank .bank-word.used').forEach(e=>{if(!done&&e.dataset.w===w){e.classList.remove('used');done=true;}});drawTgt();updateBtn();});
-      t.appendChild(el);
-    });
-    if(sel.length<q.ans.length){const bl=document.createElement('div');bl.className='sent-blank';bl.textContent='...';t.appendChild(bl);}
-  }
-  function updateBtn(){document.getElementById('sent-check').className=sel.length?'action-btn green':'action-btn gray';}
-  [...q.pool].sort(()=>Math.random()-.5).forEach(w=>{
-    const el=document.createElement('div');el.className='bank-word';el.textContent=w;el.dataset.w=w;
-    el.addEventListener('click',()=>{if(el.classList.contains('used'))return;sfxTap();el.classList.add('used');sel.push(w);drawTgt();updateBtn();});
-    document.getElementById('sent-bank').appendChild(el);
+  function drawT(){const t=document.getElementById('stgt');if(!t)return;t.innerHTML='';sel.forEach((w,i)=>{const e=document.createElement('div');e.className='sw';e.textContent=w;e.addEventListener('click',()=>{sel.splice(i,1);let d=false;document.querySelectorAll('#sbk .bw.used').forEach(x=>{if(!d&&x.dataset.w===w){x.classList.remove('used');d=true;}});drawT();upB();});t.appendChild(e);});if(sel.length<q.ans.length){const bl=document.createElement('div');bl.className='sblank';bl.textContent='...';t.appendChild(bl);}}
+  function upB(){const b=document.getElementById('seck');if(b)b.className=sel.length?'abtn green':'abtn gray';}
+  [...q.pool].sort(()=>Math.random()-.5).forEach(w=>{const e=document.createElement('div');e.className='bw';e.textContent=w;e.dataset.w=w;e.addEventListener('click',()=>{if(e.classList.contains('used')||G.hearts<=0)return;sfxTap();e.classList.add('used');sel.push(w);drawT();upB();});document.getElementById('sbk').appendChild(e);});
+  document.getElementById('seck').addEventListener('click',()=>{
+    if(G.hearts<=0)return;
+    document.getElementById('seck').style.display='none';
+    document.querySelectorAll('#stgt .sw').forEach(e=>e.style.pointerEvents='none');
+    if(JSON.stringify(sel)===JSON.stringify(q.ans)){document.querySelectorAll('#stgt .sw').forEach(e=>e.classList.add('ok'));LS.cor++;onCorrect(null,xpQ());showFB(true,'','英文完成！',nxt);}
+    else{document.querySelectorAll('#stgt .sw').forEach(e=>e.classList.add('ng'));LS.wrg++;onWrong();if(!chkHeart())showFB(false,q.ans.join(' '),'',()=>{sel=[];document.getElementById('seck').style.display='block';document.getElementById('seck').className='abtn gray';drawT();document.querySelectorAll('#sbk .bw').forEach(e=>e.classList.remove('used'));});}
   });
-  document.getElementById('sent-check').addEventListener('click',()=>{
-    document.getElementById('sent-check').style.display='none';
-    document.querySelectorAll('#sent-tgt .sent-word').forEach(e=>e.style.pointerEvents='none');
-    if(JSON.stringify(sel)===JSON.stringify(q.ans)){
-      document.querySelectorAll('#sent-tgt .sent-word').forEach(e=>e.classList.add('ok'));
-      LS.cor++; onCorrect(null,xpForQ());
-      showFB(true,'','英文完成！',nextQ);
-    } else {
-      document.querySelectorAll('#sent-tgt .sent-word').forEach(e=>e.classList.add('ng'));
-      LS.wrg++; onWrong();
-      showFB(false,q.ans.join(' '),'',()=>{sel=[];document.getElementById('sent-check').style.display='block';document.getElementById('sent-check').className='action-btn gray';drawTgt();document.querySelectorAll('#sent-bank .bank-word').forEach(e=>e.classList.remove('used'));});
-    }
-  });
-  drawTgt();
+  drawT();
 }
 
-// ── MATCH ──
-function renderMatch(body,q,dc,dl){
-  body.innerHTML=`
-    <div class="qcard">
-      <div class="qtag"><span class="diff-dot" style="background:${dc}"></span>${dl} &nbsp;·&nbsp; 意味を結ぼう</div>
-      <div class="qmain">英語と日本語を合わせよう</div>
-    </div>
-    <div class="match-grid" id="match-grid"></div>
-  `;
-  // left=english, right=japanese shuffled
+function renderMa(body,q,dc,dl){
+  body.innerHTML=`<div class="qcard"><div class="qtag"><span class="dpip" style="background:${dc}"></span>${dl} · マッチング</div><div class="qmain">英語と意味を合わせよう</div></div><div class="mcols" id="mcols"></div>`;
   const pairs=[...q.pairs];
-  const lefts=pairs.map(p=>p[0]).sort(()=>Math.random()-.5);
-  const rights=pairs.map(p=>p[1]).sort(()=>Math.random()-.5);
-  const allItems=[...lefts.map(w=>({w,side:'L'})),...rights.map(w=>({w,side:'R'}))];
-  let selected=null, matched=new Set(), wrongTimeout=null;
-  const grid=document.getElementById('match-grid');
-
-  function makeBtn(item){
-    const btn=document.createElement('button');
-    btn.className='match-btn';btn.textContent=item.w;btn.dataset.w=item.w;btn.dataset.side=item.side;
-    btn.addEventListener('click',()=>{
-      if(matched.has(item.w)||btn.classList.contains('matched'))return;
-      sfxTap(); btn.classList.add('selected');
-      if(!selected){selected={item,btn};return;}
-      if(selected.item.w===item.w){selected.btn.classList.remove('selected');selected=null;return;}
-      // check pair
-      const pair=pairs.find(p=>(p[0]===selected.item.w&&p[1]===item.w)||(p[1]===selected.item.w&&p[0]===item.w));
+  const ls=pairs.map(p=>p[0]).sort(()=>Math.random()-.5);
+  const rs=pairs.map(p=>p[1]).sort(()=>Math.random()-.5);
+  let sel=null,matched=new Set();
+  const grid=document.getElementById('mcols');
+  function mkBtn(w,side){
+    const b=document.createElement('button');b.className='mbtn';b.textContent=w;b.dataset.w=w;
+    b.addEventListener('click',()=>{
+      if(matched.has(w)||b.classList.contains('mat')||G.hearts<=0)return;
+      sfxTap();b.classList.add('sel');
+      if(!sel){sel={w,b};return;}
+      if(sel.b===b){b.classList.remove('sel');sel=null;return;}
+      const pair=pairs.find(p=>(p[0]===sel.w&&p[1]===w)||(p[1]===sel.w&&p[0]===w));
       if(pair){
-        selected.btn.classList.remove('selected');selected.btn.classList.add('matched');
-        btn.classList.remove('selected');btn.classList.add('matched');
-        matched.add(selected.item.w);matched.add(item.w);
-        onCorrect(btn,Math.floor(xpForQ()/pairs.length));
-        selected=null;
-        if(matched.size===pairs.length*2){LS.cor++;showFB(true,'','全部合った！',nextQ);}
+        sel.b.classList.remove('sel');sel.b.classList.add('mat');b.classList.remove('sel');b.classList.add('mat');
+        matched.add(sel.w);matched.add(w);
+        onCorrect(b,Math.ceil(xpQ()/pairs.length));sel=null;
+        if(matched.size===pairs.length*2){LS.cor++;showFB(true,'','全部合った！',nxt);}
       } else {
-        selected.btn.classList.add('wrong-flash');btn.classList.add('wrong-flash');
-        onWrong();
-        setTimeout(()=>{selected.btn.classList.remove('selected','wrong-flash');btn.classList.remove('selected','wrong-flash');selected=null;},700);
+        const sb=sel.b;sb.classList.add('wfl');b.classList.add('wfl');
+        LS.wrg++;onWrong();
+        setTimeout(()=>{sb.classList.remove('sel','wfl');b.classList.remove('sel','wfl');sel=null;},650);
+        if(G.hearts<=0){hideFB();setTimeout(()=>document.getElementById('nohearts').classList.add('show'),400);}
       }
     });
-    return btn;
+    return b;
   }
-
-  // interleave: left col then right col
-  lefts.forEach(w=>grid.appendChild(makeBtn({w,side:'L'})));
-  rights.forEach(w=>grid.appendChild(makeBtn({w,side:'R'})));
+  ls.forEach(w=>grid.appendChild(mkBtn(w,'L')));
+  rs.forEach(w=>grid.appendChild(mkBtn(w,'R')));
 }
 
-// ── TYPEWRITE ──
-function renderTypewrite(body,q,dc,dl){
-  body.innerHTML=`
-    <div class="qcard">
-      <div class="qtag"><span class="diff-dot" style="background:${dc}"></span>${dl} &nbsp;·&nbsp; 入力</div>
-      <div class="qmain">${q.jp} を英語で入力しよう</div>
-      <div class="qexample">ヒント: ${q.hint||q.en}</div>
-    </div>
-    <div class="type-input-wrap">
-      <input class="type-input" id="type-inp" type="text" placeholder="ここに入力..." autocomplete="off" autocorrect="off" spellcheck="false">
-    </div>
-    <button class="action-btn gray" id="type-check">確認する</button>
-  `;
-  const inp=document.getElementById('type-inp');
-  inp.focus();
-  inp.addEventListener('input',()=>{
-    document.getElementById('type-check').className=inp.value.trim()?'action-btn green':'action-btn gray';
-  });
-  function checkType(){
-    const val=inp.value.trim().toLowerCase();
-    const correct=q.en.toLowerCase();
-    inp.disabled=true;
-    document.getElementById('type-check').style.display='none';
-    if(val===correct){
-      inp.classList.add('ok'); LS.cor++;
-      onCorrect(null,xpForQ());
-      showFB(true,'','完璧！',nextQ);
-    } else {
-      inp.classList.add('ng'); LS.wrg++; onWrong();
-      showFB(false,q.en,'',()=>{inp.disabled=false;inp.value='';inp.classList.remove('ng');inp.focus();document.getElementById('type-check').style.display='block';document.getElementById('type-check').className='action-btn gray';});
-    }
+function renderTw(body,q,dc,dl){
+  body.innerHTML=`<div class="qcard"><div class="qtag"><span class="dpip" style="background:${dc}"></span>${dl} · 入力</div><div class="qmain">${q.jp}</div>${q.hint?`<div class="qhint">💡 ヒント: ${q.hint}</div>`:''}</div><input class="typein" id="ti" type="text" placeholder="英語で入力..." autocomplete="off" autocorrect="off" spellcheck="false"><button class="abtn gray" id="twck">確認する</button>`;
+  const inp=document.getElementById('ti');inp.focus();
+  inp.addEventListener('input',()=>{document.getElementById('twck').className=inp.value.trim()?'abtn green':'abtn gray';});
+  function ck(){
+    if(G.hearts<=0)return;
+    const val=inp.value.trim().toLowerCase(),cor=q.en.toLowerCase();
+    inp.disabled=true;document.getElementById('twck').style.display='none';
+    if(val===cor){inp.classList.add('ok');LS.cor++;onCorrect(null,xpQ());showFB(true,'','完璧！',nxt);}
+    else{inp.classList.add('ng');LS.wrg++;onWrong();if(!chkHeart())showFB(false,q.en,'',()=>{inp.disabled=false;inp.value='';inp.classList.remove('ng');inp.focus();document.getElementById('twck').style.display='block';document.getElementById('twck').className='abtn gray';});}
   }
-  document.getElementById('type-check').addEventListener('click',checkType);
-  inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkType();});
+  document.getElementById('twck').addEventListener('click',ck);
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')ck();});
 }
 
-// ══════════════════════════════════════════════════════
-//  END LESSON
-// ══════════════════════════════════════════════════════
+// ── END LESSON ──
 function endLesson(){
   hideFB();
-  const tot=LS.cor+LS.wrg, pct=tot?LS.cor/tot:0;
+  const tot=LS.cor+LS.wrg,pct=tot?LS.cor/tot:0;
   const stars=pct===1?3:pct>=.7?2:pct>=.4?1:0;
-
-  // save stars (only upgrade)
-  const prev=G.lessonStars[LS.lesson.id]||0;
-  if(stars>prev) G.lessonStars[LS.lesson.id]=stars;
-
-  // unlock next lesson
-  const curIdx=ALL_LESSON_IDS.indexOf(LS.lesson.id);
-  const unlockedIdx=ALL_LESSON_IDS.indexOf(G.unlockedLesson);
-  if(stars>=1 && curIdx>=unlockedIdx && curIdx+1<ALL_LESSON_IDS.length){
-    G.unlockedLesson=ALL_LESSON_IDS[curIdx+1];
+  if(LS.isSkip){
+    if(pct>=.8){
+      sfxSkip();vib([40,20,40,20,80,20,80]);
+      const unit=LS.unit;
+      unit.lessons.forEach(l=>{if(!G.stars[l.id]||G.stars[l.id]<2)G.stars[l.id]=2;});
+      const li=unit.lessons[unit.lessons.length-1].id,idx=ALL_IDS.indexOf(li);
+      if(idx+1<ALL_IDS.length)G.unlocked=ALL_IDS[idx+1];
+      G.skipCount++;unlock('skip1');if(G.skipCount>=3)unlock('skip3');
+      notify('⚡ 飛び級成功！ '+unit.title+' をスキップ！');
+      document.getElementById('resowl').textContent='⚡';
+      document.getElementById('restit').textContent='飛び級成功！';
+      document.getElementById('ressub').textContent=unit.title+' をまるごとスキップ！';
+    } else {
+      document.getElementById('resowl').textContent='😅';
+      document.getElementById('restit').textContent='惜しい！もう少し！';
+      document.getElementById('ressub').textContent='正答率80%で飛び級できるよ（今回: '+Math.round(pct*100)+'%）';
+    }
+    document.getElementById('resstars').innerHTML=['⚡','⚡','⚡'].map((s,i)=>`<span class="rs" style="opacity:${i<(pct>=.8?3:pct>=.5?2:1)?1:.3}">${s}</span>`).join('');
+  } else {
+    const prev=G.stars[LS.lesson.id]||0;
+    if(stars>prev)G.stars[LS.lesson.id]=stars;
+    const ci=ALL_IDS.indexOf(LS.lesson.id),ui=ALL_IDS.indexOf(G.unlocked);
+    if(stars>=1&&ci>=ui&&ci+1<ALL_IDS.length)G.unlocked=ALL_IDS[ci+1];
+    const am={u1:'u1c',u2:'u2c',u3:'u3c',u4:'u4c',u5:'u5c',u6:'u6c',u7:'u7c',u8:'u8c',u9:'u9c',u10:'u10c'};
+    if(LS.unit.lessons.every(l=>G.stars[l.id]>=1))unlock(am[LS.unit.id]);
+    const today=todayStr();
+    if(!G.doneToday){
+      G.doneToday=true;
+      if(G.lastDate){const d=Math.round((new Date(today)-new Date(G.lastDate))/86400000);G.streak=d===1?G.streak+1:1;}
+      else G.streak=1;
+      G.lastDate=today;
+      setTimeout(()=>notify('🔥 '+G.streak+'日連続！'),700);
+      if(G.streak>=3)unlock('s3');if(G.streak>=7)unlock('s7');if(G.streak>=30)unlock('s30');
+    }
+    if(stars===3)unlock('pf');
+    let owl,tit,sub;
+    if(pct===1){owl='🎉';tit='パーフェクト！';sub='全問正解！最高！';}
+    else if(pct>=.7){owl='🦉';tit='ナイス！';sub='いい調子！';}
+    else if(pct>=.4){owl='😅';tit='もう少し！';sub='次はもっと上手くいくよ！';}
+    else{owl='😢';tit='もう一回！';sub='練習すれば絶対上達するよ！';}
+    document.getElementById('resowl').textContent=owl;
+    document.getElementById('restit').textContent=tit;
+    document.getElementById('ressub').textContent=sub+(G.streak>1?' 　🔥'+G.streak+'日連続！':'');
+    document.getElementById('resstars').innerHTML=Array.from({length:3},(_,i)=>`<span class="rs">${i<stars?'⭐':'☆'}</span>`).join('');
+    if(pct===1){try{navigator.vibrate&&navigator.vibrate([40,20,40,20,40,20,100]);}catch(e){}sfxLvUp();}
   }
-
-  // unit completion
-  const unitDoneMap={u1:'u1done',u2:'u2done',u3:'u3done',u4:'u4done',u5:'u5done'};
-  const unit=LS.unit;
-  if(unit.lessons.every(l=>G.lessonStars[l.id]>=1)) unlock(unitDoneMap[unit.id]);
-
-  // streak
-  const today=todayStr();
-  let streakMsg='';
-  if(!G.doneToday){
-    G.doneToday=true;
-    if(G.lastDate){
-      const diff=Math.round((new Date(today)-new Date(G.lastDate))/86400000);
-      G.streak=diff===1?G.streak+1:1;
-    } else G.streak=1;
-    G.lastDate=today;
-    streakMsg='🔥 '+G.streak+'日連続！';
-    if(G.streak>=3) unlock('streak3');
-    if(G.streak>=7) unlock('streak7');
-    setTimeout(()=>notify(streakMsg),800);
-  }
-  if(stars===3) unlock('pf');
-
-  saveState();
-
-  // show result
-  let owl,title,sub;
-  if(pct===1){owl='🎉';title='パーフェクト！';sub='全問正解！最高だよ！';}
-  else if(pct>=.7){owl='🦉';title='ナイス！';sub='いい調子！続けよう！';}
-  else if(pct>=.4){owl='😅';title='もう少し！';sub='次はもっと上手くいくよ！';}
-  else{owl='😢';title='もう一回やろう！';sub='練習すれば絶対上達するよ！';}
-
-  document.getElementById('result-owl').textContent=owl;
-  document.getElementById('result-title').textContent=title;
-  document.getElementById('result-sub').textContent=sub+(G.streak>1?' 　'+G.streak+'日連続🔥':'');
-
-  const starsEl=document.getElementById('result-stars');
-  starsEl.innerHTML='';
-  for(let i=0;i<3;i++){
-    const s=document.createElement('span');s.className='star';
-    s.textContent=i<stars?'⭐':'☆';
-    starsEl.appendChild(s);
-  }
-  const xpEarned=LS.cor*(8+LS.lesson.diff*4);
-  document.getElementById('result-cor').textContent=LS.cor;
-  document.getElementById('result-wrg').textContent=LS.wrg;
-  document.getElementById('result-xp').textContent=xpEarned;
-  document.getElementById('result-retry').onclick=()=>startLesson(LS.unit,LS.lesson);
-
-  if(pct===1){try{navigator.vibrate&&navigator.vibrate([40,20,40,20,40,20,80]);}catch(e){}sfxLvUp();}
-
+  const xpE=LS.cor*(10+LS.lesson.diff*5);
+  document.getElementById('rescor').textContent=LS.cor;
+  document.getElementById('reswrg').textContent=LS.wrg;
+  document.getElementById('resxp').textContent=xpE;
+  document.getElementById('res-retry').onclick=()=>startLesson(LS.unit,LS.lesson,LS.isSkip);
+  save();
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));
   document.getElementById('page-result').classList.add('show');
 }
 
-// ══════════════════════════════════════════════════════
-//  ACHIEVEMENTS
-// ══════════════════════════════════════════════════════
+// ── ACH ──
 function renderAch(){
-  const grid=document.getElementById('ach-grid');
-  grid.innerHTML='';let cnt=0;
-  ACH_DATA.forEach(a=>{
-    const on=!!G.ach[a.id];if(on)cnt++;
-    const card=document.createElement('div');card.className='ach-card'+(on?' unlocked':'');
-    card.innerHTML=`<div class="ach-i">${a.ic}</div><div><div class="ach-n">${a.nm}</div><div class="ach-d">${a.ds}</div></div>`;
-    grid.appendChild(card);
-  });
-  document.getElementById('ach-unlocked').textContent=cnt;
-  document.getElementById('ach-total').textContent=ACH_DATA.length;
+  const g=document.getElementById('achgrid');g.innerHTML='';let cnt=0;
+  ACHS.forEach(a=>{const on=!!G.ach[a.id];if(on)cnt++;const c=document.createElement('div');c.className='acard'+(on?' on':'');c.innerHTML=`<div class="ai">${a.ic}</div><div><div class="an">${a.nm}</div><div class="ad">${a.ds}</div></div>`;g.appendChild(c);});
+  document.getElementById('acnt').textContent=cnt;
+  document.getElementById('atot').textContent=ACHS.length;
 }
 
-// ══════════════════════════════════════════════════════
-//  INIT
-// ══════════════════════════════════════════════════════
+// ── PROFILE ──
+function renderProfile(){
+  document.getElementById('pf-lv').textContent=G.lv;
+  document.getElementById('pf-str').textContent=G.streak;
+  document.getElementById('pf-cor').textContent=G.totalCor;
+  const list=document.getElementById('uprlist');list.innerHTML='';
+  CUR.forEach(unit=>{
+    const done=unit.lessons.filter(l=>G.stars[l.id]>=1).length;
+    const pct=Math.round(done/unit.lessons.length*100);
+    const row=document.createElement('div');row.className='uprrow';
+    row.innerHTML=`<div class="upri">${unit.icon}</div><div class="uprn">${unit.title}</div><div class="uprbg"><div class="uprfill" style="width:${pct}%;background:${unit.color}"></div></div><div class="uprpct">${pct}%</div>`;
+    list.appendChild(row);
+  });
+}
+
+// ── INIT ──
 refreshTop();
-renderCourseMap();
+renderMap();
+startHeartTimer();
 </script>
 </body>
 </html>
