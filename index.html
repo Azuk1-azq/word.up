@@ -85,6 +85,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);min-
 
 /* MODAL */
 #modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:none;align-items:flex-end;justify-content:center}
+#skiprange-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:501;display:none;align-items:flex-end;justify-content:center}
+#skiprange-ov.show{display:flex}
 #modal-ov.show{display:flex}
 .mc{background:var(--card);border-radius:24px 24px 0 0;padding:26px 20px calc(24px + env(safe-area-inset-bottom));max-width:640px;width:100%;animation:sup .3s cubic-bezier(.34,1.56,.64,1)}
 @keyframes sup{from{transform:translateY(100%)}to{transform:translateY(0)}}
@@ -192,6 +194,52 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);min-
 .nhsub{font-size:.85rem;color:var(--dim);margin-bottom:16px}
 .nhtimer{font-size:1.7rem;font-weight:900;color:var(--red);margin-bottom:18px;font-family:'DM Serif Display'}
 .nhbtn{display:block;width:100%;padding:13px;border-radius:50px;border:none;background:var(--grn);color:#fff;font-family:'DM Sans';font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 4px 0 var(--grnd)}
+.nhbtn-ad{background:linear-gradient(90deg,#9B59B6,#E91E8C);box-shadow:0 4px 0 #6C3483;margin-bottom:10px;display:block;width:100%;padding:13px;border-radius:50px;border:none;color:#fff;font-family:'DM Sans';font-weight:900;font-size:.95rem;cursor:pointer;transition:transform .1s}
+.nhbtn-ad:active{transform:translateY(3px);box-shadow:none}
+.nhbtn-out{display:block;width:100%;padding:12px;border-radius:50px;border:2px solid var(--bdr);background:transparent;font-family:'DM Sans';font-weight:700;font-size:.88rem;cursor:pointer;color:var(--dim)}
+
+/* AD MODAL */
+#ad-overlay{position:fixed;inset:0;background:#000;z-index:800;display:none;align-items:center;justify-content:center;padding:20px}
+#ad-overlay.show{display:flex}
+.ad-card{position:relative;max-width:380px;width:100%;background:linear-gradient(160deg,#1a0a2e,#2d1b4e);border-radius:20px;overflow:hidden;padding:0;transition:background .2s}
+.ad-skip{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.5);color:#fff;font-size:.78rem;font-weight:700;border-radius:50px;padding:6px 13px;z-index:2}
+.ad-body{padding:50px 24px 32px;text-align:center;color:#fff}
+.ad-logo{font-size:3.5rem;margin-bottom:10px}
+.ad-brand{font-family:'DM Serif Display';font-size:1.3rem;margin-bottom:6px}
+.ad-tagline{font-size:.85rem;opacity:.75;margin-bottom:22px}
+.ad-mockscreen{background:rgba(255,255,255,.08);border-radius:14px;padding:24px;margin-bottom:6px}
+.ad-mock-icon{font-size:2.2rem;margin-bottom:14px;letter-spacing:8px}
+.ad-mock-bar{height:8px;background:rgba(255,255,255,.15);border-radius:50px;overflow:hidden}
+.ad-mock-fill{height:100%;width:0%;background:linear-gradient(90deg,#9B59B6,#E91E8C);border-radius:50px;animation:adfill 5s linear forwards}
+@keyframes adfill{to{width:100%}}
+.ad-close{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;border:none;background:rgba(255,255,255,.15);color:#fff;font-size:.9rem;cursor:pointer;z-index:2;transition:opacity .2s}
+.ad-close:disabled{opacity:.3;cursor:not-allowed}
+.ad-close:not(:disabled){opacity:1;background:rgba(255,255,255,.3)}
+.ad-disclaimer{font-size:.65rem;opacity:.4;margin-top:18px;letter-spacing:.03em}
+/* product grid ad (household goods) */
+.ad-prod-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px}
+.ad-prod{background:rgba(255,255,255,.08);border-radius:12px;padding:14px 8px;text-align:center}
+.ad-prod-icon{font-size:1.8rem;margin-bottom:6px}
+.ad-prod-name{font-size:.72rem;font-weight:700;margin-bottom:3px}
+.ad-prod-price{font-size:.8rem;font-weight:900;color:#FFD700}
+.ad-prod-old{font-size:.65rem;text-decoration:line-through;opacity:.5;margin-left:4px}
+.ad-badge{display:inline-block;background:rgba(255,255,255,.15);border-radius:50px;padding:4px 12px;font-size:.7rem;font-weight:700;margin-bottom:14px}
+/* food ad */
+.ad-food-photo{font-size:3.2rem;margin-bottom:8px}
+.ad-price-tag{display:inline-block;background:#FFD700;color:#1a0a2e;border-radius:10px;padding:6px 16px;font-weight:900;font-size:1.1rem;margin-bottom:6px}
+/* insurance / service ad */
+.ad-stat-row{display:flex;justify-content:space-around;margin-bottom:6px}
+.ad-stat{text-align:center}
+.ad-stat-v{font-family:'DM Serif Display';font-size:1.4rem;color:#FFD700}
+.ad-stat-l{font-size:.62rem;opacity:.7}
+
+/* SKIP MULTI MODAL */
+.skip-range-row{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:2px}
+.skip-range-chip{flex-shrink:0;padding:10px 14px;border-radius:14px;border:2px solid var(--bdr);background:var(--card2);cursor:pointer;text-align:center;min-width:84px;transition:all .15s}
+.skip-range-chip.sel{border-color:var(--pur);background:var(--purbg)}
+.skip-range-chip .src-n{font-family:'DM Serif Display';font-size:1.1rem;color:var(--txt)}
+.skip-range-chip.sel .src-n{color:var(--purd)}
+.skip-range-chip .src-l{font-size:.62rem;font-weight:700;color:var(--dim);text-transform:uppercase;margin-top:2px}
 
 /* RESULT */
 .resh{text-align:center;padding:26px 0 14px}
@@ -358,13 +406,38 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);min-
     <button class="mc-cancel" onclick="closeModal()">キャンセル</button>
   </div>
 </div>
+<div id="skiprange-ov">
+  <div class="mc">
+    <div class="mc-icon">⚡</div>
+    <div class="mc-title" id="sr-title">飛び級テスト</div>
+    <div class="mc-sub">どこまで飛び級するか選ぼう（先のユニットほど難しい！）</div>
+    <div class="skip-range-row" id="sr-row"></div>
+    <div class="mc-stats" style="grid-template-columns:repeat(3,1fr)">
+      <div class="mc-stat"><div class="mc-sv" id="sr-qs">8</div><div class="mc-sl">問題</div></div>
+      <div class="mc-stat"><div class="mc-sv" id="sr-units">1</div><div class="mc-sl">対象Unit</div></div>
+      <div class="mc-stat"><div class="mc-sv" id="sr-need">80%</div><div class="mc-sl">合格ライン</div></div>
+    </div>
+    <button class="mc-go mc-skip-go" id="sr-go">⚡ 飛び級テストに挑戦！</button>
+    <button class="mc-cancel" onclick="closeSkipRange()">キャンセル</button>
+  </div>
+</div>
 <div id="nohearts">
   <div class="nhcard">
     <div class="nhicon">💔</div>
     <div class="nhtit">ハートがなくなった！</div>
-    <div class="nhsub">25分で1つ回復。また挑戦しよう！</div>
+    <div class="nhsub">25分で1つ回復。または広告を見て今すぐ回復しよう！</div>
     <div class="nhtimer" id="nhtimer">25:00</div>
-    <button class="nhbtn" onclick="document.getElementById('nohearts').classList.remove('show')">コースに戻る</button>
+    <button class="nhbtn nhbtn-ad" id="watch-ad-btn">📺 広告を見てハート回復</button>
+    <button class="nhbtn-out" onclick="document.getElementById('nohearts').classList.remove('show')">コースに戻る</button>
+  </div>
+</div>
+<div id="ad-overlay">
+  <div class="ad-card" id="ad-card-root">
+    <div class="ad-skip" id="ad-skip-wrap">スキップまで <span id="ad-countdown">5</span></div>
+    <div class="ad-body" id="ad-body">
+      <!-- filled dynamically by JS -->
+    </div>
+    <button class="ad-close" id="ad-close-btn" disabled>✕</button>
   </div>
 </div>
 <div id="fbfoot">
@@ -517,7 +590,7 @@ function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMo
 function loadSave(){try{const r=localStorage.getItem('azqen_v2');if(r)return JSON.parse(r);}catch(e){}return null;}
 function initG(){
   const s=loadSave(),today=todayStr(),now=Date.now();
-  const base={xp:0,lv:1,xpMax:120,hearts:MAX_H,lastHT:now,gems:0,streak:0,lastDate:null,doneToday:false,combo:0,totalCor:0,skipCount:0,ach:{},stars:{},unlocked:'u1-1'};
+  const base={xp:0,lv:1,xpMax:120,hearts:MAX_H,lastHT:now,gems:0,streak:0,lastDate:null,doneToday:false,combo:0,totalCor:0,skipCount:0,ach:{},stars:{},unlocked:'u1-1',adWatchDate:today,adWatchCount:0};
   if(!s)return base;
   let hearts=s.hearts!==undefined?s.hearts:MAX_H,lastHT=s.lastHT||now;
   if(hearts<MAX_H){const reg=Math.floor((now-lastHT)/HREGEN);if(reg>0){hearts=Math.min(MAX_H,hearts+reg);lastHT=now-(now-lastHT)%HREGEN;}}
@@ -525,10 +598,10 @@ function initG(){
   const last=s.lastDate;
   if(last===today){doneToday=true;}
   else if(last){const d=Math.round((new Date(today)-new Date(last))/86400000);if(d===1)doneToday=false;else{streak=0;doneToday=false;}}
-  return{xp:s.xp||0,lv:s.lv||1,xpMax:s.xpMax||120,hearts,lastHT,gems:s.gems||0,streak,lastDate:s.lastDate||null,doneToday,combo:0,totalCor:s.totalCor||0,skipCount:s.skipCount||0,ach:s.ach||{},stars:s.stars||{},unlocked:s.unlocked||'u1-1'};
+  return{xp:s.xp||0,lv:s.lv||1,xpMax:s.xpMax||120,hearts,lastHT,gems:s.gems||0,streak,lastDate:s.lastDate||null,doneToday,combo:0,totalCor:s.totalCor||0,skipCount:s.skipCount||0,ach:s.ach||{},stars:s.stars||{},unlocked:s.unlocked||'u1-1',adWatchDate:s.adWatchDate===today?s.adWatchDate:today,adWatchCount:s.adWatchDate===today?(s.adWatchCount||0):0};
 }
 const G=initG();
-function save(){try{localStorage.setItem('azqen_v2',JSON.stringify({xp:G.xp,lv:G.lv,xpMax:G.xpMax,hearts:G.hearts,lastHT:G.lastHT,gems:G.gems,streak:G.streak,lastDate:G.lastDate,totalCor:G.totalCor,skipCount:G.skipCount,ach:G.ach,stars:G.stars,unlocked:G.unlocked}));}catch(e){}}
+function save(){try{localStorage.setItem('azqen_v2',JSON.stringify({xp:G.xp,lv:G.lv,xpMax:G.xpMax,hearts:G.hearts,lastHT:G.lastHT,gems:G.gems,streak:G.streak,lastDate:G.lastDate,totalCor:G.totalCor,skipCount:G.skipCount,ach:G.ach,stars:G.stars,unlocked:G.unlocked,adWatchDate:G.adWatchDate,adWatchCount:G.adWatchCount}));}catch(e){}}
 function resetAll(){localStorage.removeItem('azqen_v2');location.reload();}
 
 // ── AUDIO ──
@@ -558,6 +631,204 @@ function startHeartTimer(){
   },1000);
 }
 
+// ── WATCH AD FOR HEART ──
+const MAX_AD_WATCHES_PER_DAY=3;
+function adWatchesToday(){
+  const today=todayStr();
+  if(G.adWatchDate!==today){G.adWatchDate=today;G.adWatchCount=0;}
+  return G.adWatchCount||0;
+}
+function updateAdBtn(){
+  const btn=document.getElementById('watch-ad-btn');
+  if(!btn)return;
+  const used=adWatchesToday();
+  const left=MAX_AD_WATCHES_PER_DAY-used;
+  if(G.hearts>=MAX_H){
+    btn.disabled=true;
+    btn.textContent='❤️ ハートは満タンです';
+  } else if(left<=0){
+    btn.disabled=true;
+    btn.textContent='📺 本日の広告視聴上限（また明日！）';
+  } else {
+    btn.disabled=false;
+    btn.textContent=`📺 広告を見てハート回復 (残り${left}回)`;
+  }
+}
+// ── AD TEMPLATES (mock, no real ad SDK) ──
+const AD_TEMPLATES=[
+  // ゲーム系
+  {
+    bg:'linear-gradient(160deg,#1a0a2e,#2d1b4e)',
+    render:()=>`
+      <div class="ad-logo">🎮</div>
+      <div class="ad-brand">SuperGame Adventure</div>
+      <div class="ad-tagline">無料で遊べる新作RPG、配信中！</div>
+      <div class="ad-mockscreen">
+        <div class="ad-mock-icon">⚔️🛡️✨</div>
+        <div class="ad-mock-bar"><div class="ad-mock-fill"></div></div>
+      </div>
+      <div class="ad-disclaimer">広告</div>`
+  },
+  {
+    bg:'linear-gradient(160deg,#0a2e1a,#1b4e2d)',
+    render:()=>`
+      <div class="ad-logo">🧩</div>
+      <div class="ad-brand">パズルクエスト3</div>
+      <div class="ad-tagline">頭を使う新感覚パズル、世界中で大人気！</div>
+      <div class="ad-mockscreen">
+        <div class="ad-mock-icon">🟦🟩🟨</div>
+        <div class="ad-mock-bar"><div class="ad-mock-fill"></div></div>
+      </div>
+      <div class="ad-disclaimer">広告</div>`
+  },
+  // 日用品系
+  {
+    bg:'linear-gradient(160deg,#1a2433,#2d3e52)',
+    render:()=>`
+      <div class="ad-badge">本日限定セール</div>
+      <div class="ad-brand">クリーンホーム洗剤セット</div>
+      <div class="ad-tagline">頑固な汚れもスッキリ落ちる！</div>
+      <div class="ad-prod-grid">
+        <div class="ad-prod"><div class="ad-prod-icon">🧴</div><div class="ad-prod-name">食器用洗剤</div><div class="ad-prod-price">¥398<span class="ad-prod-old">¥598</span></div></div>
+        <div class="ad-prod"><div class="ad-prod-icon">🧽</div><div class="ad-prod-name">スポンジ3個</div><div class="ad-prod-price">¥298<span class="ad-prod-old">¥420</span></div></div>
+      </div>
+      <div class="ad-disclaimer">広告・PR</div>`
+  },
+  {
+    bg:'linear-gradient(160deg,#2d2510,#4e4020)',
+    render:()=>`
+      <div class="ad-badge">新商品</div>
+      <div class="ad-brand">ふんわり柔軟剤 アロマブリーズ</div>
+      <div class="ad-tagline">洗濯のたびに、ふわっと癒される香り</div>
+      <div class="ad-mockscreen">
+        <div class="ad-mock-icon">🧺🌸💧</div>
+        <div class="ad-mock-bar"><div class="ad-mock-fill"></div></div>
+      </div>
+      <div class="ad-disclaimer">広告・PR</div>`
+  },
+  // フード系
+  {
+    bg:'linear-gradient(160deg,#331a0a,#522d1b)',
+    render:()=>`
+      <div class="ad-food-photo">🍔🍟</div>
+      <div class="ad-brand">バーガーキッチン</div>
+      <div class="ad-tagline">数量限定！新作チーズバーガー</div>
+      <div class="ad-price-tag">¥390〜</div>
+      <div class="ad-disclaimer">広告・期間限定</div>`
+  },
+  {
+    bg:'linear-gradient(160deg,#0a1f33,#1b3552)',
+    render:()=>`
+      <div class="ad-food-photo">🍕✨</div>
+      <div class="ad-brand">ピザデリバリー Mio</div>
+      <div class="ad-tagline">2枚目が半額！今すぐ注文</div>
+      <div class="ad-price-tag">最大50%OFF</div>
+      <div class="ad-disclaimer">広告・配達エリア限定</div>`
+  },
+  // サービス・保険系
+  {
+    bg:'linear-gradient(160deg,#0a2433,#1b3e52)',
+    render:()=>`
+      <div class="ad-logo">🛡️</div>
+      <div class="ad-brand">あんしん生命保険</div>
+      <div class="ad-tagline">月々980円からの医療保障</div>
+      <div class="ad-stat-row">
+        <div class="ad-stat"><div class="ad-stat-v">98%</div><div class="ad-stat-l">満足度</div></div>
+        <div class="ad-stat"><div class="ad-stat-v">980円</div><div class="ad-stat-l">月額〜</div></div>
+      </div>
+      <div class="ad-disclaimer">広告・保険商品です</div>`
+  },
+  {
+    bg:'linear-gradient(160deg,#241a33,#3d2d52)',
+    render:()=>`
+      <div class="ad-logo">📱</div>
+      <div class="ad-brand">格安SIM ライトモバイル</div>
+      <div class="ad-tagline">データ無制限プラン、今なら半額！</div>
+      <div class="ad-stat-row">
+        <div class="ad-stat"><div class="ad-stat-v">∞</div><div class="ad-stat-l">データ通信</div></div>
+        <div class="ad-stat"><div class="ad-stat-v">1480円</div><div class="ad-stat-l">月額〜</div></div>
+      </div>
+      <div class="ad-disclaimer">広告・通信サービス</div>`
+  },
+  // 化粧品系
+  {
+    bg:'linear-gradient(160deg,#33101f,#522036)',
+    render:()=>`
+      <div class="ad-badge">レビュー4.8★</div>
+      <div class="ad-brand">うるおいクリーム モイストプラス</div>
+      <div class="ad-tagline">寝る前の1分ケアで翌朝つるすべ肌</div>
+      <div class="ad-mockscreen">
+        <div class="ad-mock-icon">🧴💧✨</div>
+        <div class="ad-mock-bar"><div class="ad-mock-fill"></div></div>
+      </div>
+      <div class="ad-disclaimer">広告・PR</div>`
+  },
+];
+let _adCountdownTimer=null,_currentAdIdx=0;
+function openAdModal(){
+  const ov=document.getElementById('ad-overlay');
+  const skipWrap=document.getElementById('ad-skip-wrap');
+  const cdEl=document.getElementById('ad-countdown');
+  const closeBtn=document.getElementById('ad-close-btn');
+  const card=document.getElementById('ad-card-root');
+  const body=document.getElementById('ad-body');
+
+  // pick a random ad template (avoid repeating the same one twice in a row)
+  let idx=Math.floor(Math.random()*AD_TEMPLATES.length);
+  if(AD_TEMPLATES.length>1&&idx===_currentAdIdx)idx=(idx+1)%AD_TEMPLATES.length;
+  _currentAdIdx=idx;
+  const tpl=AD_TEMPLATES[idx];
+  card.style.background=tpl.bg;
+  body.innerHTML=tpl.render();
+
+  let count=5;
+  cdEl.textContent=count;
+  closeBtn.disabled=true;
+  skipWrap.style.display='block';
+  // restart fill animation if mock screen present
+  const fill=body.querySelector('.ad-mock-fill');
+  if(fill){fill.style.animation='none';void fill.offsetWidth;fill.style.animation='adfill 5s linear forwards';}
+  ov.classList.add('show');
+  sfxTap();
+  if(_adCountdownTimer)clearInterval(_adCountdownTimer);
+  _adCountdownTimer=setInterval(()=>{
+    count--;
+    if(count<=0){
+      clearInterval(_adCountdownTimer);
+      skipWrap.style.display='none';
+      closeBtn.disabled=false;
+    } else {
+      cdEl.textContent=count;
+    }
+  },1000);
+}
+function closeAdModal(rewarded){
+  document.getElementById('ad-overlay').classList.remove('show');
+  if(_adCountdownTimer){clearInterval(_adCountdownTimer);_adCountdownTimer=null;}
+  if(rewarded){
+    G.hearts=Math.min(MAX_H,G.hearts+1);
+    G.adWatchCount=(adWatchesToday())+1;
+    G.lastHT=Date.now();
+    save();
+    refreshTop();
+    sfxOK();vib([40,20,40,20,60]);
+    notify('❤️ 広告視聴でハート+1！');
+    confetti(window.innerWidth/2,200);
+    updateAdBtn();
+    if(G.hearts>=MAX_H){
+      setTimeout(()=>document.getElementById('nohearts').classList.remove('show'),600);
+    }
+  }
+}
+document.getElementById('watch-ad-btn').addEventListener('click',()=>{
+  if(document.getElementById('watch-ad-btn').disabled)return;
+  openAdModal();
+});
+document.getElementById('ad-close-btn').addEventListener('click',()=>{
+  if(document.getElementById('ad-close-btn').disabled)return;
+  closeAdModal(true);
+});
+
 // ── UI ──
 function refreshTop(){
   document.getElementById('ts-hearts').textContent='❤️'.repeat(Math.max(0,G.hearts))||'💔';
@@ -573,6 +844,7 @@ function refreshTop(){
   const sub=document.getElementById('sb-sub');
   if(sub)sub.textContent=G.doneToday?'今日のレッスン完了！また明日ね 😊':G.streak>0?'今日も練習してストリークを守ろう！':'今日レッスンを完了するとストリーク開始！';
   const ht=document.getElementById('htimer');if(ht)ht.style.display=G.hearts<MAX_H?'inline':'none';
+  updateAdBtn();
 }
 function drawHearts(id,n){const el=document.getElementById(id);if(!el)return;el.innerHTML=Array.from({length:MAX_H},(_,i)=>`<span style="opacity:${i<n?1:.18}">${i<n?'❤️':'🩶'}</span>`).join('');}
 function goPage(id){
@@ -693,7 +965,7 @@ function openModal(unit,lesson,isSkip){
   const stars=G.stars[lesson.id]||0;
   document.getElementById('mc-icon').textContent=isSkip?'⚡':lesson.icon;
   document.getElementById('mc-title').textContent=isSkip?unit.title+' 飛び級テスト':lesson.title;
-  document.getElementById('mc-sub').textContent=isSkip?'合格（80%以上）でこのユニットをまるごとスキップ！':unit.title+' · '+['','易しい','普通','少し難','難しい','超難'][lesson.diff]||'';
+  document.getElementById('mc-sub').textContent=isSkip?'合格（'+(unit._skipUnits&&unit._skipUnits.length>=3?85:80)+'%以上）でこの範囲をまるごとスキップ！':unit.title+' · '+['','易しい','普通','少し難','難しい','超難'][lesson.diff]||'';
   document.getElementById('mc-stars').innerHTML=isSkip?'⚡⚡⚡':Array.from({length:3},(_,i)=>i<stars?'⭐':'☆').join('');
   document.getElementById('mc-qs').textContent=lesson.qs.length;
   document.getElementById('mc-diff').textContent='⭐'.repeat(lesson.diff)+'☆'.repeat(5-lesson.diff);
@@ -708,10 +980,55 @@ function openModal(unit,lesson,isSkip){
 }
 function openSkip(uid,e){
   e.stopPropagation();
-  const unit=CUR.find(u=>u.id===uid);if(!unit)return;
-  const pool=unit.lessons.flatMap(l=>l.qs).sort(()=>Math.random()-.5).slice(0,8);
-  const sl={...unit.lessons[unit.lessons.length-1],id:'__skip__'+uid,title:unit.title+' 飛び級テスト',icon:'⚡',isBoss:false,diff:Math.max(...unit.lessons.map(l=>l.diff||1)),qs:pool};
-  openModal(unit,sl,true);
+  const startIdx=CUR.findIndex(u=>u.id===uid);
+  if(startIdx<0)return;
+  // how many units ahead are unlocked-or-reachable (allow skipping up to 4 units ahead, capped by course length)
+  const maxAhead=Math.min(4,CUR.length-startIdx);
+  _skipStartIdx=startIdx;
+  _skipRangeCount=1;
+  const row=document.getElementById('sr-row');
+  row.innerHTML='';
+  for(let n=1;n<=maxAhead;n++){
+    const endUnit=CUR[startIdx+n-1];
+    const chip=document.createElement('div');
+    chip.className='skip-range-chip'+(n===1?' sel':'');
+    chip.dataset.n=n;
+    chip.innerHTML=`<div class="src-n">${n}</div><div class="src-l">Unit先まで</div>`;
+    chip.addEventListener('click',()=>{
+      document.querySelectorAll('.skip-range-chip').forEach(c=>c.classList.remove('sel'));
+      chip.classList.add('sel');
+      _skipRangeCount=n;
+      updateSkipRangeStats();
+    });
+    row.appendChild(chip);
+  }
+  document.getElementById('sr-title').textContent=CUR[startIdx].title+' 飛び級テスト';
+  updateSkipRangeStats();
+  document.getElementById('sr-go').onclick=()=>{
+    closeSkipRange();
+    launchSkipTest(_skipStartIdx,_skipRangeCount);
+  };
+  document.getElementById('skiprange-ov').classList.add('show');
+}
+let _skipStartIdx=0,_skipRangeCount=1;
+function updateSkipRangeStats(){
+  const units=CUR.slice(_skipStartIdx,_skipStartIdx+_skipRangeCount);
+  const qCount=Math.min(6+units.length*2,20);
+  document.getElementById('sr-qs').textContent=qCount;
+  document.getElementById('sr-units').textContent=units.length;
+  document.getElementById('sr-need').textContent=units.length>=3?'85%':'80%';
+}
+function closeSkipRange(){document.getElementById('skiprange-ov').classList.remove('show');}
+document.getElementById('skiprange-ov').addEventListener('click',e=>{if(e.target===document.getElementById('skiprange-ov'))closeSkipRange();});
+
+function launchSkipTest(startIdx,count){
+  const units=CUR.slice(startIdx,startIdx+count);
+  const qCount=Math.min(6+units.length*2,20);
+  const pool=units.flatMap(u=>u.lessons.flatMap(l=>l.qs)).sort(()=>Math.random()-.5).slice(0,qCount);
+  const maxDiff=Math.max(...units.flatMap(u=>u.lessons.map(l=>l.diff||1)));
+  const title=units.length===1?units[0].title+' 飛び級テスト':units[0].title+' 〜 '+units[units.length-1].title+'（'+units.length+'ユニット）飛び級テスト';
+  const sl={id:'__skip__multi',title,icon:'⚡',isBoss:false,diff:maxDiff,qs:pool};
+  openModal({title,_skipUnits:units},sl,true);
 }
 function closeModal(){document.getElementById('modal-ov').classList.remove('show');}
 document.getElementById('modal-ov').addEventListener('click',e=>{if(e.target===document.getElementById('modal-ov'))closeModal();});
@@ -886,23 +1203,28 @@ function endLesson(){
   const tot=LS.cor+LS.wrg,pct=tot?LS.cor/tot:0;
   const stars=pct===1?3:pct>=.7?2:pct>=.4?1:0;
   if(LS.isSkip){
-    if(pct>=.8){
+    const units=LS.unit._skipUnits||[LS.unit];
+    const needPct=units.length>=3?.85:.8;
+    if(pct>=needPct){
       sfxSkip();vib([40,20,40,20,80,20,80]);
-      const unit=LS.unit;
-      unit.lessons.forEach(l=>{if(!G.stars[l.id]||G.stars[l.id]<2)G.stars[l.id]=2;});
-      const li=unit.lessons[unit.lessons.length-1].id,idx=ALL_IDS.indexOf(li);
+      units.forEach(unit=>{
+        unit.lessons.forEach(l=>{if(!G.stars[l.id]||G.stars[l.id]<2)G.stars[l.id]=2;});
+      });
+      const lastUnit=units[units.length-1];
+      const li=lastUnit.lessons[lastUnit.lessons.length-1].id,idx=ALL_IDS.indexOf(li);
       if(idx+1<ALL_IDS.length)G.unlocked=ALL_IDS[idx+1];
       G.skipCount++;unlock('skip1');if(G.skipCount>=3)unlock('skip3');
-      notify('⚡ 飛び級成功！ '+unit.title+' をスキップ！');
+      const rangeLabel=units.length===1?units[0].title:units[0].title+' 〜 '+lastUnit.title;
+      notify('⚡ 飛び級成功！ '+rangeLabel+' をスキップ！');
       document.getElementById('resowl').textContent='⚡';
-      document.getElementById('restit').textContent='飛び級成功！';
-      document.getElementById('ressub').textContent=unit.title+' をまるごとスキップ！';
+      document.getElementById('restit').textContent=units.length>1?units.length+'ユニット飛び級成功！':'飛び級成功！';
+      document.getElementById('ressub').textContent=rangeLabel+' をまるごとスキップ！';
     } else {
       document.getElementById('resowl').textContent='😅';
       document.getElementById('restit').textContent='惜しい！もう少し！';
-      document.getElementById('ressub').textContent='正答率80%で飛び級できるよ（今回: '+Math.round(pct*100)+'%）';
+      document.getElementById('ressub').textContent='正答率'+Math.round(needPct*100)+'%で飛び級できるよ（今回: '+Math.round(pct*100)+'%）';
     }
-    document.getElementById('resstars').innerHTML=['⚡','⚡','⚡'].map((s,i)=>`<span class="rs" style="opacity:${i<(pct>=.8?3:pct>=.5?2:1)?1:.3}">${s}</span>`).join('');
+    document.getElementById('resstars').innerHTML=['⚡','⚡','⚡'].map((s,i)=>`<span class="rs" style="opacity:${i<(pct>=needPct?3:pct>=needPct*0.6?2:1)?1:.3}">${s}</span>`).join('');
   } else {
     const prev=G.stars[LS.lesson.id]||0;
     if(stars>prev)G.stars[LS.lesson.id]=stars;
