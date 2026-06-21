@@ -46,6 +46,29 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);min-
 .ch-sv{font-family:'DM Serif Display';font-size:1.4rem;color:var(--gld)}
 .ch-sl{font-size:.62rem;opacity:.68;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
 .streak-ban{display:flex;align-items:center;gap:11px;background:linear-gradient(90deg,#FF9600,#FFB800);border-radius:var(--R);padding:13px 15px;margin-bottom:16px;box-shadow:0 4px 0 var(--gldd)}
+.jump-unit-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;margin-bottom:16px;border-radius:var(--R);border:2.5px solid var(--pur);background:var(--purbg);color:var(--purd);font-family:'DM Sans';font-weight:900;font-size:.92rem;cursor:pointer;box-shadow:0 4px 0 var(--pur);transition:transform .12s,box-shadow .12s}
+.jump-unit-btn:active{transform:translateY(3px);box-shadow:none}
+
+/* JUMP MODAL */
+#jump-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:502;display:none;align-items:flex-end;justify-content:center}
+#jump-ov.show{display:flex}
+.jump-card{background:var(--card);border-radius:24px 24px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));max-width:640px;width:100%;max-height:80vh;display:flex;flex-direction:column;animation:sup .3s cubic-bezier(.34,1.56,.64,1)}
+.jump-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0}
+.jump-title{font-family:'DM Serif Display';font-size:1.3rem}
+.jump-close{width:34px;height:34px;border-radius:50%;border:2px solid var(--bdr);background:var(--card2);cursor:pointer;font-size:.9rem}
+.jump-search-row{display:flex;gap:8px;margin-bottom:12px;flex-shrink:0}
+.jump-search-input{flex:1;padding:11px 14px;border-radius:12px;border:2px solid var(--bdr);font-family:'DM Sans';font-size:.92rem;font-weight:700;outline:none}
+.jump-search-input:focus{border-color:var(--pur)}
+.jump-go-btn{padding:11px 18px;border-radius:12px;border:none;background:var(--pur);color:#fff;font-weight:900;font-size:.88rem;cursor:pointer}
+.jump-list{overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:6px}
+.jump-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;border:1.5px solid var(--bdr);background:var(--card2);cursor:pointer;transition:all .12s;text-align:left}
+.jump-row:hover{border-color:var(--pur);background:var(--purbg)}
+.jump-row.lk{opacity:.45}
+.jump-row .jr-icon{font-size:1.4rem;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff}
+.jump-row .jr-title{flex:1;font-size:.85rem;font-weight:800}
+.jump-row .jr-sub{font-size:.68rem;color:var(--dim);margin-top:1px}
+.jump-row .jr-prog{font-size:.72rem;font-weight:800;color:var(--dim);flex-shrink:0}
+.jump-row .jr-skip{flex-shrink:0;padding:5px 11px;border-radius:50px;border:none;background:var(--pur);color:#fff;font-size:.68rem;font-weight:800;cursor:pointer}
 .sb-fire{font-size:1.9rem}.sb-body{flex:1}
 .sb-t{font-weight:900;font-size:.9rem;color:#fff}.sb-s{font-size:.74rem;color:rgba(255,255,255,.85);margin-top:2px}
 .sb-lv{background:rgba(0,0,0,.18);border-radius:50px;padding:4px 12px;font-size:.74rem;font-weight:800;color:#fff}
@@ -86,6 +109,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);min-
 /* MODAL */
 #modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:none;align-items:flex-end;justify-content:center}
 #skiprange-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:501;display:none;align-items:flex-end;justify-content:center}
+#jump-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:503;display:none;align-items:flex-end;justify-content:center}
+#jump-ov.show{display:flex}
 #skiprange-ov.show{display:flex}
 #modal-ov.show{display:flex}
 .mc{background:var(--card);border-radius:24px 24px 0 0;padding:26px 20px calc(24px + env(safe-area-inset-bottom));max-width:640px;width:100%;animation:sup .3s cubic-bezier(.34,1.56,.64,1)}
@@ -323,7 +348,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);min-
   <div id="page-learn" class="page show">
     <div class="course-hdr">
       <h2>英語マスターへの道 🌍</h2>
-      <p>10ユニット・<span id="tlc">0</span>レッスンで英語を極めよう</p>
+      <p>14ユニット・<span id="tlc">0</span>レッスンで英検1級レベルまで極めよう</p>
+      <p style="font-size:.72rem;opacity:.55;margin-top:2px">基礎 → 英検準2級 → 2級 → 準1級 → 1級</p>
       <div class="ch-stats">
         <div><div class="ch-sv" id="ch-done">0</div><div class="ch-sl">完了</div></div>
         <div><div class="ch-sv" id="ch-tot">0</div><div class="ch-sl">合計</div></div>
@@ -340,6 +366,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);min-
       </div>
       <div class="sb-lv" id="sb-lv">Lv.1</div>
     </div>
+    <button class="jump-unit-btn" id="jump-unit-open">🗂️ ユニット一覧から移動する</button>
     <div id="cmap"></div>
   </div>
   <div id="page-quiz" class="page">
@@ -421,6 +448,19 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);min-
     <button class="mc-cancel" onclick="closeSkipRange()">キャンセル</button>
   </div>
 </div>
+<div id="jump-ov">
+  <div class="jump-card">
+    <div class="jump-hd">
+      <div class="jump-title">🗂️ ユニット一覧</div>
+      <button class="jump-close" onclick="closeJump()">✕</button>
+    </div>
+    <div class="jump-search-row">
+      <input class="jump-search-input" id="jump-search" type="text" inputmode="numeric" placeholder="ユニット番号で検索（例: 250）">
+      <button class="jump-go-btn" id="jump-go-num">移動</button>
+    </div>
+    <div class="jump-list" id="jump-list"></div>
+  </div>
+</div>
 <div id="nohearts">
   <div class="nhcard">
     <div class="nhicon">💔</div>
@@ -459,10 +499,10 @@ const CUR=[
 {id:'u1-1',title:'動物①',icon:'🐱',diff:1,types:['v4','sp'],qs:[q('v4',{jp:'🐱 猫',en:'Cat',ch:['Cat','Dog','Bird','Fish']}),q('v4',{jp:'🐶 犬',en:'Dog',ch:['Dog','Cat','Rabbit','Horse']}),q('v4',{jp:'🐦 鳥',en:'Bird',ch:['Bird','Fish','Cat','Rabbit']}),q('sp',{jp:'🐱 猫',en:'CAT'}),q('v4',{jp:'🐟 魚',en:'Fish',ch:['Fish','Bird','Dog','Snake']})]},
 {id:'u1-2',title:'食べ物①',icon:'🍎',diff:1,types:['v4','li'],qs:[q('v4',{jp:'🍎 りんご',en:'Apple',ch:['Apple','Orange','Banana','Grape']}),q('v4',{jp:'🍌 バナナ',en:'Banana',ch:['Banana','Apple','Mango','Grape']}),q('li',{jp:'🍊 オレンジ',en:'Orange',ch:['Orange','Apple','Lemon','Peach']}),q('sp',{jp:'🍎 りんご',en:'APPLE'}),q('v4',{jp:'🍇 ぶどう',en:'Grape',ch:['Grape','Apple','Banana','Mango']})]},
 {id:'u1-3',title:'色',icon:'🎨',diff:1,types:['v4','sp'],qs:[q('v4',{jp:'🔴 赤',en:'Red',ch:['Red','Blue','Green','Yellow']}),q('v4',{jp:'🔵 青',en:'Blue',ch:['Blue','Red','Purple','Orange']}),q('v4',{jp:'🟢 緑',en:'Green',ch:['Green','Blue','Red','Brown']}),q('sp',{jp:'🔴 赤',en:'RED'}),q('li',{jp:'🔵 青',en:'Blue',ch:['Blue','Red','Green','Yellow']})]},
-{id:'u1-4',title:'数字①',icon:'🔢',diff:1,types:['v4','sp'],qs:[q('v4',{jp:'1',en:'One',ch:['One','Two','Three','Four']}),q('v4',{jp:'2',en:'Two',ch:['Two','One','Three','Five']}),q('v4',{jp:'3',en:'Three',ch:['Three','Two','Four','Six']}),q('sp',{jp:'1',en:'ONE'}),q('ma',{pairs:[['One','1'],['Two','2'],['Three','3'],['Four','4']]})]},
-{id:'u1-5',title:'数字②',icon:'🔟',diff:1,types:['v4','ma'],qs:[q('v4',{jp:'5',en:'Five',ch:['Five','Four','Six','Seven']}),q('v4',{jp:'6',en:'Six',ch:['Six','Five','Seven','Eight']}),q('v4',{jp:'10',en:'Ten',ch:['Ten','Eight','Six','Twelve']}),q('sp',{jp:'5',en:'FIVE'}),q('ma',{pairs:[['Five','5'],['Six','6'],['Seven','7'],['Ten','10']]})]},
+{id:'u1-4',title:'数字①',icon:'🔢',diff:1,types:['v4','sp'],qs:[q('v4',{jp:'1',en:'One',ch:['One','Two','Three','Four']}),q('v4',{jp:'2',en:'Two',ch:['Two','One','Three','Five']}),q('v4',{jp:'3',en:'Three',ch:['Three','Two','Four','Six']}),q('sp',{jp:'1',en:'ONE'}),q('ma',{pairs:[['One','1（数字）'],['Two','2（数字）'],['Three','3（数字）'],['Four','4（数字）']]})]},
+{id:'u1-5',title:'数字②',icon:'🔟',diff:1,types:['v4','ma'],qs:[q('v4',{jp:'5',en:'Five',ch:['Five','Four','Six','Seven']}),q('v4',{jp:'6',en:'Six',ch:['Six','Five','Seven','Eight']}),q('v4',{jp:'10',en:'Ten',ch:['Ten','Eight','Six','Twelve']}),q('sp',{jp:'5',en:'FIVE'}),q('ma',{pairs:[['Five','5（数字）'],['Six','6（数字）'],['Seven','7（数字）'],['Ten','10（数字）']]})]},
 {id:'u1-6',title:'マッチ練習①',icon:'🃏',diff:1,types:['ma'],qs:[q('ma',{pairs:[['Cat','猫'],['Dog','犬'],['Bird','鳥'],['Fish','魚']]}),q('ma',{pairs:[['Red','赤'],['Blue','青'],['Green','緑'],['Yellow','黄']]}),q('ma',{pairs:[['Apple','りんご'],['Banana','バナナ'],['Orange','オレンジ'],['Grape','ぶどう']]})]},
-{id:'u1-boss',title:'ユニット1テスト',icon:'⭐',diff:2,isBoss:true,types:['v4','sp','li','ma'],qs:[q('v4',{jp:'🐱 猫',en:'Cat',ch:['Cat','Dog','Bird','Fish']}),q('sp',{jp:'🍎 りんご',en:'APPLE'}),q('li',{jp:'🔵 青',en:'Blue',ch:['Blue','Red','Green','Yellow']}),q('v4',{jp:'3',en:'Three',ch:['Three','Two','Four','Six']}),q('ma',{pairs:[['Cat','猫'],['Red','赤'],['One','1'],['Apple','りんご']]}),q('sp',{jp:'🐶 犬',en:'DOG'})]}
+{id:'u1-boss',title:'ユニット1テスト',icon:'⭐',diff:2,isBoss:true,types:['v4','sp','li','ma'],qs:[q('v4',{jp:'🐱 猫',en:'Cat',ch:['Cat','Dog','Bird','Fish']}),q('sp',{jp:'🍎 りんご',en:'APPLE'}),q('li',{jp:'🔵 青',en:'Blue',ch:['Blue','Red','Green','Yellow']}),q('v4',{jp:'3',en:'Three',ch:['Three','Two','Four','Six']}),q('ma',{pairs:[['Cat','猫'],['Red','赤'],['One','1（数字）'],['Apple','りんご']]}),q('sp',{jp:'🐶 犬',en:'DOG'})]}
 ]},
 {id:'u2',title:'基本単語',icon:'📚',color:'#1CB0F6',dark:'#0A8BC4',desc:'よく使う単語を増やそう',lessons:[
 {id:'u2-1',title:'乗り物',icon:'🚗',diff:2,types:['v4','sp'],qs:[q('v4',{jp:'🚗 車',en:'Car',ch:['Car','Bus','Train','Plane']}),q('v4',{jp:'🚌 バス',en:'Bus',ch:['Bus','Car','Taxi','Truck']}),q('v4',{jp:'✈️ 飛行機',en:'Airplane',ch:['Airplane','Rocket','Helicopter','Ship']}),q('sp',{jp:'🚗 車',en:'CAR'}),q('li',{jp:'✈️ 飛行機',en:'Airplane',ch:['Airplane','Train','Car','Ship']})]},
@@ -486,15 +526,15 @@ const CUR=[
 {id:'u3-boss',title:'ユニット3テスト',icon:'⭐',diff:4,isBoss:true,types:['v4','se','tw','ma'],qs:[q('se',{jp:'私は犬が好きです。',ans:['I','like','dogs','.'],pool:['I','like','dogs','cats','hate','dislike','.']}),q('tw',{jp:'彼女は学校に行く',en:'goes',hint:'She ___ to school.'}),q('se',{jp:'今日は晴れています。',ans:['Today','is','sunny','.'],pool:['Today','is','sunny','rainy','we','play','.']}),q('ma',{pairs:[['Today','今日'],['Sunny','晴れ'],['Like','好き'],['Monday','月曜日']]}),q('v4',{jp:'明日',en:'Tomorrow',ch:['Tomorrow','Today','Yesterday','Later']}),q('se',{jp:'彼は速く走ります。',ans:['He','runs','fast','.'],pool:['He','runs','fast','slow','She','jumps','.']}),]}
 ]},
 {id:'u4',title:'文法の基礎',icon:'🧱',color:'#9B59B6',dark:'#6C3483',desc:'英語の仕組みを学ぼう',lessons:[
-{id:'u4-1',title:'be動詞',icon:'🔗',diff:3,types:['se','tw','ma'],qs:[q('se',{jp:'私は学生です。',ans:['I','am','a','student','.'],pool:['I','am','is','student','a','be','.']}),q('se',{jp:'彼は医者です。',ans:['He','is','a','doctor','.'],pool:['He','is','am','doctor','a','are','.']}),q('se',{jp:'彼らは友達です。',ans:['They','are','friends','.'],pool:['They','are','am','friends','is','we','.']}),q('tw',{jp:'彼女は〜です',en:'is',hint:'She ___ a nurse.'}),q('ma',{pairs:[['I','am'],['He','is'],['She','is'],['They','are']]})]},
+{id:'u4-1',title:'be動詞',icon:'🔗',diff:3,types:['se','tw','ma'],qs:[q('se',{jp:'私は学生です。',ans:['I','am','a','student','.'],pool:['I','am','is','student','a','be','.']}),q('se',{jp:'彼は医者です。',ans:['He','is','a','doctor','.'],pool:['He','is','am','doctor','a','are','.']}),q('se',{jp:'彼らは友達です。',ans:['They','are','friends','.'],pool:['They','are','am','friends','is','we','.']}),q('tw',{jp:'彼女は〜です',en:'is',hint:'She ___ a nurse.'}),q('ma',{pairs:[['I am','私は～です'],['He is','彼は～です'],['We are','私たちは～です'],['They are','彼らは～です']]})]},
 {id:'u4-2',title:'否定文',icon:'🚫',diff:3,types:['se','tw'],qs:[q('se',{jp:'私は学生ではありません。',ans:['I','am','not','a','student','.'],pool:['I','am','not','a','student','is','.']}),q('se',{jp:'彼は医者ではありません。',ans:['He','is','not','a','doctor','.'],pool:['He','is','not','a','doctor','am','.']}),q('tw',{jp:'〜ではない',en:'not',hint:'I am ___ a student.'}),q('v4',{jp:'否定',en:'Not',ch:['Not','Yes','And','But']}),q('se',{jp:'私は猫が好きではありません。',ans:['I','do','not','like','cats','.'],pool:['I','do','not','like','cats','am','.']})]},
 {id:'u4-3',title:'疑問文',icon:'❓',diff:3,types:['se','tw','v4'],qs:[q('se',{jp:'あなたは学生ですか？',ans:['Are','you','a','student','?'],pool:['Are','you','a','student','Is','he','?']}),q('se',{jp:'彼は先生ですか？',ans:['Is','he','a','teacher','?'],pool:['Is','he','a','teacher','Are','she','?']}),q('se',{jp:'あなたは何が好きですか？',ans:['What','do','you','like','?'],pool:['What','do','you','like','How','does','?']}),q('tw',{jp:'〜ですか？（2人称）',en:'Are',hint:'___ you a student?'}),q('v4',{jp:'何',en:'What',ch:['What','Who','Where','When']})]},
 {id:'u4-4',title:'現在進行形',icon:'🏊',diff:4,types:['se','tw','ma'],qs:[q('v4',{jp:'泳いでいる',en:'Swimming',ch:['Swimming','Running','Eating','Sleeping']}),q('se',{jp:'私は今泳いでいます。',ans:['I','am','swimming','now','.'],pool:['I','am','swimming','now','He','run','.']}),q('tw',{jp:'〜しています（一人称）',en:'am',hint:'I ___ running.'}),q('se',{jp:'彼女は今走っています。',ans:['She','is','running','now','.'],pool:['She','is','running','now','I','am','.']}),q('ma',{pairs:[['Swimming','泳いでいる'],['Running','走っている'],['Eating','食べている'],['Sleeping','眠っている']]})]},
 {id:'u4-5',title:'can / できる',icon:'💪',diff:4,types:['se','tw'],qs:[q('v4',{jp:'できる',en:'Can',ch:['Can','Will','Must','Shall']}),q('se',{jp:'私は泳げます。',ans:['I','can','swim','.'],pool:['I','can','swim','run','will','must','.']}),q('se',{jp:'彼は飛べません。',ans:['He','cannot','fly','.'],pool:['He','cannot','fly','run','can','swim','.']}),q('tw',{jp:'できる',en:'can',hint:'I ___ swim.'}),q('se',{jp:'あなたは歌えますか？',ans:['Can','you','sing','?'],pool:['Can','you','sing','dance','Will','shall','?']})]},
 {id:'u4-6',title:'過去形①',icon:'⏰',diff:4,types:['v4','se','sp'],qs:[q('v4',{jp:'歩いた（過去）',en:'Walked',ch:['Walked','Walk','Walking','Walks']}),q('se',{jp:'私は昨日歩きました。',ans:['I','walked','yesterday','.'],pool:['I','walked','yesterday','walk','today','will','.']}),q('sp',{jp:'歩いた',en:'WALKED'}),q('tw',{jp:'歩いた',en:'walked',hint:'I ___ home yesterday.'}),q('v4',{jp:'勉強した（過去）',en:'Studied',ch:['Studied','Study','Studying','Studies']})]},
-{id:'u4-7',title:'過去形②（不規則）',icon:'⚡',diff:4,types:['v4','se','ma'],qs:[q('v4',{jp:'食べた（不規則）',en:'Ate',ch:['Ate','Eat','Eaten','Eating']}),q('v4',{jp:'走った',en:'Ran',ch:['Ran','Run','Running','Runs']}),q('v4',{jp:'行った',en:'Went',ch:['Went','Go','Going','Gone']}),q('se',{jp:'私は昨日走りました。',ans:['I','ran','yesterday','.'],pool:['I','ran','yesterday','run','will','today','.']}),q('ma',{pairs:[['Eat','Ate'],['Run','Ran'],['Go','Went'],['See','Saw']]})]},
+{id:'u4-7',title:'過去形②（不規則）',icon:'⚡',diff:4,types:['v4','se','ma'],qs:[q('v4',{jp:'食べた（不規則）',en:'Ate',ch:['Ate','Eat','Eaten','Eating']}),q('v4',{jp:'走った',en:'Ran',ch:['Ran','Run','Running','Runs']}),q('v4',{jp:'行った',en:'Went',ch:['Went','Go','Going','Gone']}),q('se',{jp:'私は昨日走りました。',ans:['I','ran','yesterday','.'],pool:['I','ran','yesterday','run','will','today','.']}),q('ma',{pairs:[['Eat','食べる'],['Ate','食べた（過去）'],['Run','走る'],['Ran','走った（過去）']]})]},
 {id:'u4-8',title:'未来形',icon:'🚀',diff:4,types:['se','tw','ma'],qs:[q('v4',{jp:'〜するつもり',en:'Will',ch:['Will','Can','Must','Shall']}),q('se',{jp:'私は明日学校に行きます。',ans:['I','will','go','to','school','tomorrow','.'],pool:['I','will','go','to','school','tomorrow','yesterday','.']}),q('tw',{jp:'〜するつもり',en:'will',hint:'I ___ go tomorrow.'}),q('se',{jp:'彼女は医者になるでしょう。',ans:['She','will','be','a','doctor','.'],pool:['She','will','be','a','doctor','teacher','.']}),q('ma',{pairs:[['Will go','行くだろう'],['Will eat','食べるだろう'],['Will run','走るだろう'],['Will be','なるだろう']]})]},
-{id:'u4-boss',title:'ユニット4テスト',icon:'⭐',diff:5,isBoss:true,types:['v4','se','tw','ma'],qs:[q('se',{jp:'私は今泳いでいます。',ans:['I','am','swimming','now','.'],pool:['I','am','swimming','now','He','run','.']}),q('se',{jp:'私は泳げます。',ans:['I','can','swim','.'],pool:['I','can','swim','run','will','must','.']}),q('tw',{jp:'走った（過去）',en:'ran',hint:'He ___ fast yesterday.'}),q('ma',{pairs:[['Eat','Ate'],['Run','Ran'],['Will','するつもり'],['Can','できる']]}),q('se',{jp:'彼女は医者になるでしょう。',ans:['She','will','be','a','doctor','.'],pool:['She','will','be','a','doctor','teacher','.']}),]}
+{id:'u4-boss',title:'ユニット4テスト',icon:'⭐',diff:5,isBoss:true,types:['v4','se','tw','ma'],qs:[q('se',{jp:'私は今泳いでいます。',ans:['I','am','swimming','now','.'],pool:['I','am','swimming','now','He','run','.']}),q('se',{jp:'私は泳げます。',ans:['I','can','swim','.'],pool:['I','can','swim','run','will','must','.']}),q('tw',{jp:'走った（過去）',en:'ran',hint:'He ___ fast yesterday.'}),q('ma',{pairs:[['Eat','食べる'],['Ate','食べた（過去）'],['Will','するつもり'],['Can','できる']]}),q('se',{jp:'彼女は医者になるでしょう。',ans:['She','will','be','a','doctor','.'],pool:['She','will','be','a','doctor','teacher','.']}),]}
 ]},
 {id:'u5',title:'日常英会話',icon:'🗣',color:'#E91E8C',dark:'#A0145E',desc:'実際の会話表現を学ぼう',lessons:[
 {id:'u5-1',title:'挨拶',icon:'👋',diff:3,types:['v4','li','tw'],qs:[q('v4',{jp:'こんにちは',en:'Hello',ch:['Hello','Goodbye','Please','Thank you']}),q('v4',{jp:'ありがとう',en:'Thank you',ch:['Thank you','Sorry','Please','Hello']}),q('v4',{jp:'すみません',en:'Excuse me',ch:['Excuse me','Sorry','Please','Pardon']}),q('li',{jp:'こんにちは',en:'Hello',ch:['Hello','Goodbye','Please','Thank you']}),q('tw',{jp:'ありがとう',en:'Thank you',hint:'___ very much!'})]},
@@ -508,7 +548,7 @@ const CUR=[
 {id:'u6',title:'中級文法',icon:'📐',color:'#00BCD4',dark:'#00838F',desc:'より正確な英語を目指そう',lessons:[
 {id:'u6-1',title:'前置詞①',icon:'📍',diff:4,types:['v4','se','ma'],qs:[q('v4',{jp:'〜の中に',en:'In',ch:['In','On','At','Under']}),q('v4',{jp:'〜の上に',en:'On',ch:['On','In','Under','Over']}),q('se',{jp:'本は机の上にあります。',ans:['The','book','is','on','the','desk','.'],pool:['The','book','is','on','in','desk','.']}),q('tw',{jp:'〜の中に',en:'in',hint:'The cat is ___ the box.'}),q('ma',{pairs:[['In','〜の中'],['On','〜の上'],['Under','〜の下'],['At','〜で']]})]},
 {id:'u6-2',title:'接続詞',icon:'🔗',diff:4,types:['v4','se','ma'],qs:[q('v4',{jp:'そして',en:'And',ch:['And','But','Or','So']}),q('v4',{jp:'しかし',en:'But',ch:['But','And','Or','Because']}),q('se',{jp:'私はりんごとバナナが好きです。',ans:['I','like','apples','and','bananas','.'],pool:['I','like','apples','and','bananas','or','.']}),q('tw',{jp:'しかし',en:'but',hint:'I like cats, ___ I have a dog.'}),q('ma',{pairs:[['And','そして'],['But','しかし'],['Or','または'],['Because','なぜなら']]})]},
-{id:'u6-3',title:'比較級・最上級',icon:'📊',diff:5,types:['v4','se','ma'],qs:[q('v4',{jp:'〜より大きい',en:'Bigger',ch:['Bigger','Biggest','Big','More big']}),q('v4',{jp:'最も大きい',en:'Biggest',ch:['Biggest','Bigger','Most big','Big']}),q('se',{jp:'象はライオンより大きいです。',ans:['An','elephant','is','bigger','than','a','lion','.'],pool:['An','elephant','is','bigger','than','a','lion','smaller','.']}),q('tw',{jp:'〜より大きい',en:'bigger',hint:'An elephant is ___ than a dog.'}),q('ma',{pairs:[['Big','Bigger'],['Fast','Faster'],['Small','Smaller'],['Good','Best']]})]},
+{id:'u6-3',title:'比較級・最上級',icon:'📊',diff:5,types:['v4','se','ma'],qs:[q('v4',{jp:'〜より大きい',en:'Bigger',ch:['Bigger','Biggest','Big','More big']}),q('v4',{jp:'最も大きい',en:'Biggest',ch:['Biggest','Bigger','Most big','Big']}),q('se',{jp:'象はライオンより大きいです。',ans:['An','elephant','is','bigger','than','a','lion','.'],pool:['An','elephant','is','bigger','than','a','lion','smaller','.']}),q('tw',{jp:'〜より大きい',en:'bigger',hint:'An elephant is ___ than a dog.'}),q('ma',{pairs:[['Big','大きい'],['Bigger','より大きい'],['Small','小さい'],['Smaller','より小さい']]})]},
 {id:'u6-4',title:'現在完了形',icon:'✅',diff:5,types:['v4','se','tw'],qs:[q('v4',{jp:'〜したことがある',en:'Have done',ch:['Have done','Did','Do','Will do']}),q('se',{jp:'私は日本食を食べたことがあります。',ans:['I','have','eaten','Japanese','food','.'],pool:['I','have','eaten','Japanese','food','ate','.']}),q('tw',{jp:'食べたことある（完了）',en:'have eaten',hint:'I ___ sushi before.'}),q('v4',{jp:'行ったことがある（完了）',en:'Have been',ch:['Have been','Went','Will go','Go']}),q('se',{jp:'彼女はパリに行ったことがあります。',ans:['She','has','been','to','Paris','.'],pool:['She','has','been','to','Paris','went','.']})]},
 {id:'u6-5',title:'受動態',icon:'🔄',diff:5,types:['v4','se','tw'],qs:[q('v4',{jp:'〜される',en:'Is done',ch:['Is done','Does','Is doing','Did']}),q('se',{jp:'この映画は多くの人に見られています。',ans:['This','movie','is','watched','by','many','people','.'],pool:['This','movie','is','watched','by','many','people','sees','.']}),q('tw',{jp:'〜される',en:'is watched',hint:'English ___ worldwide.'}),q('ma',{pairs:[['Active','能動態'],['Passive','受動態'],['Is made','作られる'],['Is seen','見られる']]}),q('v4',{jp:'〜作られる',en:'Is made',ch:['Is made','Makes','Made','Making']})]},
 {id:'u6-6',title:'関係代名詞',icon:'🔧',diff:5,types:['v4','se','tw'],qs:[q('v4',{jp:'〜する人（関係代名詞）',en:'Who',ch:['Who','Which','What','Where']}),q('se',{jp:'私は猫を飼っている人を知っています。',ans:['I','know','a','person','who','has','a','cat','.'],pool:['I','know','a','person','who','has','cat','which','.']}),q('tw',{jp:'〜する人（人の関係代名詞）',en:'who',hint:'A doctor is a person ___ helps sick people.'}),q('se',{jp:'これは私が読んだ本です。',ans:['This','is','the','book','that','I','read','.'],pool:['This','is','the','book','that','I','read','which','.']}),q('ma',{pairs:[['who','人を修飾'],['which','物を修飾'],['that','人・物両方'],['where','場所']]})]},
@@ -549,7 +589,165 @@ const CUR=[
 {id:'u10-7',title:'総合発音練習',icon:'🗣️',diff:5,types:['li','tw'],qs:[q('li',{jp:'temperature（温度）',en:'temperature',ch:['temperature','temporal','temptation','temperate']}),q('li',{jp:'particularly（特に）',en:'particularly',ch:['particularly','partially','practically','precisely']}),q('tw',{jp:'particularly（特に）',en:'particularly',hint:'I ___ like jazz music.'}),q('li',{jp:'sophisticated（洗練された）',en:'sophisticated',ch:['sophisticated','complicated','segregated','exacerbated']}),q('tw',{jp:'sophisticated（洗練された）',en:'sophisticated',hint:'She has a ___ taste in fashion.'})]},
 {id:'u10-boss',title:'🏆 最終テスト',icon:'👑',diff:5,isBoss:true,types:['v4','se','tw','ma','li'],qs:[q('se',{jp:'疲れていたので、彼女は早く寝た。',ans:['Feeling','tired',',','she','went','to','bed','early','.'],pool:['Feeling','tired',',','she','went','to','bed','early','Because','.']}),q('v4',{jp:'気候変動',en:'Climate change',ch:['Climate change','Weather change','Season shift','Temperature rise']}),q('tw',{jp:'曖昧な',en:'ambiguous',hint:'His answer was too ___ to understand.'}),q('ma',{pairs:[['Thesis','論文'],['Persuade','説得'],['Foreshadowing','伏線'],['Consciousness','意識']]}),q('li',{jp:'sophisticated（洗練された）',en:'sophisticated',ch:['sophisticated','complicated','segregated','exacerbated']}),q('v4',{jp:'伏線',en:'Foreshadowing',ch:['Foreshadowing','Flashback','Metaphor','Symbolism']}),]}
 ]},
+{id:'u11',title:'英検準2級レベル',icon:'📘',color:'#2196F3',dark:'#0D47A1',desc:'高校中級程度の語彙・文法',lessons:[
+{id:'u11-1',title:'準2級単語①',icon:'📗',diff:4,types:['v4','sp'],qs:[q('v4',{jp:'環境',en:'Environment',ch:['Environment','Equipment','Experiment','Establishment']}),q('v4',{jp:'影響を与える',en:'Affect',ch:['Affect','Effect','Infect','Reflect']}),q('v4',{jp:'解決する',en:'Solve',ch:['Solve','Resolve','Dissolve','Evolve']}),q('sp',{jp:'環境',en:'ENVIRONMENT'}),q('v4',{jp:'発展する',en:'Develop',ch:['Develop','Envelop','Develope','Devote']})]},
+{id:'u11-2',title:'準2級単語②',icon:'📗',diff:4,types:['v4','tw'],qs:[q('v4',{jp:'参加する',en:'Participate',ch:['Participate','Anticipate','Cooperate','Celebrate']}),q('v4',{jp:'増加する',en:'Increase',ch:['Increase','Decrease','Decline','Reduce']}),q('v4',{jp:'減少する',en:'Decrease',ch:['Decrease','Increase','Raise','Boost']}),q('tw',{jp:'参加する',en:'participate',hint:'I want to ___ in the event.'}),q('v4',{jp:'比較する',en:'Compare',ch:['Compare','Prepare','Declare','Repair']})]},
+{id:'u11-3',title:'準2級文法①（受動態の応用）',icon:'🔧',diff:4,types:['se','tw'],qs:[q('se',{jp:'この本は多くの学生に読まれています。',ans:['This','book','is','read','by','many','students','.'],pool:['This','book','is','read','by','many','students','reads','.']}),q('tw',{jp:'読まれている',en:'is read',hint:'This novel ___ around the world.'}),q('se',{jp:'その問題は既に解決されました。',ans:['The','problem','has','already','been','solved','.'],pool:['The','problem','has','already','been','solved','solve','.']}),q('v4',{jp:'既に',en:'Already',ch:['Already','Yet','Still','Ever']}),q('tw',{jp:'解決された',en:'been solved',hint:'The issue has already ___.'})]},
+{id:'u11-4',title:'準2級文法②（不定詞・動名詞）',icon:'📝',diff:4,types:['se','tw'],qs:[q('se',{jp:'私は英語を勉強することに決めました。',ans:['I','decided','to','study','English','.'],pool:['I','decided','to','study','English','studying','.']}),q('se',{jp:'彼は音楽を聞くことが好きです。',ans:['He','likes','listening','to','music','.'],pool:['He','likes','listening','to','music','listen','.']}),q('tw',{jp:'〜することに決める',en:'decided to',hint:'She ___ leave early.'}),q('v4',{jp:'楽しむ',en:'Enjoy',ch:['Enjoy','Hope','Decide','Want']}),q('se',{jp:'雨が降り始めました。',ans:['It','started','to','rain','.'],pool:['It','started','to','rain','raining','.']})]},
+{id:'u11-5',title:'準2級読解語彙',icon:'📰',diff:4,types:['v4','tw'],qs:[q('v4',{jp:'要約する',en:'Summarize',ch:['Summarize','Specialize','Realize','Organize']}),q('v4',{jp:'意見',en:'Opinion',ch:['Opinion','Option','Operation','Occasion']}),q('v4',{jp:'結論',en:'Conclusion',ch:['Conclusion','Confusion','Conclusion','Inclusion']}),q('tw',{jp:'結論',en:'conclusion',hint:'In ___, I agree with the plan.'}),q('v4',{jp:'～によると',en:'According to',ch:['According to','Instead of','Because of','In spite of']})]},
+{id:'u11-boss',title:'準2級総合テスト',icon:'⭐',diff:4,isBoss:true,types:['v4','se','tw','ma'],qs:[q('v4',{jp:'環境',en:'Environment',ch:['Environment','Equipment','Experiment','Establishment']}),q('se',{jp:'その問題は既に解決されました。',ans:['The','problem','has','already','been','solved','.'],pool:['The','problem','has','already','been','solved','solve','.']}),q('tw',{jp:'参加する',en:'participate',hint:'I want to ___ in the event.'}),q('ma',{pairs:[['Increase','増加する'],['Decrease','減少する'],['Compare','比較する'],['Solve','解決する']]}),q('se',{jp:'私は英語を勉強することに決めました。',ans:['I','decided','to','study','English','.'],pool:['I','decided','to','study','English','studying','.']}),]}
+]},
+{id:'u12',title:'英検2級レベル',icon:'📙',color:'#673AB7',dark:'#311B92',desc:'高校卒業程度の総合英語力',lessons:[
+{id:'u12-1',title:'2級単語①（社会）',icon:'🏛️',diff:5,types:['v4','sp'],qs:[q('v4',{jp:'政府',en:'Government',ch:['Government','Governor','Governance','Govern']}),q('v4',{jp:'人口',en:'Population',ch:['Population','Popularity','Publication','Position']}),q('v4',{jp:'経済',en:'Economy',ch:['Economy','Economic','Economical','Economist']}),q('sp',{jp:'政府',en:'GOVERNMENT'}),q('v4',{jp:'社会の',en:'Social',ch:['Social','Special','Spatial','Spiritual']})]},
+{id:'u12-2',title:'2級単語②（科学・技術）',icon:'🔬',diff:5,types:['v4','tw'],qs:[q('v4',{jp:'技術',en:'Technology',ch:['Technology','Terminology','Methodology','Biology']}),q('v4',{jp:'進歩',en:'Progress',ch:['Progress','Process','Proceed','Procedure']}),q('v4',{jp:'発見する',en:'Discover',ch:['Discover','Recover','Uncover','Cover']}),q('tw',{jp:'技術',en:'technology',hint:'Modern ___ has changed our lives.'}),q('v4',{jp:'人工知能',en:'Artificial intelligence',ch:['Artificial intelligence','Natural language','Virtual reality','Digital media']})]},
+{id:'u12-3',title:'2級文法①（仮定法応用）',icon:'💭',diff:5,types:['se','tw'],qs:[q('se',{jp:'時間があったら、私はあなたを手伝うのに。',ans:['If','I','had','time',',','I','would','help','you','.'],pool:['If','I','had','time',',','I','would','help','you','have','.']}),q('tw',{jp:'手伝うのに',en:'would help',hint:'If I had time, I ___ you.'}),q('se',{jp:'彼がもっと早く出発していたら、間に合っていただろう。',ans:['If','he','had','left','earlier',',','he','would','have','made','it','.'],pool:['If','he','had','left','earlier',',','he','would','have','made','it','leaves','.']}),q('v4',{jp:'仮定法過去完了',en:'Had left',ch:['Had left','Left','Leaves','Leaving']}),q('tw',{jp:'間に合っていただろう',en:'would have made it',hint:'He ___ if he had hurried.'})]},
+{id:'u12-4',title:'2級文法②（分詞構文）',icon:'📐',diff:5,types:['se','tw'],qs:[q('se',{jp:'宿題を終えた後、彼女はテレビを見た。',ans:['Having','finished','her','homework',',','she','watched','TV','.'],pool:['Having','finished','her','homework',',','she','watched','TV','finished','.']}),q('tw',{jp:'終えた後で（分詞構文）',en:'Having finished',hint:'___ his work, he went home.'}),q('v4',{jp:'分詞構文',en:'Participial construction',ch:['Participial construction','Infinitive phrase','Gerund phrase','Relative clause']}),q('se',{jp:'天気が良かったので、私たちは外出した。',ans:['The','weather','being','nice',',','we','went','out','.'],pool:['The','weather','being','nice',',','we','went','out','is','.']}),q('tw',{jp:'良かったので（独立分詞構文）',en:'being nice',hint:'The weather ___, we went out.'})]},
+{id:'u12-5',title:'2級語彙（ビジネス・国際）',icon:'🌐',diff:5,types:['v4','tw'],qs:[q('v4',{jp:'国際的な',en:'International',ch:['International','Intentional','Institutional','Intellectual']}),q('v4',{jp:'貿易',en:'Trade',ch:['Trade','Trace','Track','Trait']}),q('v4',{jp:'交渉する',en:'Negotiate',ch:['Negotiate','Navigate','Nominate','Notate']}),q('tw',{jp:'交渉する',en:'negotiate',hint:'They will ___ a new contract.'}),q('v4',{jp:'規制',en:'Regulation',ch:['Regulation','Relation','Reputation','Resolution']})]},
+{id:'u12-6',title:'2級リスニング強化',icon:'🎧',diff:5,types:['li','tw'],qs:[q('li',{jp:'environment（環境）',en:'environment',ch:['environment','enlightenment','entertainment','establishment']}),q('li',{jp:'necessary（必要な）',en:'necessary',ch:['necessary','neccessary','necesary','nessecary']}),q('tw',{jp:'必要な',en:'necessary',hint:'It is ___ to study hard.'}),q('li',{jp:'opportunity（機会）',en:'opportunity',ch:['opportunity','opportunity','community','priority']}),q('tw',{jp:'機会',en:'opportunity',hint:'This is a great ___.'})]},
+{id:'u12-boss',title:'2級総合テスト',icon:'⭐',diff:5,isBoss:true,types:['v4','se','tw','ma','li'],qs:[q('v4',{jp:'政府',en:'Government',ch:['Government','Governor','Governance','Govern']}),q('se',{jp:'時間があったら、私はあなたを手伝うのに。',ans:['If','I','had','time',',','I','would','help','you','.'],pool:['If','I','had','time',',','I','would','help','you','have','.']}),q('tw',{jp:'技術',en:'technology',hint:'Modern ___ has changed our lives.'}),q('ma',{pairs:[['Government','政府'],['Economy','経済'],['Negotiate','交渉する'],['Regulation','規制']]}),q('li',{jp:'opportunity（機会）',en:'opportunity',ch:['opportunity','opportunity','community','priority']}),q('se',{jp:'宿題を終えた後、彼女はテレビを見た。',ans:['Having','finished','her','homework',',','she','watched','TV','.'],pool:['Having','finished','her','homework',',','she','watched','TV','finished','.']}),]}
+]},
+{id:'u13',title:'英検準1級レベル',icon:'📕',color:'#C2185B',dark:'#880E4F',desc:'大学中級〜社会人レベルの実用英語',lessons:[
+{id:'u13-1',title:'準1級単語①（抽象概念）',icon:'🧠',diff:5,types:['v4','tw'],qs:[q('v4',{jp:'曖昧さ',en:'Ambiguity',ch:['Ambiguity','Ability','Activity','Authority']}),q('v4',{jp:'一貫性',en:'Consistency',ch:['Consistency','Consequence','Conscience','Confidence']}),q('v4',{jp:'妥当性',en:'Validity',ch:['Validity','Variety','Vanity','Velocity']}),q('tw',{jp:'一貫性',en:'consistency',hint:'There is a lack of ___ in his argument.'}),q('v4',{jp:'実質的な',en:'Substantial',ch:['Substantial','Essential','Potential','Influential']})]},
+{id:'u13-2',title:'準1級単語②（時事・社会問題）',icon:'📰',diff:5,types:['v4','tw'],qs:[q('v4',{jp:'格差',en:'Disparity',ch:['Disparity','Diversity','Density','Dignity']}),q('v4',{jp:'持続可能な',en:'Sustainable',ch:['Sustainable','Suitable','Sociable','Sensible']}),q('v4',{jp:'緩和する',en:'Mitigate',ch:['Mitigate','Migrate','Meditate','Moderate']}),q('tw',{jp:'持続可能な',en:'sustainable',hint:'We need ___ development.'}),q('v4',{jp:'蔓延している',en:'Prevalent',ch:['Prevalent','Prevention','Preventive','Previous']})]},
+{id:'u13-3',title:'準1級文法（強調構文・倒置）',icon:'📐',diff:5,types:['se','tw'],qs:[q('se',{jp:'彼が本当に言いたかったのはそれだった。',ans:['That','was','what','he','really','wanted','to','say','.'],pool:['That','was','what','he','really','wanted','to','say','is','.']}),q('tw',{jp:'まさにそれが（強調構文）',en:'It was',hint:'___ this book that changed my life.'}),q('se',{jp:'お金があれば余裕のある生活ができるのに。',ans:['Were','I','rich',',','I','could','live','comfortably','.'],pool:['Were','I','rich',',','I','could','live','comfortably','am','.']}),q('v4',{jp:'倒置（仮定法）',en:'Were I',ch:['Were I','If I were','I were','Am I']}),q('tw',{jp:'もし〜なら（倒置仮定法）',en:'Had I known',hint:'___, I would have come earlier.'})]},
+{id:'u13-4',title:'準1級語彙（学術論文）',icon:'📚',diff:5,types:['v4','tw'],qs:[q('v4',{jp:'実証する',en:'Substantiate',ch:['Substantiate','Substitute','Subordinate','Subsidize']}),q('v4',{jp:'反証する',en:'Refute',ch:['Refute','Repute','Resolute','Recruit']}),q('v4',{jp:'仮定する',en:'Postulate',ch:['Postulate','Populate','Pollute','Pulsate']}),q('tw',{jp:'実証する',en:'substantiate',hint:'The data ___s his claim.'}),q('v4',{jp:'相関関係',en:'Correlation',ch:['Correlation','Collaboration','Consultation','Cooperation']})]},
+{id:'u13-5',title:'準1級ライティング表現',icon:'✍️',diff:5,types:['v4','se','tw'],qs:[q('v4',{jp:'一方で（対比）',en:'On the other hand',ch:['On the other hand','In other words','As a result','For instance']}),q('se',{jp:'結論として、この政策には利点と欠点の両方がある。',ans:['In','conclusion',',','this','policy','has','both','advantages','and','disadvantages','.'],pool:['In','conclusion',',','this','policy','has','both','advantages','and','disadvantages','benefits','.']}),q('tw',{jp:'要するに',en:'In short',hint:'___, we need more research.'}),q('v4',{jp:'反論',en:'Counterargument',ch:['Counterargument','Counterpart','Counteract','Counterfeit']}),q('se',{jp:'この見解には強力な根拠がある。',ans:['This','view','is','backed','by','strong','evidence','.'],pool:['This','view','is','backed','by','strong','evidence','backs','.']})]},
+{id:'u13-6',title:'準1級リスニング（高速）',icon:'🎧',diff:5,types:['li','tw'],qs:[q('li',{jp:'phenomenon（現象）',en:'phenomenon',ch:['phenomenon','phenomena','phenomenal','phenomenally']}),q('li',{jp:'subsequently（その後）',en:'subsequently',ch:['subsequently','consequently','frequently','sufficiently']}),q('tw',{jp:'その後',en:'subsequently',hint:'He failed first, but ___ succeeded.'}),q('li',{jp:'unprecedented（前例のない）',en:'unprecedented',ch:['unprecedented','unpredicted','undetermined','unrecognized']}),q('tw',{jp:'前例のない',en:'unprecedented',hint:'This is an ___ situation.'})]},
+{id:'u13-boss',title:'準1級総合テスト',icon:'⭐',diff:5,isBoss:true,types:['v4','se','tw','ma','li'],qs:[q('v4',{jp:'格差',en:'Disparity',ch:['Disparity','Diversity','Density','Dignity']}),q('se',{jp:'お金があれば余裕のある生活ができるのに。',ans:['Were','I','rich',',','I','could','live','comfortably','.'],pool:['Were','I','rich',',','I','could','live','comfortably','am','.']}),q('tw',{jp:'実証する',en:'substantiate',hint:'The data ___s his claim.'}),q('ma',{pairs:[['Disparity','格差'],['Sustainable','持続可能な'],['Refute','反証する'],['Correlation','相関関係']]}),q('li',{jp:'unprecedented（前例のない）',en:'unprecedented',ch:['unprecedented','unpredicted','undetermined','unrecognized']}),q('se',{jp:'結論として、この政策には利点と欠点の両方がある。',ans:['In','conclusion',',','this','policy','has','both','advantages','and','disadvantages','.'],pool:['In','conclusion',',','this','policy','has','both','advantages','and','disadvantages','benefits','.']}),]}
+]},
+{id:'u14',title:'英検1級レベル',icon:'👑',color:'#B71C1C',dark:'#7F0000',desc:'最高峰の語彙・論理・教養英語',lessons:[
+{id:'u14-1',title:'1級単語①（高難度語彙）',icon:'🗝️',diff:5,types:['v4','tw'],qs:[q('v4',{jp:'広範囲にわたる',en:'Pervasive',ch:['Pervasive','Persuasive','Pensive','Extensive']}),q('v4',{jp:'痛烈な',en:'Scathing',ch:['Scathing','Soothing','Searing','Sparing']}),q('v4',{jp:'解決不可能な',en:'Intractable',ch:['Intractable','Interactive','Intricate','Intrinsic']}),q('tw',{jp:'広範囲にわたる',en:'pervasive',hint:'Corruption is ___ in this region.'}),q('v4',{jp:'軽蔑的な',en:'Derogatory',ch:['Derogatory','Decorative','Declarative','Derivative']})]},
+{id:'u14-2',title:'1級単語②（学術・専門語彙）',icon:'🎓',diff:5,types:['v4','tw'],qs:[q('v4',{jp:'弁証法',en:'Dialectic',ch:['Dialectic','Dialect','Diagnostic','Didactic']}),q('v4',{jp:'認識論',en:'Epistemology',ch:['Epistemology','Etymology','Entomology','Eschatology']}),q('v4',{jp:'還元主義',en:'Reductionism',ch:['Reductionism','Relativism','Rationalism','Realism']}),q('tw',{jp:'仮説的な',en:'hypothetical',hint:'This is purely a ___ scenario.'}),q('v4',{jp:'実証主義の',en:'Empirical',ch:['Empirical','Imperial','Empirically','Imperative']})]},
+{id:'u14-3',title:'1級文法（複雑な構文）',icon:'📐',diff:5,types:['se','tw'],qs:[q('se',{jp:'いかに彼が努力したかにかかわらず、彼は成功しなかった。',ans:['No','matter','how','hard','he','tried',',','he','did','not','succeed','.'],pool:['No','matter','how','hard','he','tried',',','he','did','not','succeed','try','.']}),q('tw',{jp:'〜であろうとなかろうと',en:'Whether or not',hint:'___ you agree, the decision is final.'}),q('se',{jp:'もっと注意していたなら、その誤りは避けられただろう。',ans:['Had','he','been','more','careful',',','the','mistake','could','have','been','avoided','.'],pool:['Had','he','been','more','careful',',','the','mistake','could','have','been','avoided','avoid','.']}),q('v4',{jp:'譲歩節',en:'Concessive clause',ch:['Concessive clause','Conditional clause','Causal clause','Relative clause']}),q('tw',{jp:'〜にもかかわらず',en:'Notwithstanding',hint:'___ the risks, he proceeded.'})]},
+{id:'u14-4',title:'1級語彙（文学・修辞）',icon:'📖',diff:5,types:['v4','tw'],qs:[q('v4',{jp:'婉曲表現',en:'Euphemism',ch:['Euphemism','Euphoria','Eulogy','Etiquette']}),q('v4',{jp:'誇張法',en:'Hyperbole',ch:['Hyperbole','Hypothesis','Hypocrisy','Hybrid']}),q('v4',{jp:'逆説',en:'Paradox',ch:['Paradox','Parody','Paragon','Paradigm']}),q('tw',{jp:'逆説',en:'paradox',hint:'It is a ___ that the more we have, the more we want.'}),q('v4',{jp:'寓話',en:'Allegory',ch:['Allegory','Anthology','Analogy','Apology']})]},
+{id:'u14-5',title:'1級ライティング（論証）',icon:'✍️',diff:5,types:['v4','se','tw'],qs:[q('v4',{jp:'要するに（結論）',en:'In essence',ch:['In essence','In addition','In contrast','In case']}),q('se',{jp:'この主張を支持する説得力のある証拠は乏しい。',ans:['There','is','scant','compelling','evidence','to','support','this','claim','.'],pool:['There','is','scant','compelling','evidence','to','support','this','claim','supports','.']}),q('tw',{jp:'説得力のある',en:'compelling',hint:'He made a ___ argument.'}),q('v4',{jp:'反駁する',en:'Rebut',ch:['Rebut','Rebuke','Revolt','Rebound']}),q('se',{jp:'この問題は単純な解決策では片付かない。',ans:['This','issue','cannot','be','resolved','by','a','simple','solution','.'],pool:['This','issue','cannot','be','resolved','by','a','simple','solution','resolve','.']})]},
+{id:'u14-6',title:'1級リスニング（最上級）',icon:'🎧',diff:5,types:['li','tw'],qs:[q('li',{jp:'idiosyncrasy（特異性）',en:'idiosyncrasy',ch:['idiosyncrasy','idiosyncratic','idiomatic','idealistic']}),q('li',{jp:'circumvent（回避する）',en:'circumvent',ch:['circumvent','circumstance','circumference','circulate']}),q('tw',{jp:'回避する',en:'circumvent',hint:'They tried to ___ the regulations.'}),q('li',{jp:'exacerbate（悪化させる）',en:'exacerbate',ch:['exacerbate','exaggerate','excavate','exonerate']}),q('tw',{jp:'悪化させる',en:'exacerbate',hint:'This policy may ___ the problem.'})]},
+{id:'u14-7',title:'1級時事英語',icon:'🌐',diff:5,types:['v4','tw','se'],qs:[q('v4',{jp:'地政学的な',en:'Geopolitical',ch:['Geopolitical','Geographical','Geological','Genealogical']}),q('v4',{jp:'制裁',en:'Sanction',ch:['Sanction','Sentence','Section','Selection']}),q('se',{jp:'国際社会はこの問題に取り組む必要がある。',ans:['The','international','community','needs','to','address','this','issue','.'],pool:['The','international','community','needs','to','address','this','issue','solve','.']}),q('tw',{jp:'取り組む',en:'address',hint:'We must ___ this challenge urgently.'}),q('v4',{jp:'外交',en:'Diplomacy',ch:['Diplomacy','Democracy','Bureaucracy','Aristocracy']})]},
+{id:'u14-boss',title:'🏆 英検1級最終テスト',icon:'👑',diff:5,isBoss:true,types:['v4','se','tw','ma','li'],qs:[q('v4',{jp:'広範囲にわたる',en:'Pervasive',ch:['Pervasive','Persuasive','Pensive','Extensive']}),q('se',{jp:'いかに彼が努力したかにかかわらず、彼は成功しなかった。',ans:['No','matter','how','hard','he','tried',',','he','did','not','succeed','.'],pool:['No','matter','how','hard','he','tried',',','he','did','not','succeed','try','.']}),q('tw',{jp:'説得力のある',en:'compelling',hint:'He made a ___ argument.'}),q('ma',{pairs:[['Pervasive','広範囲にわたる'],['Euphemism','婉曲表現'],['Paradox','逆説'],['Diplomacy','外交']]}),q('li',{jp:'exacerbate（悪化させる）',en:'exacerbate',ch:['exacerbate','exaggerate','excavate','exonerate']}),q('se',{jp:'この主張を支持する説得力のある証拠は乏しい。',ans:['There','is','scant','compelling','evidence','to','support','this','claim','.'],pool:['There','is','scant','compelling','evidence','to','support','this','claim','supports','.']}),]}
+]},
 ];
+
+
+// ════════════════════════════════════════════════════════
+// AUTO-GENERATED UNITS 15〜1000 (programmatic, seeded/deterministic)
+// Built from a vocabulary database; reuses words across many lessons
+// with varied question types/distractors so each unit still feels distinct.
+// ════════════════════════════════════════════════════════
+const VOCAB_DB = {"1": [["猫", "Cat", "動物"], ["犬", "Dog", "動物"], ["鳥", "Bird", "動物"], ["魚", "Fish", "動物"], ["りんご", "Apple", "食べ物"], ["バナナ", "Banana", "食べ物"], ["オレンジ", "Orange", "食べ物"], ["ぶどう", "Grape", "食べ物"], ["赤", "Red", "色"], ["青", "Blue", "色"], ["緑", "Green", "色"], ["黄色", "Yellow", "色"], ["白", "White", "色"], ["黒", "Black", "色"], ["1", "One", "数字"], ["2", "Two", "数字"], ["3", "Three", "数字"], ["4", "Four", "数字"], ["5", "Five", "数字"], ["6", "Six", "数字"], ["7", "Seven", "数字"], ["8", "Eight", "数字"], ["9", "Nine", "数字"], ["10", "Ten", "数字"], ["車", "Car", "乗り物"], ["バス", "Bus", "乗り物"], ["電車", "Train", "乗り物"], ["自転車", "Bicycle", "乗り物"], ["飛行機", "Airplane", "乗り物"], ["学校", "School", "場所"], ["病院", "Hospital", "場所"], ["家", "House", "場所"], ["店", "Store", "場所"], ["公園", "Park", "場所"], ["走る", "Run", "動詞"], ["食べる", "Eat", "動詞"], ["飲む", "Drink", "動詞"], ["眠る", "Sleep", "動詞"], ["歩く", "Walk", "動詞"], ["泳ぐ", "Swim", "動詞"], ["読む", "Read", "動詞"], ["書く", "Write", "動詞"], ["大きい", "Big", "形容詞"], ["小さい", "Small", "形容詞"], ["速い", "Fast", "形容詞"], ["遅い", "Slow", "形容詞"], ["暑い", "Hot", "形容詞"], ["寒い", "Cold", "形容詞"], ["嬉しい", "Happy", "形容詞"], ["悲しい", "Sad", "形容詞"], ["目", "Eye", "身体"], ["鼻", "Nose", "身体"], ["手", "Hand", "身体"], ["足", "Foot", "身体"], ["耳", "Ear", "身体"], ["口", "Mouth", "身体"], ["お父さん", "Father", "家族"], ["お母さん", "Mother", "家族"], ["兄弟", "Brother", "家族"], ["姉妹", "Sister", "家族"], ["水", "Water", "飲み物"], ["牛乳", "Milk", "飲み物"], ["ジュース", "Juice", "飲み物"], ["お茶", "Tea", "飲み物"], ["コーヒー", "Coffee", "飲み物"], ["本", "Book", "物"], ["ペン", "Pen", "物"], ["机", "Desk", "物"], ["椅子", "Chair", "物"], ["時計", "Clock", "物"], ["月曜日", "Monday", "曜日"], ["火曜日", "Tuesday", "曜日"], ["水曜日", "Wednesday", "曜日"], ["木曜日", "Thursday", "曜日"], ["金曜日", "Friday", "曜日"], ["土曜日", "Saturday", "曜日"], ["日曜日", "Sunday", "曜日"], ["朝", "Morning", "時間"], ["昼", "Noon", "時間"], ["夜", "Night", "時間"], ["今日", "Today", "時間"], ["明日", "Tomorrow", "時間"], ["昨日", "Yesterday", "時間"], ["春", "Spring", "季節"], ["夏", "Summer", "季節"], ["秋", "Autumn", "季節"], ["冬", "Winter", "季節"], ["晴れ", "Sunny", "天気"], ["雨", "Rainy", "天気"], ["曇り", "Cloudy", "天気"], ["雪", "Snowy", "天気"], ["猿", "Monkey", "動物"], ["象", "Elephant", "動物"], ["ライオン", "Lion", "動物"], ["熊", "Bear", "動物"], ["ウサギ", "Rabbit", "動物"], ["馬", "Horse", "動物"], ["牛", "Cow", "動物"], ["豚", "Pig", "動物"], ["羊", "Sheep", "動物"], ["花", "Flower", "自然"], ["木", "Tree", "自然"], ["草", "Grass", "自然"], ["山", "Mountain", "自然"], ["川", "River", "自然"], ["海", "Sea", "自然"], ["空", "Sky", "自然"], ["星", "Star", "自然"], ["太陽", "Sun", "自然"], ["月", "Moon", "自然"], ["帽子", "Hat", "衣類"], ["靴", "Shoes", "衣類"], ["シャツ", "Shirt", "衣類"], ["ズボン", "Pants", "衣類"], ["コート", "Coat", "衣類"]], "2": [["学生", "Student", "人"], ["先生", "Teacher", "人"], ["医者", "Doctor", "人"], ["看護師", "Nurse", "人"], ["警察官", "Police officer", "人"], ["消防士", "Firefighter", "人"], ["料理人", "Cook", "人"], ["運転手", "Driver", "人"], ["歌手", "Singer", "人"], ["画家", "Painter", "人"], ["作る", "Make", "動詞"], ["買う", "Buy", "動詞"], ["売る", "Sell", "動詞"], ["見る", "See", "動詞"], ["聞く", "Hear", "動詞"], ["話す", "Speak", "動詞"], ["教える", "Teach", "動詞"], ["学ぶ", "Learn", "動詞"], ["働く", "Work", "動詞"], ["休む", "Rest", "動詞"], ["開ける", "Open", "動詞"], ["閉じる", "Close", "動詞"], ["始める", "Start", "動詞"], ["終える", "Finish", "動詞"], ["待つ", "Wait", "動詞"], ["助ける", "Help", "動詞"], ["探す", "Search", "動詞"], ["見つける", "Find", "動詞"], ["忘れる", "Forget", "動詞"], ["覚える", "Remember", "動詞"], ["美しい", "Beautiful", "形容詞"], ["醜い", "Ugly", "形容詞"], ["良い", "Good", "形容詞"], ["悪い", "Bad", "形容詞"], ["新しい", "New", "形容詞"], ["古い", "Old", "形容詞"], ["簡単な", "Easy", "形容詞"], ["難しい", "Difficult", "形容詞"], ["強い", "Strong", "形容詞"], ["弱い", "Weak", "形容詞"], ["高い", "High", "形容詞"], ["低い", "Low", "形容詞"], ["近い", "Near", "形容詞"], ["遠い", "Far", "形容詞"], ["重い", "Heavy", "形容詞"], ["軽い", "Light", "形容詞"], ["台所", "Kitchen", "場所"], ["寝室", "Bedroom", "場所"], ["浴室", "Bathroom", "場所"], ["庭", "Garden", "場所"], ["図書館", "Library", "場所"], ["郵便局", "Post office", "場所"], ["銀行", "Bank", "場所"], ["駅", "Station", "場所"], ["空港", "Airport", "場所"], ["ホテル", "Hotel", "場所"], ["レストラン", "Restaurant", "場所"], ["映画館", "Cinema", "場所"], ["動物園", "Zoo", "場所"], ["美術館", "Museum", "場所"], ["パン", "Bread", "食べ物"], ["米", "Rice", "食べ物"], ["肉", "Meat", "食べ物"], ["野菜", "Vegetable", "食べ物"], ["卵", "Egg", "食べ物"], ["チーズ", "Cheese", "食べ物"], ["スープ", "Soup", "食べ物"], ["サラダ", "Salad", "食べ物"], ["デザート", "Dessert", "食べ物"], ["朝食", "Breakfast", "食べ物"], ["昼食", "Lunch", "食べ物"], ["夕食", "Dinner", "食べ物"], ["台風", "Typhoon", "天気"], ["霧", "Fog", "天気"], ["風", "Wind", "天気"], ["雷", "Thunder", "天気"], ["傘", "Umbrella", "物"], ["鍵", "Key", "物"], ["財布", "Wallet", "物"], ["鞄", "Bag", "物"], ["携帯電話", "Cell phone", "物"], ["カメラ", "Camera", "物"], ["地図", "Map", "物"], ["切符", "Ticket", "物"], ["手紙", "Letter", "物"], ["プレゼント", "Present", "物"], ["音楽", "Music", "趣味"], ["映画", "Movie", "趣味"], ["スポーツ", "Sport", "趣味"], ["ゲーム", "Game", "趣味"], ["旅行", "Travel", "趣味"], ["写真", "Photo", "趣味"], ["絵", "Picture", "趣味"], ["ダンス", "Dance", "趣味"], ["サッカー", "Soccer", "スポーツ"], ["野球", "Baseball", "スポーツ"], ["テニス", "Tennis", "スポーツ"], ["バスケットボール", "Basketball", "スポーツ"], ["水泳", "Swimming", "スポーツ"], ["卓球", "Table tennis", "スポーツ"], ["週", "Week", "時間"], ["月", "Month", "時間"], ["年", "Year", "時間"], ["時間", "Hour", "時間"], ["分", "Minute", "時間"], ["秒", "Second", "時間"], ["最初", "First", "順序"], ["次", "Next", "順序"], ["最後", "Last", "順序"], ["いつも", "Always", "頻度"], ["時々", "Sometimes", "頻度"], ["決して", "Never", "頻度"], ["通常", "Usually", "頻度"], ["頻繁に", "Often", "頻度"], ["家族", "Family", "人間関係"], ["友達", "Friend", "人間関係"], ["隣人", "Neighbor", "人間関係"], ["先輩", "Senior", "人間関係"], ["後輩", "Junior", "人間関係"], ["祖父", "Grandfather", "家族"], ["祖母", "Grandmother", "家族"], ["叔父", "Uncle", "家族"], ["叔母", "Aunt", "家族"], ["いとこ", "Cousin", "家族"], ["赤ちゃん", "Baby", "家族"]], "3": [["環境", "Environment", "社会"], ["影響を与える", "Affect", "動詞"], ["解決する", "Solve", "動詞"], ["発展する", "Develop", "動詞"], ["参加する", "Participate", "動詞"], ["増加する", "Increase", "動詞"], ["減少する", "Decrease", "動詞"], ["比較する", "Compare", "動詞"], ["要約する", "Summarize", "動詞"], ["意見", "Opinion", "名詞"], ["結論", "Conclusion", "名詞"], ["理由", "Reason", "名詞"], ["目的", "Purpose", "名詞"], ["結果", "Result", "名詞"], ["原因", "Cause", "名詞"], ["方法", "Method", "名詞"], ["計画", "Plan", "名詞"], ["問題", "Problem", "名詞"], ["質問", "Question", "名詞"], ["答え", "Answer", "名詞"], ["経験", "Experience", "名詞"], ["知識", "Knowledge", "名詞"], ["情報", "Information", "名詞"], ["研究", "Research", "名詞"], ["実験", "Experiment", "名詞"], ["技術", "Technology", "名詞"], ["科学", "Science", "名詞"], ["歴史", "History", "名詞"], ["文化", "Culture", "名詞"], ["伝統", "Tradition", "名詞"], ["社会", "Society", "名詞"], ["政府", "Government", "名詞"], ["経済", "Economy", "名詞"], ["人口", "Population", "名詞"], ["国際的な", "International", "形容詞"], ["重要な", "Important", "形容詞"], ["必要な", "Necessary", "形容詞"], ["可能な", "Possible", "形容詞"], ["不可能な", "Impossible", "形容詞"], ["十分な", "Enough", "形容詞"], ["特別な", "Special", "形容詞"], ["一般的な", "General", "形容詞"], ["具体的な", "Specific", "形容詞"], ["実際の", "Actual", "形容詞"], ["典型的な", "Typical", "形容詞"], ["興味深い", "Interesting", "形容詞"], ["退屈な", "Boring", "形容詞"], ["驚くべき", "Surprising", "形容詞"], ["感動的な", "Moving", "形容詞"], ["快適な", "Comfortable", "形容詞"], ["不便な", "Inconvenient", "形容詞"], ["効果的な", "Effective", "形容詞"], ["有効な", "Valid", "形容詞"], ["無効な", "Invalid", "形容詞"], ["正確な", "Accurate", "形容詞"], ["曖昧な", "Vague", "形容詞"], ["明確な", "Clear", "形容詞"], ["複雑な", "Complex", "形容詞"], ["単純な", "Simple", "形容詞"], ["基本的な", "Basic", "形容詞"], ["発見する", "Discover", "動詞"], ["発明する", "Invent", "動詞"], ["創造する", "Create", "動詞"], ["改善する", "Improve", "動詞"], ["維持する", "Maintain", "動詞"], ["提供する", "Provide", "動詞"], ["要求する", "Require", "動詞"], ["含む", "Include", "動詞"], ["除く", "Exclude", "動詞"], ["達成する", "Achieve", "動詞"], ["成功する", "Succeed", "動詞"], ["失敗する", "Fail", "動詞"], ["挑戦する", "Challenge", "動詞"], ["克服する", "Overcome", "動詞"], ["対処する", "Deal with", "動詞"], ["注意する", "Pay attention", "動詞"], ["集中する", "Concentrate", "動詞"], ["想像する", "Imagine", "動詞"], ["予測する", "Predict", "動詞"], ["期待する", "Expect", "動詞"], ["驚く", "Surprise", "動詞"], ["心配する", "Worry", "動詞"], ["信じる", "Believe", "動詞"], ["疑う", "Doubt", "動詞"], ["確認する", "Confirm", "動詞"], ["拒否する", "Refuse", "動詞"], ["受け入れる", "Accept", "動詞"], ["提案する", "Suggest", "動詞"], ["推薦する", "Recommend", "動詞"], ["選択する", "Choose", "動詞"], ["決定する", "Decide", "動詞"], ["命じる", "Order", "動詞"], ["許可する", "Permit", "動詞"], ["禁止する", "Forbid", "動詞"], ["制限する", "Limit", "動詞"], ["増大させる", "Expand", "動詞"], ["縮小する", "Shrink", "動詞"], ["交換する", "Exchange", "動詞"], ["共有する", "Share", "動詞"], ["分割する", "Divide", "動詞"], ["結合する", "Combine", "動詞"], ["接続する", "Connect", "動詞"], ["分離する", "Separate", "動詞"], ["環境保護", "Conservation", "社会"], ["汚染", "Pollution", "社会"], ["地球温暖化", "Global warming", "社会"], ["再生可能エネルギー", "Renewable energy", "社会"], ["絶滅危惧種", "Endangered species", "社会"], ["持続可能性", "Sustainability", "社会"], ["リサイクル", "Recycle", "社会"]], "4": [["仮説", "Hypothesis", "科学"], ["実証する", "Substantiate", "動詞"], ["妥当性", "Validity", "名詞"], ["一貫性", "Consistency", "名詞"], ["曖昧さ", "Ambiguity", "名詞"], ["実質的な", "Substantial", "形容詞"], ["複合的な", "Composite", "形容詞"], ["相互の", "Mutual", "形容詞"], ["固有の", "Inherent", "形容詞"], ["潜在的な", "Potential", "形容詞"], ["明白な", "Obvious", "形容詞"], ["微妙な", "Subtle", "形容詞"], ["優勢な", "Dominant", "形容詞"], ["従属する", "Subordinate", "形容詞"], ["相反する", "Contradictory", "形容詞"], ["広範囲な", "Extensive", "形容詞"], ["徹底的な", "Thorough", "形容詞"], ["革新的な", "Innovative", "形容詞"], ["保守的な", "Conservative", "形容詞"], ["急進的な", "Radical", "形容詞"], ["実用的な", "Practical", "形容詞"], ["理論的な", "Theoretical", "形容詞"], ["客観的な", "Objective", "形容詞"], ["主観的な", "Subjective", "形容詞"], ["批判的な", "Critical", "形容詞"], ["論理的な", "Logical", "形容詞"], ["感情的な", "Emotional", "形容詞"], ["合理的な", "Rational", "形容詞"], ["不合理な", "Irrational", "形容詞"], ["倫理的な", "Ethical", "形容詞"], ["緩和する", "Mitigate", "動詞"], ["悪化させる", "Aggravate", "動詞"], ["促進する", "Promote", "動詞"], ["阻害する", "Hinder", "動詞"], ["補完する", "Complement", "動詞"], ["矛盾する", "Contradict", "動詞"], ["強調する", "Emphasize", "動詞"], ["軽視する", "Underestimate", "動詞"], ["誇張する", "Exaggerate", "動詞"], ["実証する", "Demonstrate", "動詞"], ["反証する", "Refute", "動詞"], ["立証する", "Verify", "動詞"], ["仮定する", "Assume", "動詞"], ["推論する", "Infer", "動詞"], ["分析する", "Analyze", "動詞"], ["統合する", "Integrate", "動詞"], ["分類する", "Classify", "動詞"], ["区別する", "Distinguish", "動詞"], ["特定する", "Identify", "動詞"], ["評価する", "Evaluate", "動詞"], ["修正する", "Modify", "動詞"], ["適応する", "Adapt", "動詞"], ["対応する", "Correspond", "動詞"], ["反映する", "Reflect", "動詞"], ["示唆する", "Imply", "動詞"], ["解釈する", "Interpret", "動詞"], ["実装する", "Implement", "動詞"], ["規制する", "Regulate", "動詞"], ["管理する", "Administer", "動詞"], ["監督する", "Supervise", "動詞"], ["交渉する", "Negotiate", "動詞"], ["妥協する", "Compromise", "動詞"], ["仲裁する", "Mediate", "動詞"], ["代表する", "Represent", "動詞"], ["委任する", "Delegate", "動詞"], ["格差", "Disparity", "社会"], ["持続可能な", "Sustainable", "形容詞"], ["多様性", "Diversity", "名詞"], ["不平等", "Inequality", "名詞"], ["貧困", "Poverty", "名詞"], ["繁栄", "Prosperity", "名詞"], ["移民", "Immigration", "社会"], ["人権", "Human rights", "社会"], ["民主主義", "Democracy", "社会"], ["独裁", "Dictatorship", "社会"], ["外交", "Diplomacy", "社会"], ["条約", "Treaty", "社会"], ["制裁", "Sanction", "社会"], ["地政学的な", "Geopolitical", "形容詞"], ["世論", "Public opinion", "社会"], ["インフレーション", "Inflation", "経済"], ["デフレーション", "Deflation", "経済"], ["景気後退", "Recession", "経済"], ["投資", "Investment", "経済"], ["資産", "Asset", "経済"], ["負債", "Liability", "経済"], ["予算", "Budget", "経済"], ["税金", "Tax", "経済"], ["補助金", "Subsidy", "経済"], ["関税", "Tariff", "経済"], ["論文", "Thesis", "学術"], ["引用", "Citation", "学術"], ["方法論", "Methodology", "学術"], ["文献", "Literature", "学術"], ["査読", "Peer review", "学術"], ["実証主義", "Empiricism", "学術"], ["理論", "Theory", "学術"], ["パラダイム", "Paradigm", "学術"], ["命題", "Proposition", "学術"], ["前提", "Premise", "学術"]], "5": [["広範囲にわたる", "Pervasive", "形容詞"], ["痛烈な", "Scathing", "形容詞"], ["解決不可能な", "Intractable", "形容詞"], ["軽蔑的な", "Derogatory", "形容詞"], ["蔓延している", "Prevalent", "形容詞"], ["弁証法", "Dialectic", "学術"], ["認識論", "Epistemology", "学術"], ["還元主義", "Reductionism", "学術"], ["実証主義の", "Empirical", "形容詞"], ["形而上学", "Metaphysics", "学術"], ["譲歩節", "Concessive clause", "文法"], ["倒置", "Inversion", "文法"], ["分詞構文", "Participial construction", "文法"], ["関係代名詞", "Relative pronoun", "文法"], ["仮定法", "Subjunctive mood", "文法"], ["婉曲表現", "Euphemism", "修辞"], ["誇張法", "Hyperbole", "修辞"], ["逆説", "Paradox", "修辞"], ["寓話", "Allegory", "修辞"], ["暗喩", "Metaphor", "修辞"], ["直喩", "Simile", "修辞"], ["擬人法", "Personification", "修辞"], ["頭韻", "Alliteration", "修辞"], ["反復法", "Repetition", "修辞"], ["対句法", "Antithesis", "修辞"], ["説得力のある", "Compelling", "形容詞"], ["反駁する", "Rebut", "動詞"], ["反論", "Counterargument", "学術"], ["実証する", "Substantiate", "動詞"], ["反証する", "Refute", "動詞"], ["回避する", "Circumvent", "動詞"], ["悪化させる", "Exacerbate", "動詞"], ["誇張する", "Overstate", "動詞"], ["軽視する", "Trivialize", "動詞"], ["正当化する", "Justify", "動詞"], ["非難する", "Condemn", "動詞"], ["称賛する", "Commend", "動詞"], ["軽蔑する", "Despise", "動詞"], ["尊敬する", "Esteem", "動詞"], ["感謝する", "Appreciate", "動詞"], ["特異性", "Idiosyncrasy", "学術"], ["相関関係", "Correlation", "学術"], ["因果関係", "Causation", "学術"], ["一般化", "Generalization", "学術"], ["例外", "Exception", "学術"], ["前提条件", "Prerequisite", "学術"], ["含意", "Implication", "学術"], ["帰結", "Consequence", "学術"], ["矛盾", "Contradiction", "学術"], ["整合性", "Coherence", "学術"], ["不条理な", "Absurd", "形容詞"], ["不可解な", "Inexplicable", "形容詞"], ["不可避な", "Inevitable", "形容詞"], ["不可欠な", "Indispensable", "形容詞"], ["不変の", "Invariable", "形容詞"], ["一時的な", "Transient", "形容詞"], ["永続的な", "Perpetual", "形容詞"], ["流動的な", "Fluid", "形容詞"], ["硬直した", "Rigid", "形容詞"], ["柔軟な", "Flexible", "形容詞"], ["洗練された", "Sophisticated", "形容詞"], ["粗野な", "Crude", "形容詞"], ["高尚な", "Lofty", "形容詞"], ["卑俗な", "Vulgar", "形容詞"], ["荘厳な", "Majestic", "形容詞"], ["地味な", "Modest", "形容詞"], ["華美な", "Ostentatious", "形容詞"], ["簡潔な", "Concise", "形容詞"], ["冗長な", "Verbose", "形容詞"], ["曖昧な", "Equivocal", "形容詞"], ["明瞭な", "Lucid", "形容詞"], ["不明瞭な", "Obscure", "形容詞"], ["透明な", "Transparent", "形容詞"], ["不透明な", "Opaque", "形容詞"], ["顕著な", "Conspicuous", "形容詞"], ["目立たない", "Inconspicuous", "形容詞"], ["顕在的な", "Manifest", "形容詞"], ["潜在的な", "Latent", "形容詞"], ["内在する", "Intrinsic", "形容詞"], ["外在する", "Extrinsic", "形容詞"], ["先天的な", "Innate", "形容詞"], ["後天的な", "Acquired", "形容詞"], ["利他的な", "Altruistic", "形容詞"], ["利己的な", "Egotistic", "形容詞"], ["公平な", "Impartial", "形容詞"], ["偏った", "Biased", "形容詞"], ["中立的な", "Neutral", "形容詞"], ["党派的な", "Partisan", "形容詞"], ["急進的な", "Radical", "形容詞"], ["穏健な", "Moderate", "形容詞"]]};
+
+// simple seeded PRNG (mulberry32) for deterministic generation
+function mulberry32(seed){
+  return function(){
+    seed|=0;seed=seed+0x6D2B79F5|0;
+    let t=Math.imul(seed^seed>>>15,1|seed);
+    t=t+Math.imul(t^t>>>7,61|t)^t;
+    return((t^t>>>14)>>>0)/4294967296;
+  };
+}
+function seededShuffle(arr,rng){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(rng()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function seededSample(arr,n,rng){
+  return seededShuffle(arr,rng).slice(0,n);
+}
+
+const GEN_THEMES={
+  1:['きほんの単語','はじめての英語','やさしい語彙','にちじょう単語','きそ固め'],
+  2:['基礎語彙','日常表現','初級フレーズ','生活単語','基本動詞'],
+  3:['中級語彙','実用表現','レベルアップ','応用語彙','発展フレーズ'],
+  4:['上級語彙','アカデミック表現','ビジネス英語','高度な文法','論理表現'],
+  5:['最上級語彙','学術英語','ネイティブ表現','英検1級対策','プロフェッショナル英語'],
+};
+const GEN_ICONS={1:['🌱','🍀','🌼','🌻','🌿'],2:['📘','📗','📙','📒','📕'],3:['🎯','🚀','⚡','💡','🔥'],4:['🎓','🧠','📐','🔬','⚖️'],5:['👑','💎','🏆','🌟','🦅']};
+const GEN_COLORS={1:['#58CC02','#3D8F01'],2:['#1CB0F6','#0A8BC4'],3:['#FF9600','#B86D00'],4:['#9B59B6','#6C3483'],5:['#B71C1C','#7F0000']};
+
+const GEN_START=15, GEN_TOTAL=1000; // units 15..1000 are auto-generated
+
+function genDifficultyFor(n,total){
+  const pct=n/total;
+  if(pct<0.15)return 1;
+  if(pct<0.35)return 2;
+  if(pct<0.55)return 3;
+  if(pct<0.80)return 4;
+  return 5;
+}
+
+function genDistractors(pool,correct,n,rng){
+  const cands=pool.filter(w=>w[1]!==correct).map(w=>w[1]);
+  return seededSample(cands,Math.min(n,cands.length),rng);
+}
+function genV4(item,pool,rng){
+  const[jp,en]=item;
+  const ch=seededShuffle([en,...genDistractors(pool,en,3,rng)],rng);
+  return{type:'v4',jp,en,ch};
+}
+function genSp(item){const[jp,en]=item;return{type:'sp',jp,en:en.toUpperCase()};}
+function genLi(item,pool,rng){
+  const[jp,en]=item;
+  const ch=seededShuffle([en,...genDistractors(pool,en,3,rng)],rng);
+  return{type:'li',jp,en,ch};
+}
+function genTw(item){const[jp,en]=item;return{type:'tw',jp,en,hint:'Translate: '+jp};}
+function genMa(items){return{type:'ma',pairs:items.slice(0,4).map(([jp,en])=>[en,jp])};}
+
+function genLesson(unitIdx,lessonIdx,diff,words,rng,isBoss){
+  const id='gu'+unitIdx+'-'+(isBoss?'boss':lessonIdx);
+  const icon=GEN_ICONS[diff][Math.floor(rng()*GEN_ICONS[diff].length)];
+  const qs=[];
+  const cycle=['v4','v4','sp','li','v4','tw','ma'];
+  let wi=0;
+  for(const t of cycle){
+    if(wi>=words.length)break;
+    if(t==='ma'){
+      if(words.length-wi>=4){qs.push(genMa(words.slice(wi,wi+4)));wi+=4;}
+      continue;
+    }
+    const item=words[wi];
+    if(t==='v4')qs.push(genV4(item,words,rng));
+    else if(t==='sp')qs.push(genSp(item));
+    else if(t==='li')qs.push(genLi(item,words,rng));
+    else if(t==='tw')qs.push(genTw(item));
+    wi++;
+  }
+  if(!qs.length)words.slice(0,5).forEach(w=>qs.push(genV4(w,words,rng)));
+  return{id,title:isBoss?'ユニットテスト':'レッスン'+lessonIdx,icon,diff,isBoss:!!isBoss,types:[...new Set(qs.map(q=>q.type))],qs};
+}
+
+function genUnit(unitIdx){
+  const rng=mulberry32(unitIdx*7919+13);
+  const diff=genDifficultyFor(unitIdx,GEN_TOTAL);
+  const pool=VOCAB_DB[diff];
+  const theme=GEN_THEMES[diff][Math.floor(rng()*GEN_THEMES[diff].length)];
+  const icon=GEN_ICONS[diff][Math.floor(rng()*GEN_ICONS[diff].length)];
+  const[color,dark]=GEN_COLORS[diff];
+  const words=seededSample(pool,Math.min(25,pool.length),rng);
+  const lessons=[];
+  for(let li=1;li<=5;li++){
+    let chunk=words.slice((li-1)*5,li*5);
+    if(!chunk.length)chunk=seededSample(pool,5,rng);
+    lessons.push(genLesson(unitIdx,li,diff,chunk,rng,false));
+  }
+  const bossWords=seededSample(words,Math.min(8,words.length),rng);
+  lessons.push(genLesson(unitIdx,6,Math.min(diff+1,5),bossWords,rng,true));
+  return{
+    id:'gu'+unitIdx,
+    title:'Unit '+unitIdx+': '+theme,
+    icon,color,dark,
+    desc:'難易度'+'⭐'.repeat(diff)+' ・ '+lessons.length+'レッスン',
+    lessons,
+  };
+}
+
+// Lazily build generated units and append to CUR (1000-unit course)
+for(let i=GEN_START;i<=GEN_TOTAL;i++){
+  CUR.push(genUnit(i));
+}
+
 
 const ALL_IDS=CUR.flatMap(u=>u.lessons.map(l=>l.id));
 const TOTAL=ALL_IDS.length;
@@ -917,13 +1115,74 @@ function lstate(lid){
   if(ui<uu)return'done';
   return'lk';
 }
+// ── COURSE MAP (windowed rendering for 1000-unit scale) ──
+let _mapWindowStart=0;
+let _mapWindowInitialized=false;
+const MAP_WINDOW_SIZE=8; // units rendered per page
+
+function findCurrentUnitIdx(){
+  const uu=ALL_IDS.indexOf(G.unlocked);
+  for(let i=0;i<CUR.length;i++){
+    const fi=ALL_IDS.indexOf(CUR[i].lessons[0].id);
+    const li=ALL_IDS.indexOf(CUR[i].lessons[CUR[i].lessons.length-1].id);
+    if(uu>=fi&&uu<=li)return i;
+  }
+  return 0;
+}
+
 function renderMap(){
   refreshTop();
-  const map=document.getElementById('cmap');map.innerHTML='';
+  // compute totals cheaply (no DOM)
   let doneTotal=0;
-  CUR.forEach(unit=>{
+  CUR.forEach(unit=>{ doneTotal+=unit.lessons.filter(l=>G.stars[l.id]>=1).length; });
+  document.getElementById('tlc').textContent=TOTAL;
+  document.getElementById('ch-done').textContent=doneTotal;
+  document.getElementById('ch-tot').textContent=TOTAL;
+  document.getElementById('ch-pct').textContent=Math.round(doneTotal/TOTAL*100)+'%';
+
+  // default window (only on first visit): center on the unit containing the current lesson
+  if(!_mapWindowInitialized){
+    const curIdx=findCurrentUnitIdx();
+    _mapWindowStart=Math.max(0,curIdx-1);
+    _mapWindowInitialized=true;
+  }
+  renderMapWindow();
+}
+
+function renderMapWindow(){
+  const map=document.getElementById('cmap');
+  map.innerHTML='';
+
+  const start=Math.max(0,Math.min(_mapWindowStart,CUR.length-1));
+  const end=Math.min(CUR.length,start+MAP_WINDOW_SIZE);
+
+  // "show earlier units" control
+  if(start>0){
+    const jumpBar=document.createElement('div');
+    jumpBar.style.cssText='display:flex;gap:8px;margin-bottom:14px';
+    const prevBtn=document.createElement('button');
+    prevBtn.className='abtn gray';
+    prevBtn.style.cssText='flex:1;padding:11px;font-size:.85rem';
+    prevBtn.textContent='⬅ 前の'+MAP_WINDOW_SIZE+'ユニット';
+    prevBtn.onclick=()=>{_mapWindowStart=Math.max(0,start-MAP_WINDOW_SIZE);renderMapWindow();window.scrollTo({top:0,behavior:'smooth'});};
+    const topBtn=document.createElement('button');
+    topBtn.className='abtn gray';
+    topBtn.style.cssText='flex:1;padding:11px;font-size:.85rem';
+    topBtn.textContent='⏮ Unit 1へ';
+    topBtn.onclick=()=>{_mapWindowStart=0;renderMapWindow();window.scrollTo({top:0,behavior:'smooth'});};
+    jumpBar.appendChild(topBtn);jumpBar.appendChild(prevBtn);
+    map.appendChild(jumpBar);
+  }
+
+  // position indicator
+  const posInfo=document.createElement('div');
+  posInfo.style.cssText='text-align:center;font-size:.78rem;color:var(--dim);font-weight:700;margin-bottom:14px';
+  posInfo.textContent=`Unit ${start+1} 〜 ${end} / ${CUR.length}`;
+  map.appendChild(posInfo);
+
+  for(let i=start;i<end;i++){
+    const unit=CUR[i];
     const dc=unit.lessons.filter(l=>G.stars[l.id]>=1).length;
-    doneTotal+=dc;
     const fi=ALL_IDS.indexOf(unit.lessons[0].id),ui=ALL_IDS.indexOf(G.unlocked);
     const ulk=fi>ui;
     const sec=document.createElement('div');sec.className='unit-sec';
@@ -951,11 +1210,20 @@ function renderMap(){
       path.appendChild(node);
     });
     sec.appendChild(path);map.appendChild(sec);
-  });
-  document.getElementById('tlc').textContent=TOTAL;
-  document.getElementById('ch-done').textContent=doneTotal;
-  document.getElementById('ch-tot').textContent=TOTAL;
-  document.getElementById('ch-pct').textContent=Math.round(doneTotal/TOTAL*100)+'%';
+  }
+
+  // "show more units" control
+  if(end<CUR.length){
+    const moreBar=document.createElement('div');
+    moreBar.style.cssText='display:flex;gap:8px;margin-top:6px';
+    const nextBtn=document.createElement('button');
+    nextBtn.className='abtn green';
+    nextBtn.style.cssText='flex:1;padding:13px;font-size:.9rem';
+    nextBtn.textContent='次の'+MAP_WINDOW_SIZE+'ユニットを見る ➡';
+    nextBtn.onclick=()=>{_mapWindowStart=end;renderMapWindow();window.scrollTo({top:0,behavior:'smooth'});};
+    moreBar.appendChild(nextBtn);
+    map.appendChild(moreBar);
+  }
 }
 
 // ── MODAL ──
@@ -1032,6 +1300,94 @@ function launchSkipTest(startIdx,count){
 }
 function closeModal(){document.getElementById('modal-ov').classList.remove('show');}
 document.getElementById('modal-ov').addEventListener('click',e=>{if(e.target===document.getElementById('modal-ov'))closeModal();});
+
+// ── JUMP TO UNIT (full list with direct navigation + per-unit skip button) ──
+function openJump(){
+  sfxTap();
+  renderJumpList();
+  document.getElementById('jump-ov').classList.add('show');
+  document.getElementById('jump-search').value='';
+  document.getElementById('jump-search').focus();
+}
+function closeJump(){document.getElementById('jump-ov').classList.remove('show');}
+document.getElementById('jump-unit-open').addEventListener('click',openJump);
+document.getElementById('jump-ov').addEventListener('click',e=>{if(e.target===document.getElementById('jump-ov'))closeJump();});
+
+function renderJumpList(filterText){
+  const list=document.getElementById('jump-list');
+  list.innerHTML='';
+  const uu=ALL_IDS.indexOf(G.unlocked);
+  const q=(filterText||'').trim().toLowerCase();
+
+  let shown=0;
+  const MAX_RENDER=300; // cap DOM rows even when unfiltered, to stay fast
+  for(let i=0;i<CUR.length;i++){
+    const unit=CUR[i];
+    const numMatch=q&&/^\d+$/.test(q)?String(i+1).includes(q):false;
+    const titleMatch=q?unit.title.toLowerCase().includes(q):true;
+    if(q&&!numMatch&&!titleMatch)continue;
+    if(!q&&shown>=MAX_RENDER)break; // unfiltered: only show first N, user can search for more
+    shown++;
+
+    const fi=ALL_IDS.indexOf(unit.lessons[0].id);
+    const ulk=fi>uu;
+    const dc=unit.lessons.filter(l=>G.stars[l.id]>=1).length;
+
+    const row=document.createElement('div');
+    row.className='jump-row'+(ulk?' lk':'');
+    row.innerHTML=`
+      <div class="jr-icon" style="background:${unit.color}">${unit.icon}</div>
+      <div style="flex:1;min-width:0">
+        <div class="jr-title">${unit.title}</div>
+        <div class="jr-sub">Unit ${i+1} / ${CUR.length} ・ ${unit.desc}</div>
+      </div>
+      <div class="jr-prog">${dc}/${unit.lessons.length}</div>
+      ${!ulk?`<button class="jr-skip" data-uid="${unit.id}">⚡ 飛び級</button>`:''}
+    `;
+    row.addEventListener('click',(e)=>{
+      if(e.target.classList.contains('jr-skip'))return; // handled separately
+      _mapWindowStart=i;
+      closeJump();
+      renderMapWindow();
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+    const skipBtn=row.querySelector('.jr-skip');
+    if(skipBtn){
+      skipBtn.addEventListener('click',(e)=>{
+        e.stopPropagation();
+        closeJump();
+        openSkip(unit.id,e);
+      });
+    }
+    list.appendChild(row);
+  }
+  if(!shown){
+    const empty=document.createElement('div');
+    empty.style.cssText='text-align:center;padding:30px 10px;color:var(--dim);font-size:.85rem';
+    empty.textContent='見つかりませんでした';
+    list.appendChild(empty);
+  } else if(!q&&CUR.length>MAX_RENDER){
+    const hint=document.createElement('div');
+    hint.style.cssText='text-align:center;padding:14px 10px;color:var(--dim);font-size:.78rem';
+    hint.textContent=`最初の${MAX_RENDER}件を表示中。番号で検索すると先のユニットにも移動できます`;
+    list.appendChild(hint);
+  }
+}
+document.getElementById('jump-search').addEventListener('input',(e)=>{
+  renderJumpList(e.target.value);
+});
+document.getElementById('jump-go-num').addEventListener('click',()=>{
+  const val=document.getElementById('jump-search').value.trim();
+  const n=parseInt(val,10);
+  if(!isNaN(n)&&n>=1&&n<=CUR.length){
+    _mapWindowStart=n-1;
+    closeJump();
+    renderMapWindow();
+    window.scrollTo({top:0,behavior:'smooth'});
+  } else {
+    renderJumpList(val);
+  }
+});
 
 // ── LESSON ENGINE ──
 const LS={unit:null,lesson:null,qs:[],idx:0,cor:0,wrg:0,isSkip:false};
@@ -1152,34 +1508,50 @@ function renderSe(body,q,dc,dl){
 function renderMa(body,q,dc,dl){
   body.innerHTML=`<div class="qcard"><div class="qtag"><span class="dpip" style="background:${dc}"></span>${dl} · マッチング</div><div class="qmain">英語と意味を合わせよう</div></div><div class="mcols" id="mcols"></div>`;
   const pairs=[...q.pairs];
-  const ls=pairs.map(p=>p[0]).sort(()=>Math.random()-.5);
-  const rs=pairs.map(p=>p[1]).sort(()=>Math.random()-.5);
-  let sel=null,matched=new Set();
+  let sel=null,matchedCount=0;
   const grid=document.getElementById('mcols');
-  function mkBtn(w,side){
-    const b=document.createElement('button');b.className='mbtn';b.textContent=w;b.dataset.w=w;
+  function mkBtn(w,side,pairIdx){
+    const b=document.createElement('button');b.className='mbtn';b.textContent=w;b.dataset.w=w;b.dataset.side=side;
     b.addEventListener('click',()=>{
-      if(matched.has(w)||b.classList.contains('mat')||G.hearts<=0)return;
-      sfxTap();b.classList.add('sel');
-      if(!sel){sel={w,b};return;}
-      if(sel.b===b){b.classList.remove('sel');sel=null;return;}
-      const pair=pairs.find(p=>(p[0]===sel.w&&p[1]===w)||(p[1]===sel.w&&p[0]===w));
-      if(pair){
-        sel.b.classList.remove('sel');sel.b.classList.add('mat');b.classList.remove('sel');b.classList.add('mat');
-        matched.add(sel.w);matched.add(w);
-        onCorrect(b,Math.ceil(xpQ()/pairs.length));sel=null;
-        if(matched.size===pairs.length*2){LS.cor++;showFB(true,'','全部合った！',nxt);}
+      if(b.classList.contains('mat')||G.hearts<=0)return;
+      // re-clicking the same button deselects it
+      if(sel&&sel.b===b){b.classList.remove('sel');sel=null;return;}
+      sfxTap();
+      if(!sel){
+        b.classList.add('sel');
+        sel={w,b,side,pairIdx};
+        return;
+      }
+      // must pick one from each side (L + R)
+      if(sel.side===side){
+        // switching selection within the same column
+        sel.b.classList.remove('sel');
+        b.classList.add('sel');
+        sel={w,b,side,pairIdx};
+        return;
+      }
+      const isCorrectPair=sel.pairIdx===pairIdx;
+      if(isCorrectPair){
+        sel.b.classList.remove('sel');sel.b.classList.add('mat');
+        b.classList.remove('sel');b.classList.add('mat');
+        matchedCount+=2;
+        onCorrect(b,Math.ceil(xpQ()/pairs.length));
+        sel=null;
+        if(matchedCount===pairs.length*2){LS.cor++;showFB(true,'','全部合った！',nxt);}
       } else {
         const sb=sel.b;sb.classList.add('wfl');b.classList.add('wfl');
         LS.wrg++;onWrong();
-        setTimeout(()=>{sb.classList.remove('sel','wfl');b.classList.remove('sel','wfl');sel=null;},650);
+        setTimeout(()=>{sb.classList.remove('sel','wfl');b.classList.remove('sel','wfl');},650);
+        sel=null;
         if(G.hearts<=0){hideFB();setTimeout(()=>document.getElementById('nohearts').classList.add('show'),400);}
       }
     });
     return b;
   }
-  ls.forEach(w=>grid.appendChild(mkBtn(w,'L')));
-  rs.forEach(w=>grid.appendChild(mkBtn(w,'R')));
+  const lsWithIdx=pairs.map((p,i)=>({w:p[0],i})).sort(()=>Math.random()-.5);
+  const rsWithIdx=pairs.map((p,i)=>({w:p[1],i})).sort(()=>Math.random()-.5);
+  lsWithIdx.forEach(o=>grid.appendChild(mkBtn(o.w,'L',o.i)));
+  rsWithIdx.forEach(o=>grid.appendChild(mkBtn(o.w,'R',o.i)));
 }
 
 function renderTw(body,q,dc,dl){
